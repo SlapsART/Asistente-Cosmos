@@ -17,9 +17,10 @@ const CONSULTA_ITEMS = [
 
 interface PanelBuscadorProps {
   tipo: 'asiento' | 'consulta';
+  onItemClick?: (texto: string) => void;
 }
 
-export function PanelBuscador({ tipo }: PanelBuscadorProps) {
+export function PanelBuscador({ tipo, onItemClick }: PanelBuscadorProps) {
   const placeholder = tipo === 'asiento' ? 'Buscar asiento contable' : 'Buscar la consulta';
   const width = tipo === 'asiento' ? 337 : 443;
 
@@ -66,6 +67,7 @@ export function PanelBuscador({ tipo }: PanelBuscadorProps) {
           ? BRD_ITEMS.map((item, i) => (
               <Box
                 key={i}
+                onClick={() => onItemClick?.(item.codigo)}
                 sx={{
                   display: 'flex',
                   alignItems: 'center',
@@ -103,6 +105,7 @@ export function PanelBuscador({ tipo }: PanelBuscadorProps) {
           : CONSULTA_ITEMS.map((item, i) => (
               <Box
                 key={i}
+                onClick={() => onItemClick?.(item)}
                 sx={{
                   display: 'flex',
                   gap: 1.5,

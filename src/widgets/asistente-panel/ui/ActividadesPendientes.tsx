@@ -97,7 +97,7 @@ export function ActividadesPendientes({
         </List>
 
         {/* Scrollbar decorativa */}
-        <Box
+        {/* <Box
           sx={{
             bgcolor: 'grey.200',
             borderLeft: '1px solid',
@@ -120,7 +120,7 @@ export function ActividadesPendientes({
               borderRadius: '100px',
             }}
           />
-        </Box>
+        </Box> */}
       </Box>
     </Box>
   );

@@ -1,0 +1,37 @@
+[     193ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:5173/node_modules/.vite/deps/react-dom_client.js?v=6268c9a6:20100
+[     346ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:5173/favicon.ico:0
+[  529181ms] [ERROR] Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://react.dev/link/invalid-hook-call for tips about how to debug and fix this problem. @ http://localhost:5173/node_modules/.vite/deps/chunk-AOGOAKFD.js?v=c5102b36:425
+[  529199ms] [ERROR] Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://react.dev/link/invalid-hook-call for tips about how to debug and fix this problem. @ http://localhost:5173/node_modules/.vite/deps/chunk-AOGOAKFD.js?v=c5102b36:425
+[  529201ms] TypeError: Cannot read properties of null (reading 'useContext')
+    at exports.useContext (http://localhost:5173/node_modules/.vite/deps/chunk-AOGOAKFD.js?v=c5102b36:945:27)
+    at usePresence (http://localhost:5173/node_modules/.vite/deps/framer-motion.js?v=e168acc0:8312:48)
+    at AnimatePresence (http://localhost:5173/node_modules/.vite/deps/framer-motion.js?v=e168acc0:8346:43)
+    at Object.react_stack_bottom_frame (http://localhost:5173/node_modules/.vite/deps/react-dom_client.js?v=6268c9a6:18507:20)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/react-dom_client.js?v=6268c9a6:5652:24)
+    at updateFunctionComponent (http://localhost:5173/node_modules/.vite/deps/react-dom_client.js?v=6268c9a6:7473:21)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/react-dom_client.js?v=6268c9a6:8523:20)
+    at runWithFiberInDEV (http://localhost:5173/node_modules/.vite/deps/react-dom_client.js?v=6268c9a6:995:72)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/react-dom_client.js?v=6268c9a6:12559:98)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/react-dom_client.js?v=6268c9a6:12422:43)
+[  529202ms] [WARNING] %s
+
+%s
+ An error occurred in the <AnimatePresence> component. Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://react.dev/link/error-boundaries to learn more about error boundaries. @ http://localhost:5173/node_modules/.vite/deps/react-dom_client.js?v=6268c9a6:6963
+[  529877ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:5173/node_modules/.vite/deps/react-dom_client.js?v=c5102b36:20100
+[ 1726939ms] [ERROR] SyntaxError: The requested module '/src/shared/ui/anim.ts?t=1781619142761' does not provide an export named 'rightPanelVariants' @ http://localhost:5173/@vite/client:173
+[ 1726939ms] [ERROR] [hmr] Failed to reload /src/widgets/asistente-base/ui/AsistenteBaseWidget.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:5173/@vite/client:175
+[ 1726939ms] [ERROR] SyntaxError: The requested module '/src/shared/ui/anim.ts?t=1781619142761' does not provide an export named 'rightPanelVariants' @ http://localhost:5173/@vite/client:173
+[ 1726939ms] [ERROR] [hmr] Failed to reload /src/widgets/asistente-obligaciones/ui/AsistenteObligacionesWidget.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:5173/@vite/client:175
+[ 1726939ms] [ERROR] SyntaxError: The requested module '/src/shared/ui/anim.ts?t=1781619142761' does not provide an export named 'rightPanelVariants' @ http://localhost:5173/@vite/client:173
+[ 1726939ms] [ERROR] [hmr] Failed to reload /src/widgets/asistente-base/ui/AppShellMock.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:5173/@vite/client:175
+[ 1726943ms] [ERROR] SyntaxError: The requested module '/src/shared/ui/anim.ts?t=1781619142761' does not provide an export named 'rightPanelVariants' @ http://localhost:5173/@vite/client:173
+[ 1726943ms] [ERROR] [hmr] Failed to reload /src/App.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:5173/@vite/client:175

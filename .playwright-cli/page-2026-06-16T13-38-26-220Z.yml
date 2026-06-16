@@ -1,0 +1,39 @@
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - generic [ref=e5]: DEMOS
+    - tablist [ref=e9]:
+      - tab "Asistente Contabilidad" [ref=e10] [cursor=pointer]
+      - tab "Asistente Base" [ref=e11] [cursor=pointer]
+      - tab "Asistente Obligaciones" [active] [selected] [ref=e12] [cursor=pointer]: Asistente Obligaciones
+  - generic [ref=e96]:
+    - generic [ref=e97]:
+      - generic [ref=e98]:
+        - img [ref=e99]
+        - separator [ref=e101]
+        - paragraph [ref=e102]: Inicio
+        - img [ref=e103]
+        - paragraph [ref=e105]: Reglas de derivación
+      - generic [ref=e106]:
+        - paragraph [ref=e107]: Empresa de insumos S.A.S
+        - button [ref=e108] [cursor=pointer]:
+          - img [ref=e109]
+        - separator [ref=e112]
+        - button [ref=e113] [cursor=pointer]:
+          - img [ref=e114]
+        - separator [ref=e117]
+        - paragraph [ref=e119]: HD
+    - generic [ref=e120]:
+      - generic [ref=e121]:
+        - img [ref=e122]
+        - img [ref=e124]
+        - img [ref=e125]
+      - generic [ref=e128]:
+        - heading "Nombre de la pagina" [level=6] [ref=e130]
+        - generic [ref=e134] [cursor=pointer]:
+          - button:
+            - img
+          - generic:
+            - textbox "Describe lo que necesitas..."
+          - generic:
+            - button [disabled]:
+              - img

@@ -12,6 +12,7 @@
     "@emotion/styled": "^11.14.1",
     "@mui/material": "^7.3.11",
     "@tabler/icons-react": "^3.44.0",
+    "framer-motion": "^12.40.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "react-router-dom": "^7.17.0"

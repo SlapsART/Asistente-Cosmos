@@ -1,25 +1,6 @@
 import { Box, Tab, Tabs, Typography } from '@mui/material';
 
-export type VistaDemo =
-  | 'cosmos'
-  | 'base-minimizado'
-  | 'base-expandido'
-  | 'base-activo'
-  | 'base-chat'
-  | 'base-nueva'
-  | 'base-lateral'
-  | 'base-historial';
-
-const TABS: { value: VistaDemo; label: string; grupo: string }[] = [
-  { value: 'cosmos', label: 'Asistente Cosmos', grupo: 'A' },
-  { value: 'base-minimizado', label: 'Inicial', grupo: 'B' },
-  { value: 'base-expandido', label: 'Hover', grupo: 'B' },
-  { value: 'base-activo', label: 'Activo', grupo: 'B' },
-  { value: 'base-chat', label: 'Chat', grupo: 'B' },
-  { value: 'base-nueva', label: 'Nueva conv.', grupo: 'B' },
-  { value: 'base-lateral', label: 'Lateral', grupo: 'B' },
-  { value: 'base-historial', label: 'Historial', grupo: 'B' },
-];
+export type VistaDemo = 'contabilidad' | 'base' | 'obligaciones';
 
 interface DemoNavProps {
   vista: VistaDemo;
@@ -39,7 +20,10 @@ export function DemoNav({ vista, onVista }: DemoNavProps) {
         flexShrink: 0,
       }}
     >
-      <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.35)', fontWeight: 600, letterSpacing: 1, fontSize: '0.65rem', whiteSpace: 'nowrap' }}>
+      <Typography
+        variant="caption"
+        sx={{ color: 'rgba(255,255,255,0.35)', fontWeight: 600, letterSpacing: 1, fontSize: '0.65rem', whiteSpace: 'nowrap' }}
+      >
         DEMOS
       </Typography>
 
@@ -63,17 +47,9 @@ export function DemoNav({ vista, onVista }: DemoNavProps) {
           '& .MuiTabs-indicator': { bgcolor: '#2f43d0', height: 2 },
         }}
       >
-        {TABS.map((t, i) => {
-          const showDivider = i > 0 && TABS[i - 1].grupo !== t.grupo;
-          return (
-            <Tab
-              key={t.value}
-              value={t.value}
-              label={t.label}
-              sx={showDivider ? { borderLeft: '1px solid rgba(255,255,255,0.1)', ml: 1 } : {}}
-            />
-          );
-        })}
+        <Tab value="contabilidad" label="Asistente Contabilidad" />
+        <Tab value="base" label="Asistente Base" />
+        <Tab value="obligaciones" label="Asistente Obligaciones" />
       </Tabs>
     </Box>
   );

@@ -1,0 +1,11 @@
+[     244ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:5173/node_modules/.vite/deps/react-dom_client.js?v=6268c9a6:20100
+[     409ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:5173/favicon.ico:0
+[ 1758923ms] [ERROR] SyntaxError: The requested module '/node_modules/.vite/deps/@tabler_icons-react.js?v=6268c9a6' does not provide an export named 'IconTable2' @ http://localhost:5173/@vite/client:173
+[ 1758923ms] [ERROR] [hmr] Failed to reload /src/widgets/asistente-base/ui/AppShellMock.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:5173/@vite/client:175
+[ 1852638ms] [ERROR] SyntaxError: The requested module '/node_modules/.vite/deps/@tabler_icons-react.js?v=6268c9a6' does not provide an export named 'IconTable2' @ http://localhost:5173/@vite/client:173
+[ 1852638ms] [ERROR] [hmr] Failed to reload /src/widgets/asistente-base/ui/AsistenteBaseWidget.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:5173/@vite/client:175
+[ 1858143ms] The requested module '/node_modules/.vite/deps/@tabler_icons-react.js?v=6268c9a6' does not provide an export named 'IconTable2'
+[ 1877703ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:5173/node_modules/.vite/deps/react-dom_client.js?v=6268c9a6:20100
+[ 5229108ms] [LOG] [vite] server connection lost. Polling for restart... @ http://localhost:5173/@vite/client:559
+[ 5229113ms] [ERROR] Failed to load resource: net::ERR_NETWORK_IO_SUSPENDED @ http://localhost:5173/:0
+[34168854ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:5173/node_modules/.vite/deps/react-dom_client.js?v=6268c9a6:20100

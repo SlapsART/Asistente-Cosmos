@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { Box } from '@mui/material';
+import { AnimatePresence, motion } from 'framer-motion';
+import { subPanelVariants } from '@/shared/ui/anim';
 import { ActividadesPendientes } from './ActividadesPendientes';
 import { AsistenteInput } from './AsistenteInput';
 import { PanelBuscador } from './PanelBuscador';
@@ -59,7 +61,14 @@ const ESTADO_INICIAL: Estado = {
 const PRIMARY_PANELS: PanelTipo[] = ['actividades', 'reportes', 'periodos', 'reglas'];
 const SUB_PANELS: PanelTipo[] = ['buscador-asiento', 'buscador-consulta', 'calendario'];
 
-export function AsistentePanel() {
+interface AsistentePanelProps {
+  onMinimizar?: () => void;
+  onVerHistorial?: () => void;
+  onExpandir?: () => void;
+  onEnviar?: () => void;
+}
+
+export function AsistentePanel({ onMinimizar, onVerHistorial, onExpandir, onEnviar }: AsistentePanelProps = {}) {
   const [estado, setEstado] = useState<Estado>(ESTADO_INICIAL);
 
   const { panel, chipActivo, inputTexto, inputChips } = estado;
@@ -125,6 +134,10 @@ export function AsistentePanel() {
     });
   }
 
+  function onBuscadorItemClick(texto: string) {
+    setEstado((prev) => ({ ...prev, panel: null, inputTexto: texto }));
+  }
+
   function onReporteOReglaClick(texto: string) {
     setEstado({
       panel: 'buscador-asiento',
@@ -169,28 +182,59 @@ export function AsistentePanel() {
     }
   })();
 
+  const SP = subPanelVariants;
+
   return (
     <Box sx={{ position: 'relative', display: 'flex', flexDirection: 'column', gap: 1, width: 680 }}>
-      {panelConfig && (
-        <ActividadesPendientes
-          titulo={panelConfig.titulo}
-          items={panelConfig.items}
-          onCerrar={onCerrarPanel}
-          onItemClick={panelConfig.onItemClick}
-        />
-      )}
+      <AnimatePresence>
+        {panelConfig && (
+          <motion.div
+            key={panel}
+            variants={SP}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            style={{ position: 'absolute', bottom: 'calc(100% + 8px)', left: 0, right: 0, zIndex: 5 }}
+          >
+            <ActividadesPendientes
+              titulo={panelConfig.titulo}
+              items={panelConfig.items}
+              onCerrar={onCerrarPanel}
+              onItemClick={panelConfig.onItemClick}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      {(panel === 'buscador-asiento' || panel === 'buscador-consulta') && (
-        <Box sx={{ position: 'absolute', bottom: 'calc(100% + 8px)', right: 0, zIndex: 1200 }}>
-          <PanelBuscador tipo={panel === 'buscador-asiento' ? 'asiento' : 'consulta'} />
-        </Box>
-      )}
-
-      {panel === 'calendario' && (
-        <Box sx={{ position: 'absolute', bottom: 'calc(100% + 8px)', right: 0, zIndex: 1200 }}>
-          <PanelCalendario />
-        </Box>
-      )}
+      <AnimatePresence>
+        {(panel === 'buscador-asiento' || panel === 'buscador-consulta') && (
+          <motion.div
+            key={panel}
+            variants={SP}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            style={{ position: 'absolute', bottom: 'calc(100% + 8px)', right: 0, zIndex: 1200 }}
+          >
+            <PanelBuscador
+              tipo={panel === 'buscador-asiento' ? 'asiento' : 'consulta'}
+              onItemClick={onBuscadorItemClick}
+            />
+          </motion.div>
+        )}
+        {panel === 'calendario' && (
+          <motion.div
+            key="calendario"
+            variants={SP}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            style={{ position: 'absolute', bottom: 'calc(100% + 8px)', right: 0, zIndex: 1200 }}
+          >
+            <PanelCalendario />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <AsistenteInput
         chipActivo={chipActivo}
@@ -198,10 +242,11 @@ export function AsistentePanel() {
         inputTexto={inputTexto}
         inputChips={inputChips}
         onChipClick={onChipClick}
-        onMinimizar={onCerrarPanel}
-        onVerHistorial={() => {}}
-        onExpandir={() => {}}
+        onMinimizar={onMinimizar ?? onCerrarPanel}
+        onVerHistorial={onVerHistorial ?? (() => {})}
+        onExpandir={onExpandir ?? (() => {})}
         onVerMas={() => {}}
+        onEnviar={onEnviar}
       />
     </Box>
   );

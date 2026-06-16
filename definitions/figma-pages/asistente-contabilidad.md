@@ -1,6 +1,7 @@
 # Asistente contabilidad
 
-**Sección Figma:** `Asistente contabilidad` (node `6400:54259`)
+**Sección Figma:** `Asistente contabilidad` (node `6400:54259`)  
+**Página Figma:** `🎯 Implementación` (canvas `6304:32720`)
 
 ---
 
@@ -8,7 +9,7 @@
 
 | Estado | Link |
 |--------|------|
-| Asistente — Vista base (Frame 8208) | https://www.figma.com/design/zqor1hg53PnUddkpHqUv69/Asistente-IA?node-id=6365-51010 |
+| Estado inicial — solo InputPrompt, sin conversación | https://www.figma.com/design/zqor1hg53PnUddkpHqUv69/%F0%9F%93%8C-Asistente-IA?node-id=6363-50961 |
 
 ---
 
@@ -16,12 +17,32 @@
 
 | Estado | Link |
 |--------|------|
-| Asistente — Estado 2 (Frame 8209) | https://www.figma.com/design/zqor1hg53PnUddkpHqUv69/Asistente-IA?node-id=6365-51014 |
-| Asistente — Estado 3 (Frame 8215) | https://www.figma.com/design/zqor1hg53PnUddkpHqUv69/Asistente-IA?node-id=6400-51229 |
-| Asistente — Estado 4 (Frame 8216) | https://www.figma.com/design/zqor1hg53PnUddkpHqUv69/Asistente-IA?node-id=6400-51234 |
-| Asistente — Estado 5 (Frame 8217) | https://www.figma.com/design/zqor1hg53PnUddkpHqUv69/Asistente-IA?node-id=6400-51239 |
-| Asistente — Estado 6 (Frame 8218) | https://www.figma.com/design/zqor1hg53PnUddkpHqUv69/Asistente-IA?node-id=6400-51242 |
-| Asistente — Estado 7 (Frame 8219) | https://www.figma.com/design/zqor1hg53PnUddkpHqUv69/Asistente-IA?node-id=6400-51246 |
-| Asistente — Estado 8 (Frame 8220) | https://www.figma.com/design/zqor1hg53PnUddkpHqUv69/Asistente-IA?node-id=6400-51250 |
-| Asistente — Estado 9 (Frame 8221) | https://www.figma.com/design/zqor1hg53PnUddkpHqUv69/Asistente-IA?node-id=6400-51254 |
-| Asistente — Flujo inicial (Frame 8210) | https://www.figma.com/design/zqor1hg53PnUddkpHqUv69/Asistente-IA?node-id=6399-61582 |
+| Asistente con intenciones — flujo 1 | https://www.figma.com/design/zqor1hg53PnUddkpHqUv69/%F0%9F%93%8C-Asistente-IA?node-id=6363-46368 |
+| Asistente con intenciones — flujo 2 | https://www.figma.com/design/zqor1hg53PnUddkpHqUv69/%F0%9F%93%8C-Asistente-IA?node-id=6363-46398 |
+| Asistente con menú desplegable — selección 1 | https://www.figma.com/design/zqor1hg53PnUddkpHqUv69/%F0%9F%93%8C-Asistente-IA?node-id=6363-46428 |
+| Asistente con menú desplegable — selección 2 | https://www.figma.com/design/zqor1hg53PnUddkpHqUv69/%F0%9F%93%8C-Asistente-IA?node-id=6363-46505 |
+| Asistente con DatePicker — selección de fecha | https://www.figma.com/design/zqor1hg53PnUddkpHqUv69/%F0%9F%93%8C-Asistente-IA?node-id=6363-46582 |
+| Asistente — respuesta generada | https://www.figma.com/design/zqor1hg53PnUddkpHqUv69/%F0%9F%93%8C-Asistente-IA?node-id=6363-46659 |
+| Asistente con intenciones — flujo 3 | https://www.figma.com/design/zqor1hg53PnUddkpHqUv69/%F0%9F%93%8C-Asistente-IA?node-id=6363-46690 |
+| Asistente con intenciones — flujo 4 | https://www.figma.com/design/zqor1hg53PnUddkpHqUv69/%F0%9F%93%8C-Asistente-IA?node-id=6363-46720 |
+| Asistente con menú desplegable — selección 3 | https://www.figma.com/design/zqor1hg53PnUddkpHqUv69/%F0%9F%93%8C-Asistente-IA?node-id=6363-46750 |
+| Asistente con menú desplegable — selección 4 | https://www.figma.com/design/zqor1hg53PnUddkpHqUv69/%F0%9F%93%8C-Asistente-IA?node-id=6363-46827 |
+| Asistente con menú desplegable — selección 5 | https://www.figma.com/design/zqor1hg53PnUddkpHqUv69/%F0%9F%93%8C-Asistente-IA?node-id=6363-46904 |
+| Asistente con menú desplegable — selección 6 | https://www.figma.com/design/zqor1hg53PnUddkpHqUv69/%F0%9F%93%8C-Asistente-IA?node-id=6363-46981 |
+| Asistente con menú desplegable — selección 7 | https://www.figma.com/design/zqor1hg53PnUddkpHqUv69/%F0%9F%93%8C-Asistente-IA?node-id=6363-47021 |
+| Asistente con doble InputPrompt — entrada multi-campo | https://www.figma.com/design/zqor1hg53PnUddkpHqUv69/%F0%9F%93%8C-Asistente-IA?node-id=6363-47101 |
+
+---
+
+## Elementos complementarios
+
+### Menus contextuales
+
+Varios estados de la sección muestran un `<Menu>` abierto sobre el asistente para selección de parámetros (período, tercero, cuenta, etc.).  
+Ver frames con `<Menu>` en la lista de estados de arriba (selecciones 1-7).
+
+### DatePicker
+
+| Descripción | Link |
+|-------------|------|
+| DatePicker — selector de rango de fechas abierto | https://www.figma.com/design/zqor1hg53PnUddkpHqUv69/%F0%9F%93%8C-Asistente-IA?node-id=6363-46582 |

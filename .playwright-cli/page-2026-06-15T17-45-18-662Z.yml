@@ -1,0 +1,36 @@
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - generic [ref=e5]: DEMOS
+    - tablist [ref=e9]:
+      - tab "Asistente Cosmos" [selected] [ref=e10] [cursor=pointer]
+      - tab "Asistente Base" [ref=e11] [cursor=pointer]
+  - generic [ref=e16]:
+    - generic [ref=e18]:
+      - button [ref=e19] [cursor=pointer]:
+        - img [ref=e20]
+      - button [ref=e24] [cursor=pointer]:
+        - img [ref=e25]
+      - separator [ref=e27]
+      - button [ref=e28] [cursor=pointer]:
+        - img [ref=e29]
+    - generic [ref=e30]:
+      - button [ref=e31] [cursor=pointer]:
+        - img [ref=e32]
+      - textbox "Describe lo que necesitas..." [ref=e35]
+      - generic [ref=e36]:
+        - button [disabled]:
+          - img
+    - generic [ref=e37]:
+      - generic [ref=e38]:
+        - button "Actividades pendientes" [ref=e39] [cursor=pointer]:
+          - generic [ref=e40]: Actividades pendientes
+        - button "Reportes de gestión" [ref=e41] [cursor=pointer]:
+          - generic [ref=e42]: Reportes de gestión
+        - button "Periodos contables" [ref=e43] [cursor=pointer]:
+          - generic [ref=e44]: Periodos contables
+        - button "Reglas de derivación" [ref=e45] [cursor=pointer]:
+          - generic [ref=e46]: Reglas de derivación
+      - button "Ver más" [ref=e47] [cursor=pointer]:
+        - img [ref=e48]
+        - generic [ref=e53]: Ver más
+    - generic [ref=e54]: El contenido generado por IA puede ser incorrecto.

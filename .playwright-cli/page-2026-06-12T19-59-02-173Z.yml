@@ -1,0 +1,81 @@
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - generic [ref=e5]: DEMOS
+    - tablist [ref=e9]:
+      - tab "Asistente Cosmos" [selected] [ref=e10] [cursor=pointer]
+      - tab "Inicial" [ref=e11] [cursor=pointer]
+      - tab "Hover" [ref=e12] [cursor=pointer]
+      - tab "Activo" [ref=e13] [cursor=pointer]
+      - tab "Chat" [ref=e14] [cursor=pointer]
+      - tab "Nueva conv." [ref=e15] [cursor=pointer]
+      - tab "Lateral" [ref=e16] [cursor=pointer]
+      - tab "Historial" [ref=e17] [cursor=pointer]
+  - generic [ref=e21]:
+    - generic [ref=e61]:
+      - generic [ref=e62]:
+        - heading "Actividades pendientes" [level=6] [ref=e63]
+        - button [ref=e64] [cursor=pointer]:
+          - img [ref=e65]
+      - list [ref=e69]:
+        - listitem [ref=e70]:
+          - generic [ref=e71] [cursor=pointer]:
+            - img [ref=e73]
+            - paragraph [ref=e77]: Borradores de asiento pendientes por revisar
+            - generic [ref=e78]:
+              - generic [ref=e80]: "20"
+              - button [ref=e81]:
+                - img [ref=e82]
+        - listitem [ref=e84]:
+          - generic [ref=e85] [cursor=pointer]:
+            - img [ref=e87]
+            - paragraph [ref=e91]: Borradores que fueron devueltos
+            - generic [ref=e92]:
+              - generic [ref=e94]: "5"
+              - button [ref=e95]:
+                - img [ref=e96]
+        - listitem [ref=e98]:
+          - generic [ref=e99] [cursor=pointer]:
+            - img [ref=e101]
+            - paragraph [ref=e105]: Borradores sin cuentas contables resueltas
+            - generic [ref=e106]:
+              - generic [ref=e108]: "10"
+              - button [ref=e109]:
+                - img [ref=e110]
+        - listitem [ref=e112]:
+          - generic [ref=e113] [cursor=pointer]:
+            - img [ref=e115]
+            - paragraph [ref=e119]: Periodos contables
+            - generic [ref=e120]:
+              - generic [ref=e122]: "1"
+              - button [ref=e123]:
+                - img [ref=e124]
+    - generic [ref=e22]:
+      - generic [ref=e24]:
+        - button [ref=e25] [cursor=pointer]:
+          - img [ref=e26]
+        - button [ref=e30] [cursor=pointer]:
+          - img [ref=e31]
+        - separator [ref=e33]
+        - button [ref=e34] [cursor=pointer]:
+          - img [ref=e35]
+      - generic [ref=e36]:
+        - button [ref=e37] [cursor=pointer]:
+          - img [ref=e38]
+        - textbox "Describe lo que necesitas..." [ref=e41]
+        - generic [ref=e42]:
+          - button [disabled]:
+            - img
+      - generic [ref=e43]:
+        - generic [ref=e44]:
+          - button "Actividades pendientes" [active] [ref=e45] [cursor=pointer]:
+            - generic [ref=e46]: Actividades pendientes
+          - button "Reportes de gestión" [ref=e47] [cursor=pointer]:
+            - generic [ref=e48]: Reportes de gestión
+          - button "Periodos contables" [ref=e49] [cursor=pointer]:
+            - generic [ref=e50]: Periodos contables
+          - button "Reglas de derivación" [ref=e51] [cursor=pointer]:
+            - generic [ref=e52]: Reglas de derivación
+        - button "Ver más" [ref=e53] [cursor=pointer]:
+          - img [ref=e54]
+          - generic [ref=e59]: Ver más
+      - generic [ref=e60]: El contenido generado por IA puede ser incorrecto.

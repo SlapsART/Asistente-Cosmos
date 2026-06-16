@@ -1,0 +1,125 @@
+- generic [ref=e6]:
+  - generic [ref=e7]:
+    - generic [ref=e8]:
+      - img [ref=e9]
+      - separator [ref=e11]
+      - paragraph [ref=e12]: Inicio
+      - img [ref=e13]
+      - paragraph [ref=e15]: Reglas de derivación
+    - generic [ref=e16]:
+      - paragraph [ref=e17]: Empresa de insumos S.A.S
+      - button [ref=e18] [cursor=pointer]:
+        - img [ref=e19]
+      - separator [ref=e22]
+      - button [ref=e23] [cursor=pointer]:
+        - img [ref=e24]
+      - separator [ref=e27]
+      - paragraph [ref=e29]: HD
+  - generic [ref=e30]:
+    - generic [ref=e31]:
+      - button "Asistente Base" [ref=e32] [cursor=pointer]:
+        - img [ref=e33]
+      - button "Asistente Obligaciones" [ref=e34] [cursor=pointer]:
+        - img [ref=e35]
+      - button "Asistente Contabilidad" [ref=e37] [cursor=pointer]:
+        - img [ref=e38]
+    - generic [ref=e40]:
+      - heading "Nombre de la pagina" [level=6] [ref=e42]
+      - generic [ref=e94]:
+        - generic [ref=e95]:
+          - generic [ref=e96]:
+            - img [ref=e97]
+            - textbox [ref=e103]: "[Nombre del chat]"
+          - generic [ref=e104]:
+            - button "Nueva conversación" [ref=e105] [cursor=pointer]:
+              - img [ref=e106]
+            - button "Historial" [ref=e107] [cursor=pointer]:
+              - img [ref=e108]
+            - separator [ref=e112]
+            - button "Modo flotante" [ref=e113] [cursor=pointer]:
+              - img [ref=e114]
+        - generic [ref=e116]:
+          - generic [ref=e118]:
+            - paragraph [ref=e120]: Usuario ingresa su solicitud
+            - generic [ref=e121]:
+              - generic [ref=e122]: 10:24
+              - button [ref=e123] [cursor=pointer]:
+                - img [ref=e124]
+              - button [ref=e127] [cursor=pointer]:
+                - img [ref=e128]
+              - button [ref=e131] [cursor=pointer]:
+                - img [ref=e132]
+          - generic [ref=e136]:
+            - paragraph [ref=e137]: La respuesta del agente luego de analizar la entrada del usuario
+            - generic [ref=e138]:
+              - button [ref=e139] [cursor=pointer]:
+                - img [ref=e140]
+              - button [ref=e143] [cursor=pointer]:
+                - img [ref=e144]
+              - button [ref=e147] [cursor=pointer]:
+                - img [ref=e148]
+          - generic [ref=e152]:
+            - generic [ref=e154]:
+              - img [ref=e155]
+              - generic [ref=e157]: Nuevo contexto
+            - generic [ref=e158]:
+              - paragraph [ref=e160]: Usuario ingresa su solicitud
+              - generic [ref=e161]:
+                - generic [ref=e162]: 10:25
+                - button [ref=e163] [cursor=pointer]:
+                  - img [ref=e164]
+                - button [ref=e167] [cursor=pointer]:
+                  - img [ref=e168]
+                - button [ref=e171] [cursor=pointer]:
+                  - img [ref=e172]
+          - generic [ref=e176]:
+            - paragraph [ref=e177]: La respuesta del agente luego de analizar la entrada del usuario
+            - generic [ref=e178]:
+              - button [ref=e179] [cursor=pointer]:
+                - img [ref=e180]
+              - button [ref=e183] [cursor=pointer]:
+                - img [ref=e184]
+              - button [ref=e187] [cursor=pointer]:
+                - img [ref=e188]
+          - generic [ref=e193]:
+            - paragraph [ref=e195]: Usuario ingresa su solicitud
+            - generic [ref=e196]:
+              - generic [ref=e197]: 10:26
+              - button [ref=e198] [cursor=pointer]:
+                - img [ref=e199]
+              - button [ref=e202] [cursor=pointer]:
+                - img [ref=e203]
+              - button [ref=e206] [cursor=pointer]:
+                - img [ref=e207]
+          - generic [ref=e211]:
+            - paragraph [ref=e212]: La respuesta del agente luego de analizar la entrada del usuario
+            - generic [ref=e213]:
+              - button [ref=e214] [cursor=pointer]:
+                - img [ref=e215]
+              - button [ref=e218] [cursor=pointer]:
+                - img [ref=e219]
+              - button [ref=e222] [cursor=pointer]:
+                - img [ref=e223]
+        - generic [ref=e227]:
+          - generic [ref=e229]:
+            - generic [ref=e230]:
+              - button [ref=e231] [cursor=pointer]:
+                - img [ref=e232]
+              - textbox "Describe lo que necesitas..." [ref=e235]
+              - generic [ref=e236]:
+                - button [disabled]:
+                  - img
+            - generic [ref=e237]:
+              - generic [ref=e238]:
+                - button "Actividades pendientes" [ref=e239] [cursor=pointer]:
+                  - generic [ref=e240]: Actividades pendientes
+                - button "Reportes de gestión" [ref=e241] [cursor=pointer]:
+                  - generic [ref=e242]: Reportes de gestión
+                - button "Periodos contables" [ref=e243] [cursor=pointer]:
+                  - generic [ref=e244]: Periodos contables
+                - button "Reglas de derivación" [ref=e245] [cursor=pointer]:
+                  - generic [ref=e246]: Reglas de derivación
+              - button "Ver más" [ref=e247] [cursor=pointer]:
+                - img [ref=e248]
+                - generic [ref=e253]: Ver más
+          - generic [ref=e254]: El contenido generado por IA puede ser incorrecto.

@@ -1,0 +1,38 @@
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - generic [ref=e5]: DEMOS
+    - tablist [ref=e9]:
+      - tab "Asistente Cosmos" [ref=e10] [cursor=pointer]
+      - tab "Asistente Base" [active] [selected] [ref=e11] [cursor=pointer]: Asistente Base
+  - generic [ref=e56]:
+    - generic [ref=e57]:
+      - generic [ref=e58]:
+        - img [ref=e59]
+        - separator [ref=e61]
+        - paragraph [ref=e62]: Inicio
+        - img [ref=e63]
+        - paragraph [ref=e65]: Reglas de derivación
+      - generic [ref=e66]:
+        - paragraph [ref=e67]: Empresa de insumos S.A.S
+        - button [ref=e68] [cursor=pointer]:
+          - img [ref=e69]
+        - separator [ref=e72]
+        - button [ref=e73] [cursor=pointer]:
+          - img [ref=e74]
+        - separator [ref=e77]
+        - paragraph [ref=e79]: HD
+    - generic [ref=e80]:
+      - generic [ref=e81]:
+        - img [ref=e82]
+        - img [ref=e84]
+        - img [ref=e85]
+      - generic [ref=e88]:
+        - heading "Nombre de la pagina" [level=6] [ref=e90]
+        - generic [ref=e94] [cursor=pointer]:
+          - button:
+            - img
+          - generic:
+            - textbox "Describe lo que necesitas..."
+          - generic:
+            - button [disabled]:
+              - img

@@ -1,0 +1,43 @@
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - generic [ref=e5]: DEMOS
+    - tablist [ref=e9]:
+      - tab "Asistente Cosmos" [selected] [ref=e10] [cursor=pointer]
+      - tab "Inicial" [ref=e11] [cursor=pointer]
+      - tab "Hover" [ref=e12] [cursor=pointer]
+      - tab "Activo" [ref=e13] [cursor=pointer]
+      - tab "Chat" [ref=e14] [cursor=pointer]
+      - tab "Nueva conv." [ref=e15] [cursor=pointer]
+      - tab "Lateral" [ref=e16] [cursor=pointer]
+      - tab "Historial" [ref=e17] [cursor=pointer]
+  - generic [ref=e22]:
+    - generic [ref=e24]:
+      - button [ref=e25] [cursor=pointer]:
+        - img [ref=e26]
+      - button [ref=e30] [cursor=pointer]:
+        - img [ref=e31]
+      - separator [ref=e33]
+      - button [ref=e34] [cursor=pointer]:
+        - img [ref=e35]
+    - generic [ref=e36]:
+      - button [ref=e37] [cursor=pointer]:
+        - img [ref=e38]
+      - generic [ref=e39]:
+        - textbox "Describe lo que necesitas..." [ref=e41]: BRD-00856
+        - generic [ref=e162]: Asiento contable
+      - button [ref=e163] [cursor=pointer]:
+        - img [ref=e164]
+    - generic [ref=e43]:
+      - generic [ref=e44]:
+        - button "Actividades pendientes" [ref=e45] [cursor=pointer]:
+          - generic [ref=e46]: Actividades pendientes
+        - button "Reportes de gestión" [ref=e47] [cursor=pointer]:
+          - generic [ref=e48]: Reportes de gestión
+        - button "Periodos contables" [ref=e49] [cursor=pointer]:
+          - generic [ref=e50]: Periodos contables
+        - button "Reglas de derivación" [ref=e51] [cursor=pointer]:
+          - generic [ref=e52]: Reglas de derivación
+      - button "Ver más" [ref=e53] [cursor=pointer]:
+        - img [ref=e54]
+        - generic [ref=e59]: Ver más
+    - generic [ref=e60]: El contenido generado por IA puede ser incorrecto.

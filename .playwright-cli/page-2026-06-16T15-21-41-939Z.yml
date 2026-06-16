@@ -1,0 +1,203 @@
+- generic [ref=e6]:
+  - generic [ref=e7]:
+    - generic [ref=e8]:
+      - img [ref=e9]
+      - separator [ref=e11]
+      - paragraph [ref=e12]: Inicio
+      - img [ref=e13]
+      - paragraph [ref=e15]: Reglas de derivación
+    - generic [ref=e16]:
+      - paragraph [ref=e17]: Empresa de insumos S.A.S
+      - button [ref=e18] [cursor=pointer]:
+        - img [ref=e19]
+      - separator [ref=e22]
+      - button [ref=e23] [cursor=pointer]:
+        - img [ref=e24]
+      - separator [ref=e27]
+      - paragraph [ref=e29]: HD
+  - generic [ref=e30]:
+    - generic [ref=e31]:
+      - button "Asistente Base" [ref=e32] [cursor=pointer]:
+        - img [ref=e33]
+      - button "Asistente Obligaciones" [ref=e34] [cursor=pointer]:
+        - img [ref=e35]
+      - button "Asistente Contabilidad" [ref=e37] [cursor=pointer]:
+        - img [ref=e38]
+    - generic [ref=e40]:
+      - heading "Nombre de la pagina" [level=6] [ref=e42]
+      - generic [ref=e94]:
+        - generic [ref=e95]:
+          - generic [ref=e96]:
+            - img [ref=e97]
+            - textbox [ref=e103]: "[Nombre del chat]"
+          - generic [ref=e104]:
+            - button "Nueva conversación" [ref=e105] [cursor=pointer]:
+              - img [ref=e106]
+            - button "Historial" [ref=e107] [cursor=pointer]:
+              - img [ref=e108]
+            - separator [ref=e112]
+            - button "Modo lateral" [ref=e113] [cursor=pointer]:
+              - img [ref=e114]
+            - separator [ref=e116]
+            - button "Minimizar" [ref=e117] [cursor=pointer]:
+              - img [ref=e118]
+        - generic [ref=e119]:
+          - generic [ref=e121]:
+            - paragraph [ref=e123]: Usuario ingresa su solicitud
+            - generic [ref=e124]:
+              - generic [ref=e125]: 10:24
+              - button [ref=e126] [cursor=pointer]:
+                - img [ref=e127]
+              - button [ref=e130] [cursor=pointer]:
+                - img [ref=e131]
+              - button [ref=e134] [cursor=pointer]:
+                - img [ref=e135]
+          - generic [ref=e139]:
+            - paragraph [ref=e140]: La respuesta del agente luego de analizar la entrada del usuario
+            - generic [ref=e141]:
+              - button [ref=e142] [cursor=pointer]:
+                - img [ref=e143]
+              - button [ref=e146] [cursor=pointer]:
+                - img [ref=e147]
+              - button [ref=e150] [cursor=pointer]:
+                - img [ref=e151]
+          - generic [ref=e155]:
+            - generic [ref=e157]:
+              - img [ref=e158]
+              - generic [ref=e160]: Nuevo contexto
+            - generic [ref=e161]:
+              - paragraph [ref=e163]: Usuario ingresa su solicitud
+              - generic [ref=e164]:
+                - generic [ref=e165]: 10:25
+                - button [ref=e166] [cursor=pointer]:
+                  - img [ref=e167]
+                - button [ref=e170] [cursor=pointer]:
+                  - img [ref=e171]
+                - button [ref=e174] [cursor=pointer]:
+                  - img [ref=e175]
+          - generic [ref=e179]:
+            - paragraph [ref=e180]: La respuesta del agente luego de analizar la entrada del usuario
+            - generic [ref=e181]:
+              - button [ref=e182] [cursor=pointer]:
+                - img [ref=e183]
+              - button [ref=e186] [cursor=pointer]:
+                - img [ref=e187]
+              - button [ref=e190] [cursor=pointer]:
+                - img [ref=e191]
+          - generic [ref=e196]:
+            - paragraph [ref=e198]: Usuario ingresa su solicitud
+            - generic [ref=e199]:
+              - generic [ref=e200]: 10:26
+              - button [ref=e201] [cursor=pointer]:
+                - img [ref=e202]
+              - button [ref=e205] [cursor=pointer]:
+                - img [ref=e206]
+              - button [ref=e209] [cursor=pointer]:
+                - img [ref=e210]
+          - generic [ref=e214]:
+            - paragraph [ref=e215]: La respuesta del agente luego de analizar la entrada del usuario
+            - generic [ref=e216]:
+              - button [ref=e217] [cursor=pointer]:
+                - img [ref=e218]
+              - button [ref=e221] [cursor=pointer]:
+                - img [ref=e222]
+              - button [ref=e225] [cursor=pointer]:
+                - img [ref=e226]
+        - generic [ref=e230]:
+          - generic [ref=e232]:
+            - generic [ref=e233]:
+              - button [ref=e234] [cursor=pointer]:
+                - img [ref=e235]
+              - textbox "Describe lo que necesitas..." [ref=e238]
+              - generic [ref=e239]:
+                - button [disabled]:
+                  - img
+            - generic [ref=e240]:
+              - generic [ref=e241]:
+                - button "Actividades pendientes" [ref=e242] [cursor=pointer]:
+                  - generic [ref=e243]: Actividades pendientes
+                - button "Reportes de gestión" [ref=e244] [cursor=pointer]:
+                  - generic [ref=e245]: Reportes de gestión
+                - button "Periodos contables" [ref=e246] [cursor=pointer]:
+                  - generic [ref=e247]: Periodos contables
+                - button "Reglas de derivación" [ref=e248] [cursor=pointer]:
+                  - generic [ref=e249]: Reglas de derivación
+              - button "Ver más" [ref=e250] [cursor=pointer]:
+                - img [ref=e251]
+                - generic [ref=e256]: Ver más
+          - generic [ref=e257]: El contenido generado por IA puede ser incorrecto.
+    - generic [ref=e259]:
+      - generic [ref=e260]:
+        - generic [ref=e261]:
+          - img [ref=e262]
+          - heading "Historial de conversaciones" [level=6] [ref=e266]
+        - button [ref=e267] [cursor=pointer]:
+          - img [ref=e268]
+      - generic [ref=e273]:
+        - textbox "Busca una conversación..." [ref=e274]
+        - img [ref=e276]
+        - group
+      - generic [ref=e279]:
+        - generic [ref=e280]: Recientes
+        - generic [ref=e281] [cursor=pointer]:
+          - paragraph [ref=e284]: Generación OXP Mayo
+          - generic [ref=e285]:
+            - generic [ref=e286]: ahora
+            - button [ref=e287]:
+              - img [ref=e288]
+        - generic [ref=e292] [cursor=pointer]:
+          - paragraph [ref=e295]: Generación OXP Mayo
+          - generic [ref=e296]:
+            - generic [ref=e297]: ayer
+            - button [ref=e298]:
+              - img [ref=e299]
+        - generic [ref=e303] [cursor=pointer]:
+          - paragraph [ref=e306]: Generación OXP Mayo
+          - generic [ref=e307]:
+            - generic [ref=e308]: hace 2 semanas
+            - button [ref=e309]:
+              - img [ref=e310]
+        - generic [ref=e314] [cursor=pointer]:
+          - paragraph [ref=e317]: Generación OXP Mayo
+          - generic [ref=e318]:
+            - generic [ref=e319]: hace 3 semanas
+            - button [ref=e320]:
+              - img [ref=e321]
+        - generic [ref=e325] [cursor=pointer]:
+          - paragraph [ref=e328]: Generación OXP Mayo
+          - generic [ref=e329]:
+            - generic [ref=e330]: hace 4 semanas
+            - button [ref=e331]:
+              - img [ref=e332]
+        - generic [ref=e336]: Otras conversaciones
+        - generic [ref=e337] [cursor=pointer]:
+          - paragraph [ref=e340]: Generación OXP Mayo
+          - generic [ref=e341]:
+            - generic [ref=e342]: hace 5 semanas
+            - button [ref=e343]:
+              - img [ref=e344]
+        - generic [ref=e348] [cursor=pointer]:
+          - paragraph [ref=e351]: Generación OXP Mayo
+          - generic [ref=e352]:
+            - generic [ref=e353]: hace 5 semanas
+            - button [ref=e354]:
+              - img [ref=e355]
+        - generic [ref=e359] [cursor=pointer]:
+          - paragraph [ref=e362]: Generación OXP Mayo
+          - generic [ref=e363]:
+            - generic [ref=e364]: hace 5 semanas
+            - button [ref=e365]:
+              - img [ref=e366]
+        - generic [ref=e370] [cursor=pointer]:
+          - paragraph [ref=e373]: Generación OXP Mayo
+          - generic [ref=e374]:
+            - generic [ref=e375]: hace 5 semanas
+            - button [ref=e376]:
+              - img [ref=e377]
+        - generic [ref=e381] [cursor=pointer]:
+          - paragraph [ref=e384]: Generación OXP Mayo
+          - generic [ref=e385]:
+            - generic [ref=e386]: hace 5 semanas
+            - button [ref=e387]:
+              - img [ref=e388]
+        - paragraph [ref=e393] [cursor=pointer]: Mostrar 8 más...
