@@ -30,6 +30,12 @@ const SIDEBAR_NAV: { vista: VistaDemo; Icon: React.ElementType; label: string }[
   { vista: 'contabilidad', Icon: IconBolt, label: 'Asistente Contabilidad' },
 ];
 
+const PAGE_TITLE: Record<VistaDemo, string> = {
+  base: 'Asistente Base',
+  obligaciones: 'Asistente Obligaciones por Pagar',
+  contabilidad: 'Asistente Contabilidad',
+};
+
 const EASE: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94];
 const EASE_IN: [number, number, number, number] = [0.55, 0.06, 0.68, 0.19];
 
@@ -151,7 +157,7 @@ export function AppShellMock({
           {/* Título de página — abarca todo el ancho (contenido + panel lateral) */}
           <Box sx={{ flexShrink: 0 }}>
             <Typography variant="subtitle1" sx={{ fontWeight: 600, fontSize: '0.875rem' }}>
-              Nombre de la pagina
+              {PAGE_TITLE[vista]}
             </Typography>
           </Box>
 

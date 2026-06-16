@@ -11,60 +11,37 @@ import {
   IconTrash,
   IconX,
 } from '@tabler/icons-react';
+import { CONVERSACIONES_DEMO } from '../model/conversaciones';
+import type { ConversacionData } from '../model/conversaciones';
 
 const PRIMARY = '#2f43d0';
 
-interface Conversacion {
-  id: number;
-  nombre: string;
-  tiempo: string;
-  activa?: boolean;
-  anclada?: boolean;
-}
-
-const ANCLADAS: Conversacion[] = [
-  { id: 0, nombre: 'Generación OXP Mayo', tiempo: 'hace 2 semanas', anclada: true },
-];
-
-const RECIENTES: Conversacion[] = [
-  { id: 1, nombre: 'Generación OXP Mayo', tiempo: 'ahora', activa: true },
-  { id: 2, nombre: 'Generación OXP Mayo', tiempo: 'ayer' },
-  { id: 3, nombre: 'Generación OXP Mayo', tiempo: 'hace 2 semanas' },
-  { id: 4, nombre: 'Generación OXP Mayo', tiempo: 'hace 3 semanas' },
-  { id: 5, nombre: 'Generación OXP Mayo', tiempo: 'hace 4 semanas' },
-];
-
-const OTRAS: Conversacion[] = [
-  { id: 6, nombre: 'Generación OXP Mayo', tiempo: 'hace 5 semanas' },
-  { id: 7, nombre: 'Generación OXP Mayo', tiempo: 'hace 5 semanas' },
-  { id: 8, nombre: 'Generación OXP Mayo', tiempo: 'hace 5 semanas' },
-  { id: 9, nombre: 'Generación OXP Mayo', tiempo: 'hace 5 semanas' },
-  { id: 10, nombre: 'Generación OXP Mayo', tiempo: 'hace 5 semanas' },
-];
-
 interface ConversacionItemProps {
-  conv: Conversacion;
+  conv: ConversacionData;
+  activa: boolean;
+  onSelect: () => void;
   onAnclar?: () => void;
 }
 
-function ConversacionItem({ conv, onAnclar }: ConversacionItemProps) {
+function ConversacionItem({ conv, activa, onSelect, onAnclar }: ConversacionItemProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   return (
     <Box
+      onClick={onSelect}
       sx={{
         display: 'flex',
         alignItems: 'center',
         px: 2,
         py: '4px',
         cursor: 'pointer',
-        '&:hover': { bgcolor: 'rgba(16,24,64,0.04)' },
+        bgcolor: activa ? 'rgba(47,67,208,0.06)' : 'transparent',
+        '&:hover': { bgcolor: activa ? 'rgba(47,67,208,0.08)' : 'rgba(16,24,64,0.04)' },
         '&:hover .dots-btn': { opacity: 1 },
       }}
     >
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flex: 1, minWidth: 0 }}>
-        {/* Bullet */}
-        {conv.anclada ? (
+        {conv.grupo === 'anclada' ? (
           <IconBookmark size={13} color="rgba(16,24,64,0.45)" style={{ flexShrink: 0 }} />
         ) : (
           <Box
@@ -73,8 +50,8 @@ function ConversacionItem({ conv, onAnclar }: ConversacionItemProps) {
               height: 8,
               borderRadius: '50%',
               flexShrink: 0,
-              bgcolor: conv.activa ? PRIMARY : 'transparent',
-              border: conv.activa ? 'none' : '1.5px solid rgba(16,24,64,0.28)',
+              bgcolor: activa ? PRIMARY : 'transparent',
+              border: activa ? 'none' : '1.5px solid rgba(16,24,64,0.28)',
             }}
           />
         )}
@@ -83,8 +60,8 @@ function ConversacionItem({ conv, onAnclar }: ConversacionItemProps) {
           noWrap
           sx={{
             fontSize: '0.8125rem',
-            color: conv.activa ? PRIMARY : 'text.primary',
-            fontWeight: conv.activa ? 500 : 400,
+            color: activa ? PRIMARY : 'text.primary',
+            fontWeight: activa ? 500 : 400,
           }}
         >
           {conv.nombre}
@@ -117,19 +94,22 @@ function ConversacionItem({ conv, onAnclar }: ConversacionItemProps) {
         }}
       >
         <MenuItem
-          onClick={() => { setAnchorEl(null); onAnclar?.(); }}
+          onClick={(e) => { e.stopPropagation(); setAnchorEl(null); onAnclar?.(); }}
           sx={{ gap: 1.5, fontSize: '0.8125rem', py: '6px' }}
         >
-          {conv.anclada ? <IconBookmarkOff size={14} /> : <IconPin size={14} />}
-          {conv.anclada ? 'Desanclar' : 'Anclar'}
+          {conv.grupo === 'anclada' ? <IconBookmarkOff size={14} /> : <IconPin size={14} />}
+          {conv.grupo === 'anclada' ? 'Desanclar' : 'Anclar'}
         </MenuItem>
-        <MenuItem onClick={() => setAnchorEl(null)} sx={{ gap: 1.5, fontSize: '0.8125rem', py: '6px' }}>
+        <MenuItem
+          onClick={(e) => { e.stopPropagation(); setAnchorEl(null); }}
+          sx={{ gap: 1.5, fontSize: '0.8125rem', py: '6px' }}
+        >
           <IconShare size={14} />
           Compartir
         </MenuItem>
         <Divider />
         <MenuItem
-          onClick={() => setAnchorEl(null)}
+          onClick={(e) => { e.stopPropagation(); setAnchorEl(null); }}
           sx={{ gap: 1.5, fontSize: '0.8125rem', py: '6px', color: 'error.main' }}
         >
           <IconTrash size={14} />
@@ -164,21 +144,38 @@ interface HistorialDrawerProps {
   anclado?: boolean;
   onAnclar?: () => void;
   onDesanclar?: () => void;
+  conversacionActivaId?: number;
+  onSelectConversacion?: (id: number) => void;
 }
 
-export function HistorialDrawer({ onClose, anclado = false, onAnclar, onDesanclar }: HistorialDrawerProps) {
+export function HistorialDrawer({
+  onClose,
+  anclado = false,
+  onAnclar,
+  onDesanclar,
+  conversacionActivaId,
+  onSelectConversacion,
+}: HistorialDrawerProps) {
   const [busqueda, setBusqueda] = useState('');
 
+  const filtradas = busqueda.trim()
+    ? CONVERSACIONES_DEMO.filter((c) =>
+        c.nombre.toLowerCase().includes(busqueda.toLowerCase())
+      )
+    : null;
+
+  const ancladas = (filtradas ?? CONVERSACIONES_DEMO).filter((c) => c.grupo === 'anclada');
+  const recientes = (filtradas ?? CONVERSACIONES_DEMO).filter((c) => c.grupo === 'reciente');
+  const otras = (filtradas ?? CONVERSACIONES_DEMO).filter((c) => c.grupo === 'otra');
+
+  function handleSelect(id: number) {
+    onSelectConversacion?.(id);
+    onClose();
+  }
+
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100%',
-        bgcolor: 'background.paper',
-      }}
-    >
-      {/* DrawerHeader */}
+    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%', bgcolor: 'background.paper' }}>
+      {/* Header */}
       <Box
         sx={{
           display: 'flex',
@@ -202,7 +199,7 @@ export function HistorialDrawer({ onClose, anclado = false, onAnclar, onDesancla
         </IconButton>
       </Box>
 
-      {/* Search field */}
+      {/* Search */}
       <Box sx={{ px: 2, pt: 1.5, pb: 2, flexShrink: 0 }}>
         <TextField
           size="small"
@@ -228,43 +225,70 @@ export function HistorialDrawer({ onClose, anclado = false, onAnclar, onDesancla
       </Box>
 
       {/* Lista */}
-      <Box sx={{ flex: 1 /*, overflowY: 'auto' */ }}>
-        {/* Sección anclada */}
-        {anclado && (
+      <Box sx={{ flex: 1, overflowY: 'auto', scrollbarWidth: 'thin', scrollbarColor: 'rgba(16,24,64,0.15) transparent' }}>
+        {anclado && ancladas.length > 0 && (
           <>
             <GroupLabel>Anclado</GroupLabel>
-            {ANCLADAS.map((c) => (
-              <ConversacionItem key={c.id} conv={c} onAnclar={onDesanclar} />
+            {ancladas.map((c) => (
+              <ConversacionItem
+                key={c.id}
+                conv={c}
+                activa={c.id === conversacionActivaId}
+                onSelect={() => handleSelect(c.id)}
+                onAnclar={onDesanclar}
+              />
             ))}
           </>
         )}
 
-        {/* Recientes */}
-        <GroupLabel>Recientes</GroupLabel>
-        {RECIENTES.map((c) => (
-          <ConversacionItem key={c.id} conv={c} onAnclar={onAnclar} />
-        ))}
+        {recientes.length > 0 && (
+          <>
+            <GroupLabel>Recientes</GroupLabel>
+            {recientes.map((c) => (
+              <ConversacionItem
+                key={c.id}
+                conv={c}
+                activa={c.id === conversacionActivaId}
+                onSelect={() => handleSelect(c.id)}
+                onAnclar={onAnclar}
+              />
+            ))}
+          </>
+        )}
 
-        {/* Otras conversaciones */}
-        <GroupLabel>Otras conversaciones</GroupLabel>
-        {OTRAS.map((c) => (
-          <ConversacionItem key={c.id} conv={c} onAnclar={onAnclar} />
-        ))}
+        {otras.length > 0 && (
+          <>
+            <GroupLabel>Otras conversaciones</GroupLabel>
+            {otras.map((c) => (
+              <ConversacionItem
+                key={c.id}
+                conv={c}
+                activa={c.id === conversacionActivaId}
+                onSelect={() => handleSelect(c.id)}
+                onAnclar={onAnclar}
+              />
+            ))}
+          </>
+        )}
 
-        {/* Mostrar más */}
-        <Box sx={{ px: 2, py: 1.25 }}>
-          <Typography
-            variant="body2"
-            sx={{
-              color: 'text.secondary',
-              fontSize: '0.8125rem',
-              cursor: 'pointer',
-              '&:hover': { color: PRIMARY },
-            }}
-          >
-            Mostrar 8 más...
-          </Typography>
-        </Box>
+        {filtradas !== null && filtradas.length === 0 && (
+          <Box sx={{ px: 2, py: 3, textAlign: 'center' }}>
+            <Typography variant="body2" sx={{ color: 'text.disabled', fontSize: '0.8125rem' }}>
+              Sin resultados para "{busqueda}"
+            </Typography>
+          </Box>
+        )}
+
+        {otras.length > 0 && !busqueda && (
+          <Box sx={{ px: 2, py: 1.25 }}>
+            <Typography
+              variant="body2"
+              sx={{ color: 'text.secondary', fontSize: '0.8125rem', cursor: 'pointer', '&:hover': { color: PRIMARY } }}
+            >
+              Mostrar 8 más...
+            </Typography>
+          </Box>
+        )}
       </Box>
     </Box>
   );

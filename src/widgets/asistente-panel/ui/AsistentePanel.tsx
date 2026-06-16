@@ -246,7 +246,7 @@ export function AsistentePanel({ onMinimizar, onVerHistorial, onExpandir, onEnvi
         onVerHistorial={onVerHistorial ?? (() => {})}
         onExpandir={onExpandir ?? (() => {})}
         onVerMas={() => {}}
-        onEnviar={onEnviar}
+        onEnviar={onEnviar ? () => onEnviar() : undefined}
       />
     </Box>
   );

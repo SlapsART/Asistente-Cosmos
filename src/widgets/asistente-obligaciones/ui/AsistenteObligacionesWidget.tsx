@@ -5,6 +5,8 @@ import { motion } from 'framer-motion';
 import { AppShellMock } from '@/widgets/asistente-base/ui/AppShellMock';
 import { ChatPanel } from '@/widgets/asistente-base/ui/ChatPanel';
 import { HistorialDrawer } from '@/widgets/asistente-base/ui/HistorialDrawer';
+import { CONVERSACIONES_DEMO, generarRespuesta } from '@/widgets/asistente-base/model/conversaciones';
+import type { Mensaje } from '@/widgets/asistente-base/model/conversaciones';
 import { overlayVariants } from '@/shared/ui/anim';
 import { ObligacionesPanel } from './ObligacionesPanel';
 
@@ -90,11 +92,87 @@ function MiniInput({ onClick }: { onClick: () => void }) {
 export function AsistenteObligacionesWidget() {
   const [estado, setEstado] = useState<EstadoOb>('minimizado');
 
+  // Conversation state
+  const [conversacionActivaId, setConversacionActivaId] = useState(1);
+  const [mensajesPorConv, setMensajesPorConv] = useState<Record<number, Mensaje[]>>(() =>
+    Object.fromEntries(CONVERSACIONES_DEMO.map((c) => [c.id, [...c.mensajes]]))
+  );
+  const [pensando, setPensando] = useState(false);
+
+  const mensajesActivos = mensajesPorConv[conversacionActivaId] ?? [];
+  const convActiva = CONVERSACIONES_DEMO.find((c) => c.id === conversacionActivaId);
+  const nombreConvActiva = convActiva?.nombre ?? 'Conversación';
+
   function irA(siguiente: EstadoOb) {
     setEstado(siguiente);
   }
 
+  function enviarMensaje(texto: string) {
+    const hora = new Date().toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
+    const userMsg: Mensaje = { id: Date.now(), autor: 'usuario', texto, hora };
+
+    setMensajesPorConv((prev) => ({
+      ...prev,
+      [conversacionActivaId]: [...(prev[conversacionActivaId] ?? []), userMsg],
+    }));
+    setPensando(true);
+
+    setTimeout(() => {
+      const agentMsg: Mensaje = { id: Date.now() + 1, autor: 'agente', texto: generarRespuesta(texto) };
+      setMensajesPorConv((prev) => ({
+        ...prev,
+        [conversacionActivaId]: [...(prev[conversacionActivaId] ?? []), agentMsg],
+      }));
+      setPensando(false);
+    }, 1500);
+  }
+
+  function iniciarNuevaConversacion() {
+    const nuevoId = Date.now();
+    setConversacionActivaId(nuevoId);
+    setMensajesPorConv((prev) => ({ ...prev, [nuevoId]: [] }));
+    irA('nueva');
+  }
+
+  function seleccionarConversacion(id: number, modoDestino: 'chat' | 'lateral') {
+    setConversacionActivaId(id);
+    irA(modoDestino);
+  }
+
   const O = overlayVariants;
+
+  const chatProps = {
+    mensajes: mensajesActivos,
+    pensando,
+    onEnviarMensaje: enviarMensaje,
+    nombreChat: nombreConvActiva,
+  };
+
+  function drawerHistorial(onClose: () => void, anclado: boolean, onAnclar?: () => void, onDesanclar?: () => void) {
+    return (
+      <HistorialDrawer
+        onClose={onClose}
+        anclado={anclado}
+        onAnclar={onAnclar}
+        onDesanclar={onDesanclar}
+        conversacionActivaId={conversacionActivaId}
+        onSelectConversacion={(id) => seleccionarConversacion(id, 'chat')}
+      />
+    );
+  }
+
+  function drawerHistorialLateral(onClose: () => void, anclado: boolean, onAnclar?: () => void, onDesanclar?: () => void) {
+    return (
+      <HistorialDrawer
+        onClose={onClose}
+        anclado={anclado}
+        onAnclar={onAnclar}
+        onDesanclar={onDesanclar}
+        conversacionActivaId={conversacionActivaId}
+        onSelectConversacion={(id) => seleccionarConversacion(id, 'lateral')}
+      />
+    );
+  }
 
   // ─── MINIMIZADO ──────────────────────────────────────────────────────────
   if (estado === 'minimizado') {
@@ -135,10 +213,10 @@ export function AsistenteObligacionesWidget() {
           <motion.div key="chat" variants={O} initial="initial" animate="animate" exit="exit">
             <ChatPanel
               modo="flotante"
-              conMensajes
+              {...chatProps}
               onMinimizar={() => irA('minimizado')}
               onLateral={() => irA('lateral')}
-              onNueva={() => irA('nueva')}
+              onNueva={iniciarNuevaConversacion}
               onHistorial={() => irA('historial')}
             />
           </motion.div>
@@ -155,11 +233,13 @@ export function AsistenteObligacionesWidget() {
           <motion.div key="nueva" variants={O} initial="initial" animate="animate" exit="exit">
             <ChatPanel
               modo="flotante"
-              conMensajes={false}
+              mensajes={mensajesActivos}
+              pensando={pensando}
+              onEnviarMensaje={enviarMensaje}
               nombreChat="Nueva conversación"
               onMinimizar={() => irA('minimizado')}
               onLateral={() => irA('lateral')}
-              onNueva={() => irA('nueva')}
+              onNueva={iniciarNuevaConversacion}
               onHistorial={() => irA('historial')}
             />
           </motion.div>
@@ -176,10 +256,10 @@ export function AsistenteObligacionesWidget() {
         rightPanel={
           <ChatPanel
             modo="lateral"
-            conMensajes
+            {...chatProps}
             onMinimizar={() => irA('minimizado')}
             onLateral={() => irA('chat')}
-            onNueva={() => irA('nueva')}
+            onNueva={iniciarNuevaConversacion}
             onHistorial={() => irA('historial-lateral')}
           />
         }
@@ -195,20 +275,18 @@ export function AsistenteObligacionesWidget() {
         rightPanel={
           <ChatPanel
             modo="lateral"
-            conMensajes
+            {...chatProps}
             onMinimizar={() => irA('minimizado')}
             onLateral={() => irA('chat')}
-            onNueva={() => irA('nueva')}
+            onNueva={iniciarNuevaConversacion}
             onHistorial={() => irA('historial-lateral')}
           />
         }
-        drawerOverlay={
-          <HistorialDrawer
-            onClose={() => irA('lateral')}
-            anclado={false}
-            onAnclar={() => irA('historial-lateral-anclado')}
-          />
-        }
+        drawerOverlay={drawerHistorialLateral(
+          () => irA('lateral'),
+          false,
+          () => irA('historial-lateral-anclado'),
+        )}
         drawerOverlayWidth={HISTORIAL_WIDTH}
       />
     );
@@ -222,20 +300,19 @@ export function AsistenteObligacionesWidget() {
         rightPanel={
           <ChatPanel
             modo="lateral"
-            conMensajes
+            {...chatProps}
             onMinimizar={() => irA('minimizado')}
             onLateral={() => irA('chat')}
-            onNueva={() => irA('nueva')}
+            onNueva={iniciarNuevaConversacion}
             onHistorial={() => irA('historial-lateral')}
           />
         }
-        drawerOverlay={
-          <HistorialDrawer
-            onClose={() => irA('lateral')}
-            anclado
-            onDesanclar={() => irA('historial-lateral')}
-          />
-        }
+        drawerOverlay={drawerHistorialLateral(
+          () => irA('lateral'),
+          true,
+          undefined,
+          () => irA('historial-lateral'),
+        )}
         drawerOverlayWidth={HISTORIAL_WIDTH}
       />
     );
@@ -249,21 +326,19 @@ export function AsistenteObligacionesWidget() {
           <motion.div key="chat" variants={O} initial="initial" animate="animate" exit="exit">
             <ChatPanel
               modo="flotante"
-              conMensajes
+              {...chatProps}
               onMinimizar={() => irA('minimizado')}
               onLateral={() => irA('lateral')}
-              onNueva={() => irA('nueva')}
+              onNueva={iniciarNuevaConversacion}
               onHistorial={() => irA('chat')}
             />
           </motion.div>
         }
-        drawerOverlay={
-          <HistorialDrawer
-            onClose={() => irA('chat')}
-            anclado={false}
-            onAnclar={() => irA('historial-anclado')}
-          />
-        }
+        drawerOverlay={drawerHistorial(
+          () => irA('chat'),
+          false,
+          () => irA('historial-anclado'),
+        )}
         drawerOverlayWidth={HISTORIAL_WIDTH}
       />
     );
@@ -277,21 +352,20 @@ export function AsistenteObligacionesWidget() {
           <motion.div key="chat" variants={O} initial="initial" animate="animate" exit="exit">
             <ChatPanel
               modo="flotante"
-              conMensajes
+              {...chatProps}
               onMinimizar={() => irA('minimizado')}
               onLateral={() => irA('lateral')}
-              onNueva={() => irA('nueva')}
+              onNueva={iniciarNuevaConversacion}
               onHistorial={() => irA('chat')}
             />
           </motion.div>
         }
-        drawerOverlay={
-          <HistorialDrawer
-            onClose={() => irA('chat')}
-            anclado
-            onDesanclar={() => irA('historial')}
-          />
-        }
+        drawerOverlay={drawerHistorial(
+          () => irA('chat'),
+          true,
+          undefined,
+          () => irA('historial'),
+        )}
         drawerOverlayWidth={HISTORIAL_WIDTH}
       />
     );

@@ -29,7 +29,7 @@ interface AsistenteInputProps {
   onVerHistorial: () => void;
   onExpandir: () => void;
   onVerMas: () => void;
-  onEnviar?: () => void;
+  onEnviar?: (texto: string) => void;
   showTopActions?: boolean;
   /** embedded: sin card propio (integrado dentro de otro contenedor) */
   variant?: 'card' | 'embedded';
@@ -170,7 +170,7 @@ export function AsistenteInput({
               <IconButton
                 size="small"
                 disabled={!tieneTexto}
-                onClick={tieneTexto ? onEnviar : undefined}
+                onClick={tieneTexto ? () => { onEnviar?.(localTexto); setLocalTexto(''); } : undefined}
                 sx={{
                   p: '4px',
                   color: tieneTexto ? '#fff !important' : 'rgba(47,67,208,0.3) !important',

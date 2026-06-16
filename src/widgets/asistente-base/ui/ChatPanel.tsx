@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Box, Divider, IconButton, InputBase, Typography } from '@mui/material';
 import {
   IconBookmark,
@@ -13,25 +13,9 @@ import {
   IconUsers,
 } from '@tabler/icons-react';
 import { AsistenteInput } from '@/widgets/asistente-panel/ui/AsistenteInput';
+import type { Mensaje } from '../model/conversaciones';
 
 const PRIMARY = '#2f43d0';
-
-interface Mensaje {
-  id: number;
-  autor: 'usuario' | 'agente';
-  texto: string;
-  hora?: string;
-  esContextoNuevo?: boolean;
-}
-
-const MENSAJES_DEMO: Mensaje[] = [
-  { id: 1, autor: 'usuario', texto: 'Usuario ingresa su solicitud', hora: '10:24' },
-  { id: 2, autor: 'agente', texto: 'La respuesta del agente luego de analizar la entrada del usuario' },
-  { id: 3, autor: 'usuario', texto: 'Usuario ingresa su solicitud', hora: '10:25', esContextoNuevo: true },
-  { id: 4, autor: 'agente', texto: 'La respuesta del agente luego de analizar la entrada del usuario' },
-  { id: 5, autor: 'usuario', texto: 'Usuario ingresa su solicitud', hora: '10:26' },
-  { id: 6, autor: 'agente', texto: 'La respuesta del agente luego de analizar la entrada del usuario' },
-];
 
 function UserMessage({ mensaje }: { mensaje: Mensaje }) {
   const [hover, setHover] = useState(false);
@@ -41,15 +25,11 @@ function UserMessage({ mensaje }: { mensaje: Mensaje }) {
       onMouseLeave={() => setHover(false)}
       sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '2px', pl: 7 }}
     >
-      <Box
-        sx={{
-          bgcolor: 'rgba(47,67,208,0.08)',
-          borderRadius: '4px 4px 0 4px',
-          px: 1,
-          py: 0.5,
-        }}
-      >
-        <Typography variant="body2" sx={{ color: 'text.primary', fontSize: '0.8125rem' }}>
+      <Box sx={{ bgcolor: 'rgba(47,67,208,0.08)', borderRadius: '4px 4px 0 4px', px: 1, py: 0.5 }}>
+        <Typography
+          variant="body2"
+          sx={{ color: 'text.primary', fontSize: '0.8125rem', whiteSpace: 'pre-wrap' }}
+        >
           {mensaje.texto}
         </Typography>
       </Box>
@@ -83,7 +63,10 @@ function AgenteMessage({ mensaje }: { mensaje: Mensaje }) {
       onMouseLeave={() => setHover(false)}
       sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '2px', pr: 7 }}
     >
-      <Typography variant="body2" sx={{ color: 'text.secondary', fontSize: '0.8125rem' }}>
+      <Typography
+        variant="body2"
+        sx={{ color: 'text.secondary', fontSize: '0.8125rem', whiteSpace: 'pre-wrap' }}
+      >
         {mensaje.texto}
       </Typography>
       <Box
@@ -98,6 +81,39 @@ function AgenteMessage({ mensaje }: { mensaje: Mensaje }) {
         <IconButton size="small" sx={{ p: '2px' }}><IconCopy size={13} /></IconButton>
         <IconButton size="small" sx={{ p: '2px' }}><IconRefresh size={13} /></IconButton>
         <IconButton size="small" sx={{ p: '2px' }}><IconDots size={13} /></IconButton>
+      </Box>
+    </Box>
+  );
+}
+
+function TypingIndicator() {
+  return (
+    <Box sx={{ display: 'flex', alignItems: 'flex-start', pr: 7 }}>
+      <Box
+        sx={{
+          display: 'flex',
+          gap: '4px',
+          alignItems: 'center',
+          py: 0.5,
+        }}
+      >
+        {[0, 1, 2].map((i) => (
+          <Box
+            key={i}
+            sx={{
+              width: 6,
+              height: 6,
+              borderRadius: '50%',
+              bgcolor: 'rgba(16,24,64,0.3)',
+              animation: 'pulse 1.2s ease-in-out infinite',
+              animationDelay: `${i * 0.2}s`,
+              '@keyframes pulse': {
+                '0%, 60%, 100%': { opacity: 0.3, transform: 'scale(0.8)' },
+                '30%': { opacity: 1, transform: 'scale(1)' },
+              },
+            }}
+          />
+        ))}
       </Box>
     </Box>
   );
@@ -129,29 +145,42 @@ function ContextSeparator() {
   );
 }
 
-interface ChatPanelProps {
+export interface ChatPanelProps {
   modo: 'flotante' | 'lateral';
-  conMensajes?: boolean;
+  mensajes?: Mensaje[];
+  pensando?: boolean;
   onHistorial?: () => void;
   onLateral?: () => void;
   onMinimizar?: () => void;
   onNueva?: () => void;
-  /** Nombre editable del chat */
+  onEnviarMensaje?: (texto: string) => void;
   nombreChat?: string;
 }
 
 export function ChatPanel({
   modo,
-  conMensajes = true,
+  mensajes = [],
+  pensando = false,
   onHistorial,
   onLateral,
   onMinimizar,
   onNueva,
+  onEnviarMensaje,
   nombreChat = '[Nombre del chat]',
 }: ChatPanelProps) {
   const [chipActivo, setChipActivo] = useState('');
   const [nombre, setNombre] = useState(nombreChat);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
   const isFlotante = modo === 'flotante';
+  const tieneMensajes = mensajes.length > 0;
+
+  useEffect(() => {
+    setNombre(nombreChat);
+  }, [nombreChat]);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [mensajes, pensando]);
 
   return (
     <Box
@@ -169,7 +198,7 @@ export function ChatPanel({
         overflow: 'hidden',
       }}
     >
-      {/* NameChat header */}
+      {/* Header */}
       <Box
         sx={{
           display: 'flex',
@@ -178,10 +207,9 @@ export function ChatPanel({
           py: 0.75,
           gap: 1,
           flexShrink: 0,
-          borderBottom: conMensajes ? '1px solid rgba(16,24,64,0.06)' : 'none',
+          borderBottom: tieneMensajes ? '1px solid rgba(16,24,64,0.06)' : 'none',
         }}
       >
-        {/* Chat name — editable text field style */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75, flex: 1, minWidth: 0 }}>
           <IconUsers size={14} color={PRIMARY} style={{ flexShrink: 0 }} />
           <InputBase
@@ -206,7 +234,6 @@ export function ChatPanel({
           />
         </Box>
 
-        {/* Right actions (Figma: bordered+ | message-search | | | layout-sidebar) */}
         <Box sx={{ display: 'flex', gap: 0.5, alignItems: 'center', flexShrink: 0 }}>
           <Box
             component="button"
@@ -230,7 +257,12 @@ export function ChatPanel({
             <IconMessageSearch size={15} color="rgba(16,24,64,0.54)" />
           </IconButton>
           <Divider orientation="vertical" flexItem sx={{ mx: 0.25, height: 12, alignSelf: 'center' }} />
-          <IconButton size="small" onClick={onLateral} sx={{ p: '3px' }} title={isFlotante ? 'Modo lateral' : 'Modo flotante'}>
+          <IconButton
+            size="small"
+            onClick={onLateral}
+            sx={{ p: '3px' }}
+            title={isFlotante ? 'Modo lateral' : 'Modo flotante'}
+          >
             <IconLayoutSidebarRight size={15} color="rgba(16,24,64,0.54)" />
           </IconButton>
           {isFlotante && (
@@ -244,32 +276,34 @@ export function ChatPanel({
         </Box>
       </Box>
 
-      {/* Mensaje area */}
-      {conMensajes && (
+      {/* Messages area */}
+      {tieneMensajes && (
         <Box
           sx={{
             flex: isFlotante ? 'unset' : 1,
+            maxHeight: isFlotante ? 320 : 'none',
+            overflowY: 'auto',
             px: 1.5,
             py: 1,
             display: 'flex',
             flexDirection: 'column',
             gap: 1.25,
-            // overflowY: isFlotante ? 'unset' : 'auto',
             position: 'relative',
+            scrollbarWidth: 'thin',
+            scrollbarColor: 'rgba(16,24,64,0.15) transparent',
           }}
         >
-          {MENSAJES_DEMO.map((m) => (
+          {mensajes.map((m) => (
             <Box key={m.id}>
               {m.esContextoNuevo && <ContextSeparator />}
-              {m.autor === 'usuario' ? (
-                <UserMessage mensaje={m} />
-              ) : (
-                <AgenteMessage mensaje={m} />
-              )}
+              {m.autor === 'usuario' ? <UserMessage mensaje={m} /> : <AgenteMessage mensaje={m} />}
             </Box>
           ))}
 
-          {/* Fade gradient at bottom */}
+          {pensando && <TypingIndicator />}
+
+          <div ref={messagesEndRef} />
+
           {!isFlotante && (
             <Box
               sx={{
@@ -287,7 +321,8 @@ export function ChatPanel({
         </Box>
       )}
 
-      {!conMensajes && !isFlotante && <Box sx={{ flex: 1 }} />}
+      {/* Spacer when no messages in lateral mode */}
+      {!tieneMensajes && !isFlotante && <Box sx={{ flex: 1 }} />}
 
       {/* Input */}
       <AsistenteInput
@@ -300,6 +335,7 @@ export function ChatPanel({
         onVerHistorial={onHistorial ?? (() => {})}
         onExpandir={onLateral ?? (() => {})}
         onVerMas={() => {}}
+        onEnviar={onEnviarMensaje}
         showTopActions={false}
         variant="embedded"
       />

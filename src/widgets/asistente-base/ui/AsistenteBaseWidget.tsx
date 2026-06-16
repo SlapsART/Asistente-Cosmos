@@ -4,6 +4,8 @@ import { IconArrowUp, IconPlus } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import { AsistentePanel } from '@/widgets/asistente-panel';
 import { overlayVariants } from '@/shared/ui/anim';
+import { CONVERSACIONES_DEMO, generarRespuesta } from '../model/conversaciones';
+import type { Mensaje } from '../model/conversaciones';
 import { AppShellMock } from './AppShellMock';
 import { ChatPanel } from './ChatPanel';
 import { HistorialDrawer } from './HistorialDrawer';
@@ -19,7 +21,6 @@ type EstadoBase =
   | 'historial-lateral'
   | 'historial-lateral-anclado';
 
-// Figma: panel lateral 336px, drawer historial 380px
 const LATERAL_WIDTH = 336;
 const HISTORIAL_WIDTH = 380;
 
@@ -31,8 +32,7 @@ function MiniInput({ onClick }: { onClick: () => void }) {
         bgcolor: 'background.paper',
         border: '1px solid rgba(47,67,208,0.08)',
         borderRadius: '10px',
-        boxShadow:
-          '0px 4px 16px rgba(47,67,208,0.1), 0px 1px 4px rgba(47,67,208,0.06)',
+        boxShadow: '0px 4px 16px rgba(47,67,208,0.1), 0px 1px 4px rgba(47,67,208,0.06)',
         p: 1,
         width: 260,
         cursor: 'pointer',
@@ -92,11 +92,89 @@ function MiniInput({ onClick }: { onClick: () => void }) {
 export function AsistenteBaseWidget() {
   const [estado, setEstado] = useState<EstadoBase>('minimizado');
 
+  // Conversation state
+  const [conversacionActivaId, setConversacionActivaId] = useState(1);
+  const [mensajesPorConv, setMensajesPorConv] = useState<Record<number, Mensaje[]>>(() =>
+    Object.fromEntries(CONVERSACIONES_DEMO.map((c) => [c.id, [...c.mensajes]]))
+  );
+  const [pensando, setPensando] = useState(false);
+
+  const mensajesActivos = mensajesPorConv[conversacionActivaId] ?? [];
+  const convActiva = CONVERSACIONES_DEMO.find((c) => c.id === conversacionActivaId);
+  const nombreConvActiva = convActiva?.nombre ?? 'Conversación';
+
   function irA(siguiente: EstadoBase) {
     setEstado(siguiente);
   }
 
+  function enviarMensaje(texto: string) {
+    const hora = new Date().toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
+    const userMsg: Mensaje = { id: Date.now(), autor: 'usuario', texto, hora };
+
+    setMensajesPorConv((prev) => ({
+      ...prev,
+      [conversacionActivaId]: [...(prev[conversacionActivaId] ?? []), userMsg],
+    }));
+    setPensando(true);
+
+    setTimeout(() => {
+      const agentMsg: Mensaje = { id: Date.now() + 1, autor: 'agente', texto: generarRespuesta(texto) };
+      setMensajesPorConv((prev) => ({
+        ...prev,
+        [conversacionActivaId]: [...(prev[conversacionActivaId] ?? []), agentMsg],
+      }));
+      setPensando(false);
+    }, 1500);
+  }
+
+  function iniciarNuevaConversacion() {
+    const nuevoId = Date.now();
+    setConversacionActivaId(nuevoId);
+    setMensajesPorConv((prev) => ({ ...prev, [nuevoId]: [] }));
+    irA('nueva');
+  }
+
+  function seleccionarConversacion(id: number, modoDestino: 'chat' | 'lateral') {
+    setConversacionActivaId(id);
+    irA(modoDestino);
+  }
+
   const O = overlayVariants;
+
+  // Shared ChatPanel props for active conversation
+  const chatProps = {
+    mensajes: mensajesActivos,
+    pensando,
+    onEnviarMensaje: enviarMensaje,
+    nombreChat: nombreConvActiva,
+  };
+
+  // Shared HistorialDrawer for flotante modes
+  function drawerHistorial(onClose: () => void, anclado: boolean, onAnclar?: () => void, onDesanclar?: () => void) {
+    return (
+      <HistorialDrawer
+        onClose={onClose}
+        anclado={anclado}
+        onAnclar={onAnclar}
+        onDesanclar={onDesanclar}
+        conversacionActivaId={conversacionActivaId}
+        onSelectConversacion={(id) => seleccionarConversacion(id, 'chat')}
+      />
+    );
+  }
+
+  function drawerHistorialLateral(onClose: () => void, anclado: boolean, onAnclar?: () => void, onDesanclar?: () => void) {
+    return (
+      <HistorialDrawer
+        onClose={onClose}
+        anclado={anclado}
+        onAnclar={onAnclar}
+        onDesanclar={onDesanclar}
+        conversacionActivaId={conversacionActivaId}
+        onSelectConversacion={(id) => seleccionarConversacion(id, 'lateral')}
+      />
+    );
+  }
 
   // ─── MINIMIZADO ──────────────────────────────────────────────────────────
   if (estado === 'minimizado') {
@@ -111,7 +189,7 @@ export function AsistenteBaseWidget() {
     );
   }
 
-  // ─── EXPANDIDO (modo activo — input con chips) ───────────────────────────
+  // ─── EXPANDIDO ───────────────────────────────────────────────────────────
   if (estado === 'expandido') {
     return (
       <AppShellMock
@@ -137,10 +215,10 @@ export function AsistenteBaseWidget() {
           <motion.div key="chat" variants={O} initial="initial" animate="animate" exit="exit">
             <ChatPanel
               modo="flotante"
-              conMensajes
+              {...chatProps}
               onMinimizar={() => irA('minimizado')}
               onLateral={() => irA('lateral')}
-              onNueva={() => irA('nueva')}
+              onNueva={iniciarNuevaConversacion}
               onHistorial={() => irA('historial')}
             />
           </motion.div>
@@ -157,11 +235,13 @@ export function AsistenteBaseWidget() {
           <motion.div key="nueva" variants={O} initial="initial" animate="animate" exit="exit">
             <ChatPanel
               modo="flotante"
-              conMensajes={false}
+              mensajes={mensajesActivos}
+              pensando={pensando}
+              onEnviarMensaje={enviarMensaje}
               nombreChat="Nueva conversación"
               onMinimizar={() => irA('minimizado')}
               onLateral={() => irA('lateral')}
-              onNueva={() => irA('nueva')}
+              onNueva={iniciarNuevaConversacion}
               onHistorial={() => irA('historial')}
             />
           </motion.div>
@@ -178,10 +258,10 @@ export function AsistenteBaseWidget() {
         rightPanel={
           <ChatPanel
             modo="lateral"
-            conMensajes
+            {...chatProps}
             onMinimizar={() => irA('minimizado')}
             onLateral={() => irA('chat')}
-            onNueva={() => irA('nueva')}
+            onNueva={iniciarNuevaConversacion}
             onHistorial={() => irA('historial-lateral')}
           />
         }
@@ -197,20 +277,18 @@ export function AsistenteBaseWidget() {
         rightPanel={
           <ChatPanel
             modo="lateral"
-            conMensajes
+            {...chatProps}
             onMinimizar={() => irA('minimizado')}
             onLateral={() => irA('chat')}
-            onNueva={() => irA('nueva')}
+            onNueva={iniciarNuevaConversacion}
             onHistorial={() => irA('historial-lateral')}
           />
         }
-        drawerOverlay={
-          <HistorialDrawer
-            onClose={() => irA('lateral')}
-            anclado={false}
-            onAnclar={() => irA('historial-lateral-anclado')}
-          />
-        }
+        drawerOverlay={drawerHistorialLateral(
+          () => irA('lateral'),
+          false,
+          () => irA('historial-lateral-anclado'),
+        )}
         drawerOverlayWidth={HISTORIAL_WIDTH}
       />
     );
@@ -224,20 +302,19 @@ export function AsistenteBaseWidget() {
         rightPanel={
           <ChatPanel
             modo="lateral"
-            conMensajes
+            {...chatProps}
             onMinimizar={() => irA('minimizado')}
             onLateral={() => irA('chat')}
-            onNueva={() => irA('nueva')}
+            onNueva={iniciarNuevaConversacion}
             onHistorial={() => irA('historial-lateral')}
           />
         }
-        drawerOverlay={
-          <HistorialDrawer
-            onClose={() => irA('lateral')}
-            anclado
-            onDesanclar={() => irA('historial-lateral')}
-          />
-        }
+        drawerOverlay={drawerHistorialLateral(
+          () => irA('lateral'),
+          true,
+          undefined,
+          () => irA('historial-lateral'),
+        )}
         drawerOverlayWidth={HISTORIAL_WIDTH}
       />
     );
@@ -251,21 +328,19 @@ export function AsistenteBaseWidget() {
           <motion.div key="chat" variants={O} initial="initial" animate="animate" exit="exit">
             <ChatPanel
               modo="flotante"
-              conMensajes
+              {...chatProps}
               onMinimizar={() => irA('minimizado')}
               onLateral={() => irA('lateral')}
-              onNueva={() => irA('nueva')}
+              onNueva={iniciarNuevaConversacion}
               onHistorial={() => irA('chat')}
             />
           </motion.div>
         }
-        drawerOverlay={
-          <HistorialDrawer
-            onClose={() => irA('chat')}
-            anclado={false}
-            onAnclar={() => irA('historial-anclado')}
-          />
-        }
+        drawerOverlay={drawerHistorial(
+          () => irA('chat'),
+          false,
+          () => irA('historial-anclado'),
+        )}
         drawerOverlayWidth={HISTORIAL_WIDTH}
       />
     );
@@ -279,21 +354,20 @@ export function AsistenteBaseWidget() {
           <motion.div key="chat" variants={O} initial="initial" animate="animate" exit="exit">
             <ChatPanel
               modo="flotante"
-              conMensajes
+              {...chatProps}
               onMinimizar={() => irA('minimizado')}
               onLateral={() => irA('lateral')}
-              onNueva={() => irA('nueva')}
+              onNueva={iniciarNuevaConversacion}
               onHistorial={() => irA('chat')}
             />
           </motion.div>
         }
-        drawerOverlay={
-          <HistorialDrawer
-            onClose={() => irA('chat')}
-            anclado
-            onDesanclar={() => irA('historial')}
-          />
-        }
+        drawerOverlay={drawerHistorial(
+          () => irA('chat'),
+          true,
+          undefined,
+          () => irA('historial'),
+        )}
         drawerOverlayWidth={HISTORIAL_WIDTH}
       />
     );
