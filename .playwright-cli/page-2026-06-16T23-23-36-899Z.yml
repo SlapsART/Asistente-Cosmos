@@ -1,0 +1,97 @@
+- generic [ref=e150]:
+  - generic [ref=e151]:
+    - generic [ref=e152]:
+      - img [ref=e153]
+      - separator [ref=e155]
+      - paragraph [ref=e156]: Inicio
+      - img [ref=e157]
+      - paragraph [ref=e159]: Reglas de derivación
+    - generic [ref=e160]:
+      - paragraph [ref=e161]: Empresa de insumos S.A.S
+      - button [ref=e162] [cursor=pointer]:
+        - img [ref=e163]
+      - separator [ref=e166]
+      - button [ref=e167] [cursor=pointer]:
+        - img [ref=e168]
+      - separator [ref=e171]
+      - paragraph [ref=e173]: HD
+  - generic [ref=e174]:
+    - generic [ref=e175]:
+      - button "Asistente Base" [ref=e176] [cursor=pointer]:
+        - img [ref=e177]
+      - button "Asistente Obligaciones" [ref=e178] [cursor=pointer]:
+        - img [ref=e179]
+      - button "Asistente Contabilidad" [ref=e181] [cursor=pointer]:
+        - img [ref=e182]
+    - generic [ref=e184]:
+      - heading "Asistente Base" [level=6] [ref=e186]
+      - generic [ref=e198]:
+        - generic [ref=e246]:
+          - generic [ref=e247]:
+            - heading "Actividades pendientes" [level=6] [ref=e248]
+            - button [ref=e249] [cursor=pointer]:
+              - img [ref=e250]
+          - list [ref=e254]:
+            - listitem [ref=e255]:
+              - generic [ref=e256] [cursor=pointer]:
+                - img [ref=e258]
+                - paragraph [ref=e262]: Borradores de asiento pendientes por revisar
+                - generic [ref=e263]:
+                  - generic [ref=e265]: "20"
+                  - button [ref=e266]:
+                    - img [ref=e267]
+            - listitem [ref=e269]:
+              - generic [ref=e270] [cursor=pointer]:
+                - img [ref=e272]
+                - paragraph [ref=e276]: Borradores que fueron devueltos
+                - generic [ref=e277]:
+                  - generic [ref=e279]: "5"
+                  - button [ref=e280]:
+                    - img [ref=e281]
+            - listitem [ref=e283]:
+              - generic [ref=e284] [cursor=pointer]:
+                - img [ref=e286]
+                - paragraph [ref=e290]: Borradores sin cuentas contables resueltas
+                - generic [ref=e291]:
+                  - generic [ref=e293]: "10"
+                  - button [ref=e294]:
+                    - img [ref=e295]
+            - listitem [ref=e297]:
+              - generic [ref=e298] [cursor=pointer]:
+                - img [ref=e300]
+                - paragraph [ref=e304]: Periodos contables
+                - generic [ref=e305]:
+                  - generic [ref=e307]: "1"
+                  - button [ref=e308]:
+                    - img [ref=e309]
+        - generic [ref=e199]:
+          - generic [ref=e201]:
+            - button [ref=e202] [cursor=pointer]:
+              - img [ref=e203]
+            - separator [ref=e205]
+            - button [ref=e206] [cursor=pointer]:
+              - img [ref=e207]
+          - generic [ref=e208]:
+            - generic [ref=e209]:
+              - generic [ref=e212]:
+                - button [ref=e213] [cursor=pointer]:
+                  - img [ref=e214]
+                - textbox "Describe lo que necesitas..." [ref=e217]
+                - button [ref=e218] [cursor=pointer]:
+                  - img [ref=e219]
+              - generic [ref=e222]:
+                - generic [ref=e223]:
+                  - button "Actividades pendientes" [active] [ref=e224] [cursor=pointer]:
+                    - generic [ref=e225]: Actividades pendientes
+                  - button "Reportes de gestión" [ref=e226] [cursor=pointer]:
+                    - generic [ref=e227]: Reportes de gestión
+                  - button "Periodos contables" [ref=e228] [cursor=pointer]:
+                    - generic [ref=e229]: Periodos contables
+                  - button "Reglas de derivación" [ref=e230] [cursor=pointer]:
+                    - generic [ref=e231]: Reglas de derivación
+                - button "Ver más" [ref=e232] [cursor=pointer]:
+                  - img [ref=e233]
+                  - generic [ref=e238]: Ver más
+            - button [ref=e239] [cursor=pointer]:
+              - img [ref=e240]
+          - generic [ref=e244]: El contenido generado por IA puede ser incorrecto.

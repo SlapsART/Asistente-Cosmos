@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Box } from '@mui/material';
 import { AnimatePresence, motion } from 'framer-motion';
 import { subPanelVariants } from '@/shared/ui/anim';
 import { ActividadesPendientes } from '@/widgets/asistente-panel/ui/ActividadesPendientes';
 import { PanelCalendario } from '@/widgets/asistente-panel/ui/PanelCalendario';
+import { PanelVerMas } from '@/widgets/asistente-panel/ui/PanelVerMas';
 import { ObligacionesInput } from './ObligacionesInput';
 
 type PanelOb =
@@ -12,6 +13,7 @@ type PanelOb =
   | 'vencimientos'
   | 'conciliaciones'
   | 'calendario'
+  | 'ver-mas'
   | null;
 
 interface Estado {
@@ -19,6 +21,7 @@ interface Estado {
   chipActivo: string;
   inputTexto: string;
   inputChips: string[];
+  chipValues: Record<string, string>;
 }
 
 const ESTADO_INICIAL: Estado = {
@@ -26,6 +29,7 @@ const ESTADO_INICIAL: Estado = {
   chipActivo: '',
   inputTexto: '',
   inputChips: [],
+  chipValues: {},
 };
 
 const REGISTRAR_ITEMS = [
@@ -76,6 +80,7 @@ interface ObligacionesPanelProps {
   onVerHistorial?: () => void;
   onExpandir?: () => void;
   onEnviar?: () => void;
+  chipInicial?: string;
 }
 
 export function ObligacionesPanel({
@@ -83,10 +88,21 @@ export function ObligacionesPanel({
   onVerHistorial,
   onExpandir,
   onEnviar,
+  chipInicial,
 }: ObligacionesPanelProps = {}) {
-  const [estado, setEstado] = useState<Estado>(ESTADO_INICIAL);
+  const [estado, setEstado] = useState<Estado>(() => {
+    if (!chipInicial) return ESTADO_INICIAL;
+    if (chipInicial === 'ver-mas') return { ...ESTADO_INICIAL, panel: 'ver-mas' };
+    if (chipInicial === 'Saldos y balances') {
+      return { panel: null, chipActivo: chipInicial, inputTexto: '', inputChips: SALDOS_CONTEXT_CHIPS, chipValues: {} };
+    }
+    const panelOb = CHIP_TO_PANEL[chipInicial] ?? null;
+    return { panel: panelOb, chipActivo: chipInicial, inputTexto: '', inputChips: [], chipValues: {} };
+  });
+  const [pensando, setPensando] = useState(false);
+  const pensandoTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const { panel, chipActivo, inputTexto, inputChips } = estado;
+  const { panel, chipActivo, inputTexto, inputChips, chipValues } = estado;
 
   const chipActivoTipo: 'primario' | 'sub' | null =
     chipActivo === 'Saldos y balances' && inputChips.length > 0
@@ -97,25 +113,40 @@ export function ObligacionesPanel({
 
   function onChipClick(chip: string) {
     if (chip === 'Saldos y balances') {
-      setEstado({
-        panel: null,
-        chipActivo: chip,
-        inputTexto: '',
-        inputChips: SALDOS_CONTEXT_CHIPS,
-      });
+      setEstado({ panel: null, chipActivo: chip, inputTexto: '', inputChips: SALDOS_CONTEXT_CHIPS, chipValues: {} });
       return;
     }
     const panelOb = CHIP_TO_PANEL[chip] ?? null;
-    setEstado({
-      panel: panelOb,
-      chipActivo: chip,
-      inputTexto: '',
-      inputChips: [],
-    });
+    setEstado({ panel: panelOb, chipActivo: chip, inputTexto: '', inputChips: [], chipValues: {} });
   }
 
   function onCerrarPanel() {
     setEstado(ESTADO_INICIAL);
+  }
+
+  function handleEnviar() {
+    if (!onEnviar) return;
+    setPensando(true);
+    if (pensandoTimer.current) clearTimeout(pensandoTimer.current);
+    pensandoTimer.current = setTimeout(() => {
+      onEnviar();
+    }, 600);
+  }
+
+  function onToggleVerMas() {
+    setEstado((prev) => {
+      const abriendo = prev.panel !== 'ver-mas';
+      return {
+        ...prev,
+        panel: abriendo ? 'ver-mas' : null,
+        chipActivo: abriendo ? '' : prev.chipActivo,
+        inputChips: abriendo ? [] : prev.inputChips,
+      };
+    });
+  }
+
+  function onVerMasItemClick(texto: string) {
+    setEstado({ panel: null, chipActivo: '', inputTexto: texto, inputChips: [], chipValues: {} });
   }
 
   function onItemClick(texto: string) {
@@ -125,6 +156,7 @@ export function ObligacionesPanel({
       panel: null,
       inputTexto: texto,
       inputChips: contextChips,
+      chipValues: {},
     }));
   }
 
@@ -134,10 +166,18 @@ export function ObligacionesPanel({
     }
   }
 
+  function onCalendarioSelect(fecha: string) {
+    setEstado((prev) => ({
+      ...prev,
+      panel: null,
+      chipValues: { ...prev.chipValues, 'Fecha de corte': fecha },
+    }));
+  }
+
   function onContextoChipSelect(chip: string, valor: string) {
     setEstado((prev) => ({
       ...prev,
-      inputTexto: prev.inputTexto ? `${prev.inputTexto} - ${valor}` : valor,
+      chipValues: { ...prev.chipValues, [chip]: valor },
     }));
   }
 
@@ -193,7 +233,27 @@ export function ObligacionesPanel({
             exit="exit"
             style={{ position: 'absolute', bottom: 'calc(100% + 8px)', right: 0, zIndex: 1200 }}
           >
-            <PanelCalendario />
+            <PanelCalendario onSelect={onCalendarioSelect} />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Panel Ver más */}
+      <AnimatePresence>
+        {panel === 'ver-mas' && (
+          <motion.div
+            key="ver-mas"
+            variants={SP}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            style={{ position: 'absolute', bottom: 'calc(100% + 8px)', left: 0, right: 0, zIndex: 10 }}
+          >
+            <PanelVerMas
+              moduloInicial="obligaciones"
+              onCerrar={onCerrarPanel}
+              onItemClick={onVerMasItemClick}
+            />
           </motion.div>
         )}
       </AnimatePresence>
@@ -203,14 +263,17 @@ export function ObligacionesPanel({
         chipActivoTipo={chipActivoTipo}
         inputTexto={inputTexto}
         inputChips={inputChips}
+        chipValues={chipValues}
         onChipClick={onChipClick}
         onContextoChipClick={onContextoChipClick}
         onContextoChipSelect={onContextoChipSelect}
         onMinimizar={onMinimizar ?? onCerrarPanel}
         onVerHistorial={onVerHistorial ?? (() => {})}
         onExpandir={onExpandir ?? (() => {})}
-        onVerMas={() => {}}
-        onEnviar={onEnviar}
+        onVerMas={onToggleVerMas}
+        verMasActivo={panel === 'ver-mas'}
+        pensando={pensando}
+        onEnviar={onEnviar ? handleEnviar : undefined}
       />
     </Box>
   );

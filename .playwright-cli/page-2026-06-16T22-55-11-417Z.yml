@@ -1,0 +1,108 @@
+- generic [ref=e381]:
+  - generic [ref=e382]:
+    - generic [ref=e383]:
+      - img [ref=e384]
+      - separator [ref=e386]
+      - paragraph [ref=e387]: Inicio
+      - img [ref=e388]
+      - paragraph [ref=e390]: Reglas de derivación
+    - generic [ref=e391]:
+      - paragraph [ref=e392]: Empresa de insumos S.A.S
+      - button [ref=e393] [cursor=pointer]:
+        - img [ref=e394]
+      - separator [ref=e397]
+      - button [ref=e398] [cursor=pointer]:
+        - img [ref=e399]
+      - separator [ref=e402]
+      - paragraph [ref=e404]: HD
+  - generic [ref=e405]:
+    - generic [ref=e406]:
+      - button "Asistente Base" [ref=e407] [cursor=pointer]:
+        - img [ref=e408]
+      - button "Asistente Obligaciones" [ref=e409] [cursor=pointer]:
+        - img [ref=e410]
+      - button "Asistente Contabilidad" [ref=e412] [cursor=pointer]:
+        - img [ref=e413]
+    - generic [ref=e415]:
+      - heading "Asistente Obligaciones por Pagar" [level=6] [ref=e417]
+      - generic [ref=e476]:
+        - generic [ref=e477]:
+          - generic [ref=e478]:
+            - img [ref=e479]
+            - textbox [ref=e485]: Actividades pendientes Q2
+          - generic [ref=e486]:
+            - button "Nueva conversación" [ref=e487] [cursor=pointer]:
+              - img [ref=e488]
+            - button "Historial" [ref=e489] [cursor=pointer]:
+              - img [ref=e490]
+            - separator [ref=e494]
+            - button "Modo lateral" [ref=e495] [cursor=pointer]:
+              - img [ref=e496]
+            - separator [ref=e498]
+            - button "Minimizar" [ref=e499] [cursor=pointer]:
+              - img [ref=e500]
+        - generic [ref=e501]:
+          - generic [ref=e503]:
+            - paragraph [ref=e505]: ¿Cuáles son las actividades pendientes para este período?
+            - generic [ref=e506]:
+              - generic [ref=e507]: 10:24
+              - button [ref=e508] [cursor=pointer]:
+                - img [ref=e509]
+              - button [ref=e512] [cursor=pointer]:
+                - img [ref=e513]
+              - button [ref=e516] [cursor=pointer]:
+                - img [ref=e517]
+          - generic [ref=e521]:
+            - paragraph [ref=e522]: "Encontré 3 actividades pendientes para el período actual: 1. Borradores de asiento pendientes por revisar — 20 registros 2. Borradores que fueron devueltos — 5 registros 3. Borradores sin cuentas contables resueltas — 10 registros ¿Deseas revisar alguno de estos en detalle?"
+            - generic [ref=e523]:
+              - button [ref=e524] [cursor=pointer]:
+                - img [ref=e525]
+              - button [ref=e528] [cursor=pointer]:
+                - img [ref=e529]
+              - button [ref=e532] [cursor=pointer]:
+                - img [ref=e533]
+          - generic [ref=e537]:
+            - generic [ref=e539]:
+              - img [ref=e540]
+              - generic [ref=e542]: Nuevo contexto
+            - generic [ref=e543]:
+              - paragraph [ref=e545]: ¿Puedes mostrarme los borradores devueltos?
+              - generic [ref=e546]:
+                - generic [ref=e547]: 10:25
+                - button [ref=e548] [cursor=pointer]:
+                  - img [ref=e549]
+                - button [ref=e552] [cursor=pointer]:
+                  - img [ref=e553]
+                - button [ref=e556] [cursor=pointer]:
+                  - img [ref=e557]
+          - generic [ref=e561]:
+            - paragraph [ref=e562]: "Aquí están los 5 borradores que fueron devueltos: • BRD-00856 | Construcciones Almo S.A. — $4.000.000 • BRD-093975 | Sura — $3.500.000 • BRD-028383 | Éxito — $2.750.000 • BRD-00223 | Bancolombia — $5.200.000 • BRD-00112 | EPM — $1.800.000 Total devuelto: $17.250.000"
+            - generic [ref=e563]:
+              - button [ref=e564] [cursor=pointer]:
+                - img [ref=e565]
+              - button [ref=e568] [cursor=pointer]:
+                - img [ref=e569]
+              - button [ref=e572] [cursor=pointer]:
+                - img [ref=e573]
+        - generic [ref=e577]:
+          - generic [ref=e579]:
+            - generic [ref=e581]:
+              - button [ref=e582] [cursor=pointer]:
+                - img [ref=e583]
+              - textbox "Describe lo que necesitas..." [ref=e586]
+              - button [ref=e587] [cursor=pointer]:
+                - img [ref=e588]
+            - generic [ref=e591]:
+              - generic [ref=e592]:
+                - button "Actividades pendientes" [ref=e593] [cursor=pointer]:
+                  - generic [ref=e594]: Actividades pendientes
+                - button "Reportes de gestión" [ref=e595] [cursor=pointer]:
+                  - generic [ref=e596]: Reportes de gestión
+                - button "Periodos contables" [ref=e597] [cursor=pointer]:
+                  - generic [ref=e598]: Periodos contables
+                - button "Reglas de derivación" [ref=e599] [cursor=pointer]:
+                  - generic [ref=e600]: Reglas de derivación
+              - button "Ver más" [ref=e601] [cursor=pointer]:
+                - img [ref=e602]
+                - generic [ref=e607]: Ver más
+          - generic [ref=e608]: El contenido generado por IA puede ser incorrecto.

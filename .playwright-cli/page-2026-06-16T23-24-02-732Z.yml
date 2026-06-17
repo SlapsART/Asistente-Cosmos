@@ -1,0 +1,99 @@
+- generic [ref=e1]:
+  - generic [ref=e150]:
+    - generic [ref=e151]:
+      - generic [ref=e152]:
+        - img [ref=e153]
+        - separator [ref=e155]
+        - paragraph [ref=e156]: Inicio
+        - img [ref=e157]
+        - paragraph [ref=e159]: Reglas de derivación
+      - generic [ref=e160]:
+        - paragraph [ref=e161]: Empresa de insumos S.A.S
+        - button [ref=e162] [cursor=pointer]:
+          - img [ref=e163]
+        - separator [ref=e166]
+        - button [ref=e167] [cursor=pointer]:
+          - img [ref=e168]
+        - separator [ref=e171]
+        - paragraph [ref=e173]: HD
+    - generic [ref=e174]:
+      - generic [ref=e175]:
+        - button [ref=e346] [cursor=pointer]:
+          - img [ref=e177]
+        - button [ref=e347] [cursor=pointer]:
+          - img [ref=e179]
+        - button [ref=e348] [cursor=pointer]:
+          - img [ref=e182]
+      - generic [ref=e184]:
+        - heading [level=6] [ref=e349]: Asistente Base
+        - generic [ref=e198]:
+          - generic [ref=e312]:
+            - generic [ref=e314]:
+              - textbox [ref=e350]:
+                - /placeholder: Buscar asiento contable
+              - img [ref=e317]
+            - generic [ref=e320] [cursor=pointer]:
+              - generic [ref=e321]:
+                - paragraph [ref=e322]: BRD-00856
+                - generic [ref=e323]: Construcciones Almo S.A.
+              - generic [ref=e325]: $ 4.000.000,00
+            - generic [ref=e326] [cursor=pointer]:
+              - generic [ref=e327]:
+                - paragraph [ref=e328]: BRD-093975
+                - generic [ref=e329]: Sura
+              - generic [ref=e331]: $ 3.500.000,00
+            - generic [ref=e332] [cursor=pointer]:
+              - generic [ref=e333]:
+                - paragraph [ref=e334]: BRD-028383
+                - generic [ref=e335]: Éxito
+              - generic [ref=e337]: $ 2.750.000,00
+            - generic [ref=e338] [cursor=pointer]:
+              - generic [ref=e339]:
+                - paragraph [ref=e340]: BRD-00223
+                - generic [ref=e341]: Bancolombia
+              - generic [ref=e343]: $ 5.200.000,00
+          - generic [ref=e199]:
+            - generic [ref=e201]:
+              - button [ref=e202] [cursor=pointer]:
+                - img [ref=e203]
+              - separator [ref=e205]
+              - button [ref=e206] [cursor=pointer]:
+                - img [ref=e207]
+            - generic [ref=e208]:
+              - generic [ref=e209]:
+                - generic [ref=e212]:
+                  - button [ref=e213] [cursor=pointer]:
+                    - img [ref=e214]
+                  - generic [ref=e215]:
+                    - textbox [ref=e351]:
+                      - /placeholder: Describe lo que necesitas...
+                      - text: Borradores de asiento pendientes por revisar
+                    - button [ref=e352] [cursor=pointer]:
+                      - generic [ref=e345]: Asiento contable
+                  - button [ref=e218] [cursor=pointer]:
+                    - img [ref=e219]
+                - generic [ref=e222]:
+                  - generic [ref=e223]:
+                    - button [ref=e353] [cursor=pointer]:
+                      - generic [ref=e225]: Actividades pendientes
+                    - button [ref=e354] [cursor=pointer]:
+                      - generic [ref=e227]: Reportes de gestión
+                    - button [ref=e355] [cursor=pointer]:
+                      - generic [ref=e229]: Periodos contables
+                    - button [ref=e356] [cursor=pointer]:
+                      - generic [ref=e231]: Reglas de derivación
+                  - button [ref=e357] [cursor=pointer]:
+                    - img [ref=e233]
+                    - generic [ref=e238]: Ver más
+              - button [ref=e239] [cursor=pointer]:
+                - img [ref=e240]
+            - generic [ref=e244]: El contenido generado por IA puede ser incorrecto.
+  - menu [ref=e360]:
+    - menuitem [active] [ref=e361] [cursor=pointer]:
+      - generic [ref=e362]:
+        - textbox "Buscar Asiento contable" [ref=e364]
+        - img [ref=e365]
+    - menuitem "AST-001 Compra equipos" [ref=e368] [cursor=pointer]
+    - menuitem "AST-002 Pago nómina" [ref=e369] [cursor=pointer]
+    - menuitem "AST-003 Cierre mes octubre" [ref=e370] [cursor=pointer]
+    - menuitem "AST-004 Ajuste IVA" [ref=e371] [cursor=pointer]

@@ -146,6 +146,7 @@ interface HistorialDrawerProps {
   onDesanclar?: () => void;
   conversacionActivaId?: number;
   onSelectConversacion?: (id: number) => void;
+  conversaciones?: ConversacionData[];
 }
 
 export function HistorialDrawer({
@@ -155,18 +156,19 @@ export function HistorialDrawer({
   onDesanclar,
   conversacionActivaId,
   onSelectConversacion,
+  conversaciones,
 }: HistorialDrawerProps) {
   const [busqueda, setBusqueda] = useState('');
 
+  const lista = conversaciones ?? CONVERSACIONES_DEMO;
+
   const filtradas = busqueda.trim()
-    ? CONVERSACIONES_DEMO.filter((c) =>
-        c.nombre.toLowerCase().includes(busqueda.toLowerCase())
-      )
+    ? lista.filter((c) => c.nombre.toLowerCase().includes(busqueda.toLowerCase()))
     : null;
 
-  const ancladas = (filtradas ?? CONVERSACIONES_DEMO).filter((c) => c.grupo === 'anclada');
-  const recientes = (filtradas ?? CONVERSACIONES_DEMO).filter((c) => c.grupo === 'reciente');
-  const otras = (filtradas ?? CONVERSACIONES_DEMO).filter((c) => c.grupo === 'otra');
+  const ancladas = (filtradas ?? lista).filter((c) => c.grupo === 'anclada');
+  const recientes = (filtradas ?? lista).filter((c) => c.grupo === 'reciente');
+  const otras = (filtradas ?? lista).filter((c) => c.grupo === 'otra');
 
   function handleSelect(id: number) {
     onSelectConversacion?.(id);

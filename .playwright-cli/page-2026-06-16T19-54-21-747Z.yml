@@ -1,0 +1,114 @@
+- generic [ref=e52]:
+  - generic [ref=e53]:
+    - generic [ref=e54]:
+      - img [ref=e55]
+      - separator [ref=e57]
+      - paragraph [ref=e58]: Inicio
+      - img [ref=e59]
+      - paragraph [ref=e61]: Reglas de derivación
+    - generic [ref=e62]:
+      - paragraph [ref=e63]: Empresa de insumos S.A.S
+      - button [ref=e64] [cursor=pointer]:
+        - img [ref=e65]
+      - separator [ref=e68]
+      - button [ref=e69] [cursor=pointer]:
+        - img [ref=e70]
+      - separator [ref=e73]
+      - paragraph [ref=e75]: HD
+  - generic [ref=e76]:
+    - generic [ref=e77]:
+      - button "Asistente Base" [ref=e78] [cursor=pointer]:
+        - img [ref=e79]
+      - button "Asistente Obligaciones" [ref=e80] [cursor=pointer]:
+        - img [ref=e81]
+      - button "Asistente Contabilidad" [ref=e83] [cursor=pointer]:
+        - img [ref=e84]
+    - generic [ref=e86]:
+      - heading "Asistente Base" [level=6] [ref=e88]
+      - generic [ref=e100]:
+        - generic [ref=e143]:
+          - button [ref=e145] [cursor=pointer]:
+            - img [ref=e146]
+          - generic [ref=e149]:
+            - button "Obligaciones por pagar" [ref=e150] [cursor=pointer]:
+              - img [ref=e151]
+              - generic [ref=e153]: Obligaciones por pagar
+            - button "Contabilidad" [ref=e154] [cursor=pointer]:
+              - img [ref=e155]
+              - generic [ref=e157]: Contabilidad
+            - button "Terceros" [ref=e158] [cursor=pointer]:
+              - img [ref=e159]
+              - generic [ref=e164]: Terceros
+            - button "Impuestos" [ref=e165] [cursor=pointer]:
+              - img [ref=e166]
+              - generic [ref=e172]: Impuestos
+          - generic [ref=e173]:
+            - generic [ref=e174]:
+              - generic [ref=e175] [cursor=pointer]:
+                - heading "Gestiones en espera" [level=6] [ref=e177]
+                - paragraph [ref=e179]: "5"
+                - button [ref=e180]:
+                  - img [ref=e181]
+              - generic [ref=e186]:
+                - generic [ref=e187] [cursor=pointer]:
+                  - img [ref=e188]
+                  - paragraph [ref=e191]: Compras por confirmar
+                - generic [ref=e192] [cursor=pointer]:
+                  - img [ref=e193]
+                  - paragraph [ref=e196]: Compras por causar
+                - generic [ref=e197] [cursor=pointer]:
+                  - img [ref=e198]
+                  - paragraph [ref=e201]: Extractos por conciliar
+                - generic [ref=e202] [cursor=pointer]:
+                  - img [ref=e203]
+                  - paragraph [ref=e206]: Extractos por confirmar
+                - generic [ref=e207] [cursor=pointer]:
+                  - img [ref=e208]
+                  - paragraph [ref=e211]: Devoluciones por causar
+            - generic [ref=e213] [cursor=pointer]:
+              - heading "Saldos y balances" [level=6] [ref=e215]
+              - paragraph [ref=e217]: "5"
+              - button [ref=e218]:
+                - img [ref=e219]
+            - generic [ref=e222] [cursor=pointer]:
+              - heading "Algo vence pronto" [level=6] [ref=e224]
+              - paragraph [ref=e226]: "5"
+              - button [ref=e227]:
+                - img [ref=e228]
+            - generic [ref=e231] [cursor=pointer]:
+              - heading "Conciliaciones abiertas" [level=6] [ref=e233]
+              - paragraph [ref=e235]: "4"
+              - button [ref=e236]:
+                - img [ref=e237]
+        - generic [ref=e101]:
+          - generic [ref=e103]:
+            - button [ref=e104] [cursor=pointer]:
+              - img [ref=e105]
+            - separator [ref=e107]
+            - button [ref=e108] [cursor=pointer]:
+              - img [ref=e109]
+          - generic [ref=e110]:
+            - generic [ref=e111]:
+              - generic [ref=e112]:
+                - button [ref=e113] [cursor=pointer]:
+                  - img [ref=e114]
+                - textbox "Describe lo que necesitas..." [ref=e117]
+                - generic [ref=e118]:
+                  - button [disabled]:
+                    - img
+              - generic [ref=e119]:
+                - generic [ref=e120]:
+                  - button "Actividades pendientes" [ref=e121] [cursor=pointer]:
+                    - generic [ref=e122]: Actividades pendientes
+                  - button "Reportes de gestión" [ref=e123] [cursor=pointer]:
+                    - generic [ref=e124]: Reportes de gestión
+                  - button "Periodos contables" [ref=e125] [cursor=pointer]:
+                    - generic [ref=e126]: Periodos contables
+                  - button "Reglas de derivación" [ref=e127] [cursor=pointer]:
+                    - generic [ref=e128]: Reglas de derivación
+                - button "Ver más" [active] [ref=e129] [cursor=pointer]:
+                  - img [ref=e130]
+                  - generic [ref=e135]: Ver más
+            - button [ref=e136] [cursor=pointer]:
+              - img [ref=e137]
+          - generic [ref=e141]: El contenido generado por IA puede ser incorrecto.

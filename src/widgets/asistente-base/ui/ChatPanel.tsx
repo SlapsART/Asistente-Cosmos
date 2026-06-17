@@ -13,6 +13,7 @@ import {
   IconUsers,
 } from '@tabler/icons-react';
 import { AsistenteInput } from '@/widgets/asistente-panel/ui/AsistenteInput';
+import { CosmosLoader } from './CosmosLoader';
 import type { Mensaje } from '../model/conversaciones';
 
 const PRIMARY = '#2f43d0';
@@ -86,38 +87,6 @@ function AgenteMessage({ mensaje }: { mensaje: Mensaje }) {
   );
 }
 
-function TypingIndicator() {
-  return (
-    <Box sx={{ display: 'flex', alignItems: 'flex-start', pr: 7 }}>
-      <Box
-        sx={{
-          display: 'flex',
-          gap: '4px',
-          alignItems: 'center',
-          py: 0.5,
-        }}
-      >
-        {[0, 1, 2].map((i) => (
-          <Box
-            key={i}
-            sx={{
-              width: 6,
-              height: 6,
-              borderRadius: '50%',
-              bgcolor: 'rgba(16,24,64,0.3)',
-              animation: 'pulse 1.2s ease-in-out infinite',
-              animationDelay: `${i * 0.2}s`,
-              '@keyframes pulse': {
-                '0%, 60%, 100%': { opacity: 0.3, transform: 'scale(0.8)' },
-                '30%': { opacity: 1, transform: 'scale(1)' },
-              },
-            }}
-          />
-        ))}
-      </Box>
-    </Box>
-  );
-}
 
 function ContextSeparator() {
   return (
@@ -149,24 +118,33 @@ export interface ChatPanelProps {
   modo: 'flotante' | 'lateral';
   mensajes?: Mensaje[];
   pensando?: boolean;
+  textoLoader?: string;
   onHistorial?: () => void;
   onLateral?: () => void;
   onMinimizar?: () => void;
   onNueva?: () => void;
   onEnviarMensaje?: (texto: string) => void;
+  onDetenerRespuesta?: () => void;
+  onRenombrar?: (nombre: string) => void;
   nombreChat?: string;
+  /** Cuando hay mensajes, los chips del input navegan al panel en lugar de actuar localmente */
+  onAbrirPanel?: (chip: string) => void;
 }
 
 export function ChatPanel({
   modo,
   mensajes = [],
   pensando = false,
+  textoLoader,
   onHistorial,
   onLateral,
   onMinimizar,
   onNueva,
   onEnviarMensaje,
+  onDetenerRespuesta,
+  onRenombrar,
   nombreChat = '[Nombre del chat]',
+  onAbrirPanel,
 }: ChatPanelProps) {
   const [chipActivo, setChipActivo] = useState('');
   const [nombre, setNombre] = useState(nombreChat);
@@ -215,6 +193,8 @@ export function ChatPanel({
           <InputBase
             value={nombre}
             onChange={(e) => setNombre(e.target.value)}
+            onBlur={() => { if (nombre.trim()) onRenombrar?.(nombre.trim()); }}
+            onKeyDown={(e) => { if (e.key === 'Enter') e.currentTarget.blur(); }}
             sx={{
               flex: 1,
               minWidth: 0,
@@ -300,7 +280,7 @@ export function ChatPanel({
             </Box>
           ))}
 
-          {pensando && <TypingIndicator />}
+          {pensando && <CosmosLoader texto={textoLoader} />}
 
           <div ref={messagesEndRef} />
 
@@ -324,7 +304,6 @@ export function ChatPanel({
       {/* Spacer when no messages in lateral mode */}
       {!tieneMensajes && !isFlotante && <Box sx={{ flex: 1 }} />}
 
-      {/* Input */}
       <AsistenteInput
         chipActivo={chipActivo}
         chipActivoTipo={null}
@@ -336,8 +315,11 @@ export function ChatPanel({
         onExpandir={onLateral ?? (() => {})}
         onVerMas={() => {}}
         onEnviar={onEnviarMensaje}
+        onDetener={onDetenerRespuesta}
+        pensando={pensando}
         showTopActions={false}
         variant="embedded"
+        onAbrirPanel={tieneMensajes ? onAbrirPanel : undefined}
       />
     </Box>
   );

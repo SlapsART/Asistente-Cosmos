@@ -22,6 +22,8 @@ interface AppShellMockProps {
   /** Overlay absoluto en el lado derecho — no empuja el contenido (historial) */
   drawerOverlay?: React.ReactNode;
   drawerOverlayWidth?: number;
+  /** Callback para cerrar el drawer al hacer clic fuera */
+  onCloseDrawer?: () => void;
 }
 
 const SIDEBAR_NAV: { vista: VistaDemo; Icon: React.ElementType; label: string }[] = [
@@ -46,6 +48,7 @@ export function AppShellMock({
   overlay,
   drawerOverlay,
   drawerOverlayWidth = 380,
+  onCloseDrawer,
 }: AppShellMockProps) {
   const { vista, setVista } = useDemoContext();
 
@@ -247,25 +250,45 @@ export function AppShellMock({
         {/* Drawer overlay — pegado al lado derecho del body, de arriba a abajo */}
         <AnimatePresence>
           {drawerOverlay && (
-            <motion.div
-              key="drawer"
-              variants={drawerVariants}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              style={{
-                position: 'absolute',
-                right: 0,
-                top: 0,
-                bottom: 0,
-                width: drawerOverlayWidth,
-                zIndex: 20,
-                backgroundColor: '#fff',
-                boxShadow: '-4px 0 24px rgba(16,24,64,0.12)',
-              }}
-            >
-              {drawerOverlay}
-            </motion.div>
+            <>
+              {/* Invisible backdrop to close drawer */}
+              <motion.div
+                key="drawer-backdrop"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                onClick={onCloseDrawer}
+                style={{
+                  position: 'absolute',
+                  right: drawerOverlayWidth,
+                  top: 0,
+                  bottom: 0,
+                  left: 0,
+                  zIndex: 19,
+                  backgroundColor: 'transparent',
+                }}
+              />
+              <motion.div
+                key="drawer"
+                variants={drawerVariants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                style={{
+                  position: 'absolute',
+                  right: 0,
+                  top: 0,
+                  bottom: 0,
+                  width: drawerOverlayWidth,
+                  zIndex: 20,
+                  backgroundColor: '#fff',
+                  boxShadow: '-4px 0 24px rgba(16,24,64,0.12)',
+                }}
+              >
+                {drawerOverlay}
+              </motion.div>
+            </>
           )}
         </AnimatePresence>
       </Box>

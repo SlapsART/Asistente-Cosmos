@@ -1,0 +1,58 @@
+- generic [ref=e150]:
+  - generic [ref=e151]:
+    - generic [ref=e152]:
+      - img [ref=e153]
+      - separator [ref=e155]
+      - paragraph [ref=e156]: Inicio
+      - img [ref=e157]
+      - paragraph [ref=e159]: Reglas de derivación
+    - generic [ref=e160]:
+      - paragraph [ref=e161]: Empresa de insumos S.A.S
+      - button [ref=e162] [cursor=pointer]:
+        - img [ref=e163]
+      - separator [ref=e166]
+      - button [ref=e167] [cursor=pointer]:
+        - img [ref=e168]
+      - separator [ref=e171]
+      - paragraph [ref=e173]: HD
+  - generic [ref=e174]:
+    - generic [ref=e175]:
+      - button "Asistente Base" [ref=e176] [cursor=pointer]:
+        - img [ref=e177]
+      - button "Asistente Obligaciones" [ref=e178] [cursor=pointer]:
+        - img [ref=e179]
+      - button "Asistente Contabilidad" [ref=e181] [cursor=pointer]:
+        - img [ref=e182]
+    - generic [ref=e184]:
+      - heading "Asistente Base" [level=6] [ref=e186]
+      - generic [ref=e199]:
+        - generic [ref=e201]:
+          - button [ref=e202] [cursor=pointer]:
+            - img [ref=e203]
+          - separator [ref=e205]
+          - button [ref=e206] [cursor=pointer]:
+            - img [ref=e207]
+        - generic [ref=e208]:
+          - generic [ref=e209]:
+            - generic [ref=e212]:
+              - button [ref=e213] [cursor=pointer]:
+                - img [ref=e214]
+              - textbox "Describe lo que necesitas..." [ref=e217]
+              - button [ref=e218] [cursor=pointer]:
+                - img [ref=e219]
+            - generic [ref=e222]:
+              - generic [ref=e223]:
+                - button "Actividades pendientes" [ref=e224] [cursor=pointer]:
+                  - generic [ref=e225]: Actividades pendientes
+                - button "Reportes de gestión" [ref=e226] [cursor=pointer]:
+                  - generic [ref=e227]: Reportes de gestión
+                - button "Periodos contables" [ref=e228] [cursor=pointer]:
+                  - generic [ref=e229]: Periodos contables
+                - button "Reglas de derivación" [ref=e230] [cursor=pointer]:
+                  - generic [ref=e231]: Reglas de derivación
+              - button "Ver más" [ref=e232] [cursor=pointer]:
+                - img [ref=e233]
+                - generic [ref=e238]: Ver más
+          - button [ref=e239] [cursor=pointer]:
+            - img [ref=e240]
+        - generic [ref=e244]: El contenido generado por IA puede ser incorrecto.

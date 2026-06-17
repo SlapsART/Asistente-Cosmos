@@ -1,0 +1,73 @@
+- generic [ref=e1]:
+  - generic [ref=e52]:
+    - generic [ref=e53]:
+      - generic [ref=e54]:
+        - img [ref=e55]
+        - separator [ref=e57]
+        - paragraph [ref=e58]: Inicio
+        - img [ref=e59]
+        - paragraph [ref=e61]: Reglas de derivación
+      - generic [ref=e62]:
+        - paragraph [ref=e63]: Empresa de insumos S.A.S
+        - button [ref=e64] [cursor=pointer]:
+          - img [ref=e65]
+        - separator [ref=e68]
+        - button [ref=e69] [cursor=pointer]:
+          - img [ref=e70]
+        - separator [ref=e73]
+        - paragraph [ref=e75]: HD
+    - generic [ref=e76]:
+      - generic [ref=e77]:
+        - button [ref=e248] [cursor=pointer]:
+          - img [ref=e79]
+        - button [ref=e249] [cursor=pointer]:
+          - img [ref=e81]
+        - button [ref=e250] [cursor=pointer]:
+          - img [ref=e84]
+      - generic [ref=e86]:
+        - heading [level=6] [ref=e251]: Asistente Base
+        - generic [ref=e101]:
+          - generic [ref=e103]:
+            - button [ref=e104] [cursor=pointer]:
+              - img [ref=e105]
+            - separator [ref=e107]
+            - button [ref=e108] [cursor=pointer]:
+              - img [ref=e109]
+          - generic [ref=e110]:
+            - generic [ref=e111]:
+              - generic [ref=e114]:
+                - button [ref=e115] [cursor=pointer]:
+                  - img [ref=e116]
+                - generic [ref=e117]:
+                  - textbox [ref=e252]:
+                    - /placeholder: Describe lo que necesitas...
+                    - text: Borradores de asiento pendientes por revisar
+                  - button [ref=e253] [cursor=pointer]:
+                    - generic [ref=e247]: Asiento contable
+                - button [ref=e120] [cursor=pointer]:
+                  - img [ref=e121]
+              - generic [ref=e124]:
+                - generic [ref=e125]:
+                  - button [ref=e254] [cursor=pointer]:
+                    - generic [ref=e127]: Actividades pendientes
+                  - button [ref=e255] [cursor=pointer]:
+                    - generic [ref=e129]: Reportes de gestión
+                  - button [ref=e256] [cursor=pointer]:
+                    - generic [ref=e131]: Periodos contables
+                  - button [ref=e257] [cursor=pointer]:
+                    - generic [ref=e133]: Reglas de derivación
+                - button [ref=e258] [cursor=pointer]:
+                  - img [ref=e135]
+                  - generic [ref=e140]: Ver más
+            - button [ref=e141] [cursor=pointer]:
+              - img [ref=e142]
+          - generic [ref=e146]: El contenido generado por IA puede ser incorrecto.
+  - menu [ref=e261]:
+    - menuitem [active] [ref=e262] [cursor=pointer]:
+      - generic [ref=e263]:
+        - textbox "Buscar Asiento contable" [ref=e265]
+        - img [ref=e266]
+    - menuitem "AST-001 Compra equipos" [ref=e269] [cursor=pointer]
+    - menuitem "AST-002 Pago nómina" [ref=e270] [cursor=pointer]
+    - menuitem "AST-003 Cierre mes octubre" [ref=e271] [cursor=pointer]
+    - menuitem "AST-004 Ajuste IVA" [ref=e272] [cursor=pointer]

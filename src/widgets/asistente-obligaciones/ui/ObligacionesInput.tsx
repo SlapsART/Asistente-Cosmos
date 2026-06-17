@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Box, Chip, Divider, IconButton, InputBase, Menu, MenuItem, Typography } from '@mui/material';
 import {
   IconArrowUp,
@@ -9,8 +9,15 @@ import {
   IconPlus,
   IconSearch,
 } from '@tabler/icons-react';
+import { ArchivoAdjunto, FileChip } from '@/shared/ui/FileChip';
 
 const FIGMA_PRIMARY = '#2f43d0';
+
+{
+  const s = document.createElement('style');
+  s.textContent = '@keyframes border-beam{from{transform:translate(-50%,-50%) rotate(0deg)}to{transform:translate(-50%,-50%) rotate(360deg)}}';
+  document.head.appendChild(s);
+}
 
 const QUICK_ACTIONS = [
   'Registrar',
@@ -32,6 +39,7 @@ interface ObligacionesInputProps {
   chipActivoTipo: 'primario' | 'sub' | null;
   inputTexto?: string;
   inputChips?: string[];
+  chipValues?: Record<string, string>;
   onChipClick: (chip: string) => void;
   onContextoChipClick?: (chip: string) => void;
   onContextoChipSelect?: (chip: string, valor: string) => void;
@@ -39,6 +47,8 @@ interface ObligacionesInputProps {
   onVerHistorial: () => void;
   onExpandir: () => void;
   onVerMas: () => void;
+  verMasActivo?: boolean;
+  pensando?: boolean;
   onEnviar?: () => void;
   showTopActions?: boolean;
   variant?: 'card' | 'embedded';
@@ -49,6 +59,7 @@ export function ObligacionesInput({
   chipActivoTipo,
   inputTexto,
   inputChips = [],
+  chipValues = {},
   onChipClick,
   onContextoChipClick,
   onContextoChipSelect,
@@ -56,6 +67,8 @@ export function ObligacionesInput({
   onVerHistorial,
   onExpandir,
   onVerMas,
+  verMasActivo = false,
+  pensando = false,
   onEnviar,
   showTopActions = true,
   variant = 'card',
@@ -64,6 +77,8 @@ export function ObligacionesInput({
   const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
   const [menuChip, setMenuChip] = useState('');
   const [busqueda, setBusqueda] = useState('');
+  const [archivos, setArchivos] = useState<ArchivoAdjunto[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setLocalTexto(inputTexto ?? '');
@@ -71,6 +86,32 @@ export function ObligacionesInput({
 
   const tieneTexto = Boolean(localTexto);
   const isCard = variant === 'card';
+
+  function handleAgregarArchivo() {
+    fileInputRef.current?.click();
+  }
+
+  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const MAX = 5 * 1024 * 1024;
+    const nuevos: ArchivoAdjunto[] = Array.from(e.target.files ?? []).map((file) => {
+      const partes = file.name.split('.');
+      const formato = partes.length > 1 ? partes.pop()!.toUpperCase() : 'FILE';
+      const nombre = partes.join('.') || file.name;
+      const tamaño =
+        file.size < 1024 * 1024
+          ? `${(file.size / 1024).toFixed(0)}KB`
+          : `${(file.size / (1024 * 1024)).toFixed(1)}MB`;
+      return file.size > MAX
+        ? { nombre, tamaño, formato, estado: 'error' as const, mensajeError: 'Límite alcanzado máx 5mb' }
+        : { nombre, tamaño, formato, estado: 'exito' as const };
+    });
+    setArchivos((prev) => [...prev, ...nuevos]);
+    e.target.value = '';
+  }
+
+  function removerArchivo(index: number) {
+    setArchivos((prev) => prev.filter((_, i) => i !== index));
+  }
 
   function handleContextChipClick(chip: string, e: React.MouseEvent<HTMLElement>) {
     e.stopPropagation();
@@ -146,86 +187,147 @@ export function ObligacionesInput({
       {/* Campo de entrada */}
       <Box
         sx={{
-          bgcolor: 'grey.100',
-          border: '1px solid rgba(47,67,208,0.4)',
-          borderRadius: '20px',
-          display: 'flex',
-          alignItems: 'center',
-          gap: 1,
-          pl: 1,
-          pr: 0.75,
-          py: 0.75,
+          position: 'relative',
+          borderRadius: pensando ? '22px' : '20px',
+          overflow: 'hidden',
+          p: pensando ? '2px' : 0,
           width: '100%',
         }}
       >
-        <IconButton size="small" sx={{ p: '3px', flexShrink: 0 }}>
-          <IconPlus size={14} />
-        </IconButton>
-
-        <Box
-          sx={{ display: 'flex', flex: '1 0 0', gap: '8px', alignItems: 'center', minWidth: 0, overflow: 'hidden' }}
-        >
-          <InputBase
-            value={localTexto}
-            onChange={(e) => setLocalTexto(e.target.value)}
-            placeholder="Describe lo que necesitas..."
-            inputProps={inputChips.length > 0 ? { size: Math.max(localTexto.length + 1, 2) } : undefined}
-            sx={{
-              flex: inputChips.length > 0 ? '0 0 auto' : '1 0 0',
-              minWidth: 0,
-              fontSize: '0.8125rem',
-              color: 'text.primary',
-              '& input': {
-                padding: 0,
-                '&::placeholder': { color: 'text.secondary', opacity: 1 },
-              },
-            }}
-          />
-
-          {/* Chips de contexto — clickeables, abren menús */}
-          {inputChips.map((chip, i) => (
-            <Chip
-              key={i}
-              label={chip}
-              size="small"
-              variant="outlined"
-              color="primary"
-              onClick={(e) => handleContextChipClick(chip, e)}
-              sx={{
-                flexShrink: 0,
-                cursor: 'pointer',
-                '&&': {
-                  border: '1px solid rgba(47,67,208,0.5)',
-                  color: 'text.secondary',
-                },
-              }}
-            />
-          ))}
-        </Box>
-
+        {/* Beam — static sx so the class never changes and animation never restarts */}
         <Box
           sx={{
-            bgcolor: tieneTexto ? FIGMA_PRIMARY : 'rgba(47,67,208,0.3)',
+            position: 'absolute',
+            width: '400%',
+            aspectRatio: '1 / 1',
+            top: '50%',
+            left: '50%',
+            background: 'conic-gradient(transparent 0deg 250deg, rgba(47,67,208,0.01) 250deg 300deg, rgba(47,67,208,0.06) 300deg 338deg, rgba(47,67,208,0.22) 338deg 354deg, rgba(55,82,228,0.45) 354deg 360deg)',
+            animation: 'border-beam 3s linear infinite',
+            pointerEvents: 'none',
+          }}
+          style={{
+            opacity: pensando ? 1 : 0,
+            transition: 'opacity 0.6s ease',
+          }}
+        />
+        <Box
+          sx={{
+            bgcolor: 'grey.100',
             borderRadius: '20px',
             display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexShrink: 0,
-            transition: 'background-color 0.2s',
+            flexDirection: 'column',
+            gap: '8px',
+            pl: 1,
+            pr: 0.75,
+            py: 0.75,
+            position: 'relative',
+            zIndex: 1,
+            transition: 'border-color 0.2s',
+            ...(pensando
+              ? {}
+              : {
+                  border: '1px solid rgba(16,24,64,0.2)',
+                  '&:hover': { borderColor: 'rgba(47,67,208,0.5)' },
+                  '&:focus-within': { borderColor: '#2f43d0' },
+                }),
           }}
         >
-          <IconButton
-            size="small"
-            disabled={!tieneTexto}
-            onClick={tieneTexto ? onEnviar : undefined}
-            sx={{
-              p: '4px',
-              color: tieneTexto ? '#fff !important' : 'rgba(47,67,208,0.3) !important',
-            }}
-          >
-            <IconArrowUp size={20} />
-          </IconButton>
+          {/* Archivos adjuntos */}
+          {archivos.length > 0 && (
+            <Box sx={{ display: 'flex', gap: '4px', overflow: 'hidden' }}>
+              {archivos.map((archivo, i) => (
+                <FileChip key={i} archivo={archivo} onRemover={() => removerArchivo(i)} />
+              ))}
+            </Box>
+          )}
+
+          {/* Input row */}
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <IconButton size="small" onClick={handleAgregarArchivo} sx={{ p: '3px', flexShrink: 0 }}>
+              <IconPlus size={14} />
+            </IconButton>
+
+            <Box
+              sx={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0, overflow: 'hidden', flex: '1 0 0' }}
+            >
+              <InputBase
+                value={localTexto}
+                onChange={(e) => setLocalTexto(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && !e.shiftKey && tieneTexto) {
+                    e.preventDefault();
+                    onEnviar?.();
+                  }
+                }}
+                placeholder="Describe lo que necesitas..."
+                sx={{
+                  flex: inputChips.length > 0 ? '0 0 auto' : '1 0 0',
+                  minWidth: 0,
+                  fontSize: '0.8125rem',
+                  color: 'text.primary',
+                  '& input': {
+                    padding: 0,
+                    fieldSizing: 'content',
+                    minWidth: '4ch',
+                    '&::placeholder': { color: 'text.secondary', opacity: 1 },
+                  },
+                }}
+              />
+
+              {inputChips.map((chip, i) => {
+                const valorSeleccionado = chipValues[chip];
+                return (
+                  <Chip
+                    key={i}
+                    label={valorSeleccionado ?? chip}
+                    size="small"
+                    variant={valorSeleccionado ? 'filled' : 'outlined'}
+                    color="primary"
+                    onClick={(e) => handleContextChipClick(chip, e)}
+                    sx={{
+                      flexShrink: 0,
+                      cursor: 'pointer',
+                      ...(!valorSeleccionado && {
+                        '&&': { border: '1px solid rgba(47,67,208,0.5)', color: 'text.secondary', bgcolor: 'transparent' },
+                      }),
+                    }}
+                  />
+                );
+              })}
+            </Box>
+
+            <IconButton
+              size="small"
+              onClick={tieneTexto ? onEnviar : undefined}
+              sx={{
+                p: '4px',
+                borderRadius: '20px',
+                flexShrink: 0,
+                transition: 'background-color 0.2s, color 0.2s',
+                '&&': {
+                  bgcolor: tieneTexto ? FIGMA_PRIMARY : 'rgba(16,24,64,0.1)',
+                  color: tieneTexto ? '#fff' : 'rgba(16,24,64,0.38)',
+                },
+                '&&:hover': {
+                  bgcolor: tieneTexto ? FIGMA_PRIMARY : 'rgba(47,67,208,0.1)',
+                  color: tieneTexto ? '#fff' : 'rgba(47,67,208,0.6)',
+                },
+              }}
+            >
+              <IconArrowUp size={20} />
+            </IconButton>
+          </Box>
         </Box>
+
+        {/* Hidden file input */}
+        <input
+          ref={fileInputRef}
+          type="file"
+          multiple
+          style={{ display: 'none' }}
+          onChange={handleFileChange}
+        />
       </Box>
 
       {/* Quick Actions */}
@@ -242,22 +344,16 @@ export function ObligacionesInput({
         >
           {QUICK_ACTIONS.map((accion) => {
             const isActive = accion === chipActivo;
-            const esPrimario = isActive && chipActivoTipo === 'primario';
-            const esSub = isActive && chipActivoTipo === 'sub';
 
             return (
               <Chip
                 key={accion}
                 label={accion}
                 size="medium"
-                variant="filled"
-                color={esPrimario ? 'primary' : 'default'}
+                variant={isActive ? 'filled' : 'outlined'}
+                color={isActive ? 'primary' : 'default'}
                 onClick={() => onChipClick(accion)}
-                sx={{
-                  flexShrink: 0,
-                  cursor: 'pointer',
-                  ...(esSub ? { '&&': { color: FIGMA_PRIMARY } } : {}),
-                }}
+                sx={{ flexShrink: 0, cursor: 'pointer' }}
               />
             );
           })}
@@ -279,10 +375,11 @@ export function ObligacionesInput({
         <Chip
           label="Ver más"
           size="medium"
-          variant="outlined"
+          variant={verMasActivo ? 'filled' : 'outlined'}
+          color={verMasActivo ? 'primary' : 'default'}
           icon={<IconLayoutDashboard size={14} />}
           onClick={onVerMas}
-          sx={{ flexShrink: 0 }}
+          sx={{ flexShrink: 0, cursor: 'pointer' }}
         />
       </Box>
 
@@ -299,7 +396,7 @@ export function ObligacionesInput({
         anchorEl={menuAnchor}
         open={Boolean(menuAnchor)}
         onClose={handleMenuClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+        anchorOrigin={{ vertical: -4, horizontal: 'left' }}
         transformOrigin={{ vertical: 'bottom', horizontal: 'left' }}
         slotProps={{
           paper: {
@@ -308,7 +405,6 @@ export function ObligacionesInput({
               boxShadow:
                 '0px 3px 14px 2px rgba(93,109,126,0.09), 0px 8px 10px 1px rgba(93,109,126,0.14), 0px 5px 5px -3px rgba(93,109,126,0.18)',
               borderRadius: '4px',
-              mb: 1,
             },
           },
         }}

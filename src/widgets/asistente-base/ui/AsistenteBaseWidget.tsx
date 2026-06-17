@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Box, IconButton, InputBase } from '@mui/material';
 import { IconArrowUp, IconPlus } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
@@ -19,7 +19,8 @@ type EstadoBase =
   | 'historial'
   | 'historial-anclado'
   | 'historial-lateral'
-  | 'historial-lateral-anclado';
+  | 'historial-lateral-anclado'
+  | 'expandido-desde-chat';
 
 const LATERAL_WIDTH = 336;
 const HISTORIAL_WIDTH = 380;
@@ -69,21 +70,19 @@ function MiniInput({ onClick }: { onClick: () => void }) {
             },
           }}
         />
-        <Box
+        <IconButton
+          size="small"
+          disabled
           sx={{
-            bgcolor: 'rgba(47,67,208,0.25)',
+            p: '4px',
             borderRadius: '20px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
             flexShrink: 0,
             pointerEvents: 'none',
+            '&&': { bgcolor: 'rgba(16,24,64,0.1)', color: 'rgba(16,24,64,0.38)' },
           }}
         >
-          <IconButton size="small" disabled sx={{ p: '4px' }}>
-            <IconArrowUp size={18} />
-          </IconButton>
-        </Box>
+          <IconArrowUp size={18} />
+        </IconButton>
       </Box>
     </Box>
   );
@@ -91,16 +90,20 @@ function MiniInput({ onClick }: { onClick: () => void }) {
 
 export function AsistenteBaseWidget() {
   const [estado, setEstado] = useState<EstadoBase>('minimizado');
+  const [chipDesdeChat, setChipDesdeChat] = useState<string | undefined>(undefined);
 
   // Conversation state
   const [conversacionActivaId, setConversacionActivaId] = useState(1);
+  const [conversaciones, setConversaciones] = useState(() => [...CONVERSACIONES_DEMO]);
   const [mensajesPorConv, setMensajesPorConv] = useState<Record<number, Mensaje[]>>(() =>
     Object.fromEntries(CONVERSACIONES_DEMO.map((c) => [c.id, [...c.mensajes]]))
   );
   const [pensando, setPensando] = useState(false);
+  const [loaderTexto, setLoaderTexto] = useState<string | undefined>(undefined);
+  const respuestaTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const mensajesActivos = mensajesPorConv[conversacionActivaId] ?? [];
-  const convActiva = CONVERSACIONES_DEMO.find((c) => c.id === conversacionActivaId);
+  const convActiva = conversaciones.find((c) => c.id === conversacionActivaId);
   const nombreConvActiva = convActiva?.nombre ?? 'Conversación';
 
   function irA(siguiente: EstadoBase) {
@@ -117,14 +120,39 @@ export function AsistenteBaseWidget() {
     }));
     setPensando(true);
 
-    setTimeout(() => {
+    if (respuestaTimer.current) clearTimeout(respuestaTimer.current);
+    respuestaTimer.current = setTimeout(() => {
       const agentMsg: Mensaje = { id: Date.now() + 1, autor: 'agente', texto: generarRespuesta(texto) };
       setMensajesPorConv((prev) => ({
         ...prev,
         [conversacionActivaId]: [...(prev[conversacionActivaId] ?? []), agentMsg],
       }));
       setPensando(false);
-    }, 1500);
+    }, 7000);
+  }
+
+  function detenerRespuesta() {
+    if (respuestaTimer.current) {
+      clearTimeout(respuestaTimer.current);
+      respuestaTimer.current = null;
+    }
+    setPensando(false);
+  }
+
+  function enviarMensajeSistema(_texto: string) {
+    const userMsg: Mensaje = { id: Date.now(), autor: 'usuario', texto: 'Ir a la tarea' };
+    setMensajesPorConv((prev) => ({
+      ...prev,
+      [conversacionActivaId]: [...(prev[conversacionActivaId] ?? []), userMsg],
+    }));
+    setPensando(true);
+    setLoaderTexto('Dirigiendo a la tarea');
+    irA('chat');
+    if (respuestaTimer.current) clearTimeout(respuestaTimer.current);
+    respuestaTimer.current = setTimeout(() => {
+      setPensando(false);
+      setLoaderTexto(undefined);
+    }, 3000);
   }
 
   function iniciarNuevaConversacion() {
@@ -134,8 +162,54 @@ export function AsistenteBaseWidget() {
     irA('nueva');
   }
 
+  function renombrarConversacion(id: number, nombre: string) {
+    if (!nombre.trim()) return;
+    setConversaciones(prev => {
+      const idx = prev.findIndex(c => c.id === id);
+      if (idx === -1) return prev;
+      const updated = { ...prev[idx], nombre: nombre.trim(), tiempo: 'ahora', grupo: 'reciente' as const };
+      const rest = prev.filter(c => c.id !== id);
+      const firstNonAnclada = rest.findIndex(c => c.grupo !== 'anclada');
+      const result = [...rest];
+      firstNonAnclada === -1 ? result.push(updated) : result.splice(firstNonAnclada, 0, updated);
+      return result;
+    });
+  }
+
+  function anclarConversacion(id: number) {
+    setConversaciones(prev => {
+      const conv = prev.find(c => c.id === id);
+      if (!conv) return prev;
+      const isAnclada = conv.grupo === 'anclada';
+      const nuevoGrupo = isAnclada ? 'reciente' : 'anclada';
+      const updated = { ...conv, grupo: nuevoGrupo as const };
+      const rest = prev.filter(c => c.id !== id);
+      
+      if (isAnclada) {
+        // Desanclar: mover a recientes
+        const firstNonAnclada = rest.findIndex(c => c.grupo !== 'anclada');
+        const result = [...rest];
+        firstNonAnclada === -1 ? result.push(updated) : result.splice(firstNonAnclada, 0, updated);
+        return result;
+      } else {
+        // Anclar: mover al inicio
+        return [updated, ...rest];
+      }
+    });
+  }
+
   function seleccionarConversacion(id: number, modoDestino: 'chat' | 'lateral') {
     setConversacionActivaId(id);
+    setConversaciones(prev => {
+      const idx = prev.findIndex(c => c.id === id);
+      if (idx === -1) return prev;
+      const updated = { ...prev[idx], tiempo: 'ahora', grupo: 'reciente' as const };
+      const rest = prev.filter(c => c.id !== id);
+      const firstNonAnclada = rest.findIndex(c => c.grupo !== 'anclada');
+      const result = [...rest];
+      firstNonAnclada === -1 ? result.push(updated) : result.splice(firstNonAnclada, 0, updated);
+      return result;
+    });
     irA(modoDestino);
   }
 
@@ -145,8 +219,11 @@ export function AsistenteBaseWidget() {
   const chatProps = {
     mensajes: mensajesActivos,
     pensando,
+    textoLoader: loaderTexto,
     onEnviarMensaje: enviarMensaje,
+    onDetenerRespuesta: detenerRespuesta,
     nombreChat: nombreConvActiva,
+    onRenombrar: (nombre: string) => renombrarConversacion(conversacionActivaId, nombre),
   };
 
   // Shared HistorialDrawer for flotante modes
@@ -155,10 +232,11 @@ export function AsistenteBaseWidget() {
       <HistorialDrawer
         onClose={onClose}
         anclado={anclado}
-        onAnclar={onAnclar}
-        onDesanclar={onDesanclar}
+        onAnclar={() => { anclarConversacion(conversacionActivaId); onAnclar?.(); }}
+        onDesanclar={() => { anclarConversacion(conversacionActivaId); onDesanclar?.(); }}
         conversacionActivaId={conversacionActivaId}
         onSelectConversacion={(id) => seleccionarConversacion(id, 'chat')}
+        conversaciones={conversaciones}
       />
     );
   }
@@ -168,10 +246,11 @@ export function AsistenteBaseWidget() {
       <HistorialDrawer
         onClose={onClose}
         anclado={anclado}
-        onAnclar={onAnclar}
-        onDesanclar={onDesanclar}
+        onAnclar={() => { anclarConversacion(conversacionActivaId); onAnclar?.(); }}
+        onDesanclar={() => { anclarConversacion(conversacionActivaId); onDesanclar?.(); }}
         conversacionActivaId={conversacionActivaId}
         onSelectConversacion={(id) => seleccionarConversacion(id, 'lateral')}
+        conversaciones={conversaciones}
       />
     );
   }
@@ -200,6 +279,7 @@ export function AsistenteBaseWidget() {
               onVerHistorial={() => irA('historial')}
               onExpandir={() => irA('lateral')}
               onEnviar={() => irA('chat')}
+              onEnviarMensajeSistema={enviarMensajeSistema}
             />
           </motion.div>
         }
@@ -220,6 +300,7 @@ export function AsistenteBaseWidget() {
               onLateral={() => irA('lateral')}
               onNueva={iniciarNuevaConversacion}
               onHistorial={() => irA('historial')}
+              onAbrirPanel={(chip) => { setChipDesdeChat(chip); irA('expandido-desde-chat'); }}
             />
           </motion.div>
         }
@@ -243,6 +324,27 @@ export function AsistenteBaseWidget() {
               onLateral={() => irA('lateral')}
               onNueva={iniciarNuevaConversacion}
               onHistorial={() => irA('historial')}
+              onAbrirPanel={(chip) => { setChipDesdeChat(chip); irA('expandido-desde-chat'); }}
+            />
+          </motion.div>
+        }
+      />
+    );
+  }
+
+  // ─── PANEL DESDE CHAT (chip click con mensajes activos) ───────────────────
+  if (estado === 'expandido-desde-chat') {
+    return (
+      <AppShellMock
+        overlay={
+          <motion.div key="expandido-desde-chat" variants={O} initial="initial" animate="animate" exit="exit">
+            <AsistentePanel
+              onMinimizar={() => irA('minimizado')}
+              onVerHistorial={() => irA('historial')}
+              onExpandir={() => irA('lateral')}
+              onEnviar={() => irA('chat')}
+              onEnviarMensajeSistema={enviarMensajeSistema}
+              chipInicial={chipDesdeChat}
             />
           </motion.div>
         }
@@ -289,6 +391,7 @@ export function AsistenteBaseWidget() {
           false,
           () => irA('historial-lateral-anclado'),
         )}
+        onCloseDrawer={() => irA('lateral')}
         drawerOverlayWidth={HISTORIAL_WIDTH}
       />
     );
@@ -315,6 +418,7 @@ export function AsistenteBaseWidget() {
           undefined,
           () => irA('historial-lateral'),
         )}
+        onCloseDrawer={() => irA('lateral')}
         drawerOverlayWidth={HISTORIAL_WIDTH}
       />
     );
@@ -341,6 +445,7 @@ export function AsistenteBaseWidget() {
           false,
           () => irA('historial-anclado'),
         )}
+        onCloseDrawer={() => irA('chat')}
         drawerOverlayWidth={HISTORIAL_WIDTH}
       />
     );
@@ -368,6 +473,7 @@ export function AsistenteBaseWidget() {
           undefined,
           () => irA('historial'),
         )}
+        onCloseDrawer={() => irA('chat')}
         drawerOverlayWidth={HISTORIAL_WIDTH}
       />
     );

@@ -1,0 +1,113 @@
+- generic [ref=e52]:
+  - generic [ref=e53]:
+    - generic [ref=e54]:
+      - img [ref=e55]
+      - separator [ref=e57]
+      - paragraph [ref=e58]: Inicio
+      - img [ref=e59]
+      - paragraph [ref=e61]: Reglas de derivación
+    - generic [ref=e62]:
+      - paragraph [ref=e63]: Empresa de insumos S.A.S
+      - button [ref=e64] [cursor=pointer]:
+        - img [ref=e65]
+      - separator [ref=e68]
+      - button [ref=e69] [cursor=pointer]:
+        - img [ref=e70]
+      - separator [ref=e73]
+      - paragraph [ref=e75]: HD
+  - generic [ref=e76]:
+    - generic [ref=e77]:
+      - button "Asistente Base" [ref=e78] [cursor=pointer]:
+        - img [ref=e79]
+      - button "Asistente Obligaciones" [ref=e80] [cursor=pointer]:
+        - img [ref=e81]
+      - button "Asistente Contabilidad" [ref=e83] [cursor=pointer]:
+        - img [ref=e84]
+    - generic [ref=e86]:
+      - heading "Asistente Base" [level=6] [ref=e88]
+      - generic [ref=e101]:
+        - generic [ref=e164]:
+          - generic [ref=e165]:
+            - paragraph [ref=e166]: Tareas pendientes
+            - button [ref=e167] [cursor=pointer]:
+              - img [ref=e168]
+          - generic [ref=e171]:
+            - button "Obligaciones por pagar" [ref=e172] [cursor=pointer]:
+              - generic [ref=e173]: Obligaciones por pagar
+            - button "Contabilidad" [ref=e174] [cursor=pointer]:
+              - generic [ref=e175]: Contabilidad
+            - button "Terceros" [ref=e176] [cursor=pointer]:
+              - generic [ref=e177]: Terceros
+            - button "Impuestos" [ref=e178] [cursor=pointer]:
+              - generic [ref=e179]: Impuestos
+          - generic [ref=e180]:
+            - generic [ref=e181] [cursor=pointer]:
+              - img [ref=e182]
+              - generic [ref=e185]:
+                - generic [ref=e186]:
+                  - img [ref=e187]
+                  - paragraph [ref=e189]: Revisar extractos devueltos
+                  - paragraph [ref=e191]: "3"
+                - paragraph [ref=e192]: El más antiguo lleva 3 días sin corregir
+            - generic [ref=e193] [cursor=pointer]:
+              - img [ref=e194]
+              - generic [ref=e197]:
+                - generic [ref=e198]:
+                  - img [ref=e199]
+                  - paragraph [ref=e201]: Corregir obligaciones devueltas
+                  - paragraph [ref=e203]: "3"
+                - paragraph [ref=e204]: La más antigua lleva 4 días sin corregir
+            - generic [ref=e205] [cursor=pointer]:
+              - img [ref=e206]
+              - generic [ref=e209]:
+                - generic [ref=e210]:
+                  - img [ref=e211]
+                  - paragraph [ref=e213]: Emitir DSE DIAN
+                  - paragraph [ref=e215]: "3"
+                - paragraph [ref=e216]: "\"El soporte adjunto no corresponde al pe…\" · Laura González Castil…"
+            - generic [ref=e217] [cursor=pointer]:
+              - img [ref=e218]
+              - generic [ref=e221]:
+                - generic [ref=e222]:
+                  - img [ref=e223]
+                  - paragraph [ref=e225]: Resolver duplicados detectados
+                  - paragraph [ref=e227]: "3"
+                - paragraph [ref=e228]: Detectados hace 2 días
+            - generic [ref=e229] [cursor=pointer]:
+              - img [ref=e230]
+              - generic [ref=e233]:
+                - generic [ref=e234]:
+                  - img [ref=e235]
+                  - paragraph [ref=e237]: Validar pagos en tránsito
+                  - paragraph [ref=e239]: "5"
+                - paragraph [ref=e240]: Pendientes de confirmación bancaria
+        - generic [ref=e102]:
+          - generic [ref=e104]:
+            - button [ref=e105] [cursor=pointer]:
+              - img [ref=e106]
+            - button [ref=e110] [cursor=pointer]:
+              - img [ref=e111]
+            - separator [ref=e113]
+            - button [ref=e114] [cursor=pointer]:
+              - img [ref=e115]
+          - generic [ref=e117]:
+            - generic [ref=e120]:
+              - button [ref=e121] [cursor=pointer]:
+                - img [ref=e122]
+              - textbox "Describe lo que necesitas..." [ref=e125]
+              - button [ref=e126] [cursor=pointer]:
+                - img [ref=e127]
+            - generic [ref=e130]:
+              - generic [ref=e131]:
+                - button "Actividades pendientes" [ref=e132] [cursor=pointer]:
+                  - generic [ref=e133]: Actividades pendientes
+                - button "Reportes de gestión" [ref=e134] [cursor=pointer]:
+                  - generic [ref=e135]: Reportes de gestión
+                - button "Periodos contables" [ref=e136] [cursor=pointer]:
+                  - generic [ref=e137]: Periodos contables
+                - button "Reglas de derivación" [ref=e138] [cursor=pointer]:
+                  - generic [ref=e139]: Reglas de derivación
+              - button "Ver más" [ref=e140] [cursor=pointer]:
+                - img [ref=e141]
+                - generic [ref=e146]: Ver más
+          - generic [ref=e147]: El contenido generado por IA puede ser incorrecto.

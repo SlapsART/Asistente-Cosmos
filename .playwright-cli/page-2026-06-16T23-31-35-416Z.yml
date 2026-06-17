@@ -1,0 +1,86 @@
+- generic [ref=e52]:
+  - generic [ref=e53]:
+    - generic [ref=e54]:
+      - img [ref=e55]
+      - separator [ref=e57]
+      - paragraph [ref=e58]: Inicio
+      - img [ref=e59]
+      - paragraph [ref=e61]: Reglas de derivación
+    - generic [ref=e62]:
+      - paragraph [ref=e63]: Empresa de insumos S.A.S
+      - button [ref=e64] [cursor=pointer]:
+        - img [ref=e65]
+      - separator [ref=e68]
+      - button [ref=e69] [cursor=pointer]:
+        - img [ref=e70]
+      - separator [ref=e73]
+      - paragraph [ref=e75]: HD
+  - generic [ref=e76]:
+    - generic [ref=e77]:
+      - button "Asistente Base" [ref=e78] [cursor=pointer]:
+        - img [ref=e79]
+      - button "Asistente Obligaciones" [ref=e80] [cursor=pointer]:
+        - img [ref=e81]
+      - button "Asistente Contabilidad" [ref=e83] [cursor=pointer]:
+        - img [ref=e84]
+    - generic [ref=e86]:
+      - heading "Asistente Base" [level=6] [ref=e88]
+      - generic [ref=e100]:
+        - generic [ref=e214]:
+          - generic [ref=e216]:
+            - textbox "Buscar asiento contable" [ref=e218]
+            - img [ref=e219]
+          - generic [ref=e222] [cursor=pointer]:
+            - generic [ref=e223]:
+              - paragraph [ref=e224]: BRD-00856
+              - generic [ref=e225]: Construcciones Almo S.A.
+            - generic [ref=e227]: $ 4.000.000,00
+          - generic [ref=e228] [cursor=pointer]:
+            - generic [ref=e229]:
+              - paragraph [ref=e230]: BRD-093975
+              - generic [ref=e231]: Sura
+            - generic [ref=e233]: $ 3.500.000,00
+          - generic [ref=e234] [cursor=pointer]:
+            - generic [ref=e235]:
+              - paragraph [ref=e236]: BRD-028383
+              - generic [ref=e237]: Éxito
+            - generic [ref=e239]: $ 2.750.000,00
+          - generic [ref=e240] [cursor=pointer]:
+            - generic [ref=e241]:
+              - paragraph [ref=e242]: BRD-00223
+              - generic [ref=e243]: Bancolombia
+            - generic [ref=e245]: $ 5.200.000,00
+        - generic [ref=e101]:
+          - generic [ref=e103]:
+            - button [ref=e104] [cursor=pointer]:
+              - img [ref=e105]
+            - separator [ref=e107]
+            - button [ref=e108] [cursor=pointer]:
+              - img [ref=e109]
+          - generic [ref=e110]:
+            - generic [ref=e111]:
+              - generic [ref=e114]:
+                - button [ref=e115] [cursor=pointer]:
+                  - img [ref=e116]
+                - generic [ref=e117]:
+                  - textbox "Describe lo que necesitas..." [ref=e119]: Borradores de asiento pendientes por revisar
+                  - button "Asiento contable" [ref=e246] [cursor=pointer]:
+                    - generic [ref=e247]: Asiento contable
+                - button [ref=e120] [cursor=pointer]:
+                  - img [ref=e121]
+              - generic [ref=e124]:
+                - generic [ref=e125]:
+                  - button "Actividades pendientes" [ref=e126] [cursor=pointer]:
+                    - generic [ref=e127]: Actividades pendientes
+                  - button "Reportes de gestión" [ref=e128] [cursor=pointer]:
+                    - generic [ref=e129]: Reportes de gestión
+                  - button "Periodos contables" [ref=e130] [cursor=pointer]:
+                    - generic [ref=e131]: Periodos contables
+                  - button "Reglas de derivación" [ref=e132] [cursor=pointer]:
+                    - generic [ref=e133]: Reglas de derivación
+                - button "Ver más" [ref=e134] [cursor=pointer]:
+                  - img [ref=e135]
+                  - generic [ref=e140]: Ver más
+            - button [ref=e141] [cursor=pointer]:
+              - img [ref=e142]
+          - generic [ref=e146]: El contenido generado por IA puede ser incorrecto.

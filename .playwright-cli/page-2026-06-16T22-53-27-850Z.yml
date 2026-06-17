@@ -1,0 +1,58 @@
+- generic [ref=e6]:
+  - generic [ref=e7]:
+    - generic [ref=e8]:
+      - img [ref=e9]
+      - separator [ref=e11]
+      - paragraph [ref=e12]: Inicio
+      - img [ref=e13]
+      - paragraph [ref=e15]: Reglas de derivación
+    - generic [ref=e16]:
+      - paragraph [ref=e17]: Empresa de insumos S.A.S
+      - button [ref=e18] [cursor=pointer]:
+        - img [ref=e19]
+      - separator [ref=e22]
+      - button [ref=e23] [cursor=pointer]:
+        - img [ref=e24]
+      - separator [ref=e27]
+      - paragraph [ref=e29]: HD
+  - generic [ref=e30]:
+    - generic [ref=e31]:
+      - button "Asistente Base" [ref=e32] [cursor=pointer]:
+        - img [ref=e33]
+      - button "Asistente Obligaciones" [ref=e34] [cursor=pointer]:
+        - img [ref=e35]
+      - button "Asistente Contabilidad" [ref=e37] [cursor=pointer]:
+        - img [ref=e38]
+    - generic [ref=e40]:
+      - heading "Asistente Contabilidad" [level=6] [ref=e42]
+      - generic [ref=e52]:
+        - generic [ref=e54]:
+          - button [ref=e55] [cursor=pointer]:
+            - img [ref=e56]
+          - separator [ref=e58]
+          - button [ref=e59] [cursor=pointer]:
+            - img [ref=e60]
+        - generic [ref=e61]:
+          - generic [ref=e62]:
+            - generic [ref=e64]:
+              - button [ref=e65] [cursor=pointer]:
+                - img [ref=e66]
+              - textbox "Describe lo que necesitas..." [ref=e69]
+              - button [ref=e70] [cursor=pointer]:
+                - img [ref=e71]
+            - generic [ref=e74]:
+              - generic [ref=e75]:
+                - button "Actividades pendientes" [ref=e76] [cursor=pointer]:
+                  - generic [ref=e77]: Actividades pendientes
+                - button "Reportes de gestión" [ref=e78] [cursor=pointer]:
+                  - generic [ref=e79]: Reportes de gestión
+                - button "Periodos contables" [ref=e80] [cursor=pointer]:
+                  - generic [ref=e81]: Periodos contables
+                - button "Reglas de derivación" [ref=e82] [cursor=pointer]:
+                  - generic [ref=e83]: Reglas de derivación
+              - button "Ver más" [ref=e84] [cursor=pointer]:
+                - img [ref=e85]
+                - generic [ref=e90]: Ver más
+          - button [ref=e91] [cursor=pointer]:
+            - img [ref=e92]
+        - generic [ref=e96]: El contenido generado por IA puede ser incorrecto.

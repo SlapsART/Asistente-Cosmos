@@ -11,9 +11,9 @@ const EASE_IN: [number, number, number, number] = [0.55, 0.06, 0.68, 0.19];
  * Exit rápido (100ms) para que la espera sea imperceptible.
  */
 export const overlayVariants: Variants = {
-  initial: { opacity: 0, y: 5 },
-  animate: { opacity: 1, y: 0, transition: { duration: 0.22, ease: EASE } },
-  exit: { opacity: 0, transition: { duration: 0.1, ease: EASE_IN } },
+  initial: { opacity: 0, y: 3, scale: 0.985 },
+  animate: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.28, ease: EASE } },
+  exit: { opacity: 0, scale: 0.98, transition: { duration: 0.14, ease: EASE_IN } },
 };
 
 /**

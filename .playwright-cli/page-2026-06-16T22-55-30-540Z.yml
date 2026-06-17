@@ -1,0 +1,58 @@
+- generic [ref=e381]:
+  - generic [ref=e382]:
+    - generic [ref=e383]:
+      - img [ref=e384]
+      - separator [ref=e386]
+      - paragraph [ref=e387]: Inicio
+      - img [ref=e388]
+      - paragraph [ref=e390]: Reglas de derivación
+    - generic [ref=e391]:
+      - paragraph [ref=e392]: Empresa de insumos S.A.S
+      - button [ref=e393] [cursor=pointer]:
+        - img [ref=e394]
+      - separator [ref=e397]
+      - button [ref=e398] [cursor=pointer]:
+        - img [ref=e399]
+      - separator [ref=e402]
+      - paragraph [ref=e404]: HD
+  - generic [ref=e405]:
+    - generic [ref=e406]:
+      - button "Asistente Base" [ref=e407] [cursor=pointer]:
+        - img [ref=e408]
+      - button "Asistente Obligaciones" [ref=e409] [cursor=pointer]:
+        - img [ref=e410]
+      - button "Asistente Contabilidad" [ref=e412] [cursor=pointer]:
+        - img [ref=e413]
+    - generic [ref=e415]:
+      - heading "Asistente Obligaciones por Pagar" [level=6] [ref=e417]
+      - generic [ref=e611]:
+        - generic [ref=e613]:
+          - button [ref=e614] [cursor=pointer]:
+            - img [ref=e615]
+          - button [ref=e619] [cursor=pointer]:
+            - img [ref=e620]
+          - separator [ref=e622]
+          - button [ref=e623] [cursor=pointer]:
+            - img [ref=e624]
+        - generic [ref=e626]:
+          - button [ref=e627] [cursor=pointer]:
+            - img [ref=e628]
+          - textbox "Describe lo que necesitas..." [ref=e631]
+          - button [ref=e632] [cursor=pointer]:
+            - img [ref=e633]
+        - generic [ref=e636]:
+          - generic [ref=e637]:
+            - button "Registrar" [ref=e638] [cursor=pointer]:
+              - generic [ref=e639]: Registrar
+            - button "Gestión en espera" [ref=e640] [cursor=pointer]:
+              - generic [ref=e641]: Gestión en espera
+            - button "Saldos y balances" [ref=e642] [cursor=pointer]:
+              - generic [ref=e643]: Saldos y balances
+            - button "Próximos vencimientos" [ref=e644] [cursor=pointer]:
+              - generic [ref=e645]: Próximos vencimientos
+            - button "Conciliaciones abiertas" [ref=e646] [cursor=pointer]:
+              - generic [ref=e647]: Conciliaciones abiertas
+          - button "Ver más" [ref=e648] [cursor=pointer]:
+            - img [ref=e649]
+            - generic [ref=e654]: Ver más
+        - generic [ref=e655]: El contenido generado por IA puede ser incorrecto.
