@@ -83,6 +83,7 @@ export function AsistenteInput({
   onAbrirPanel,
 }: AsistenteInputProps) {
   const [localTexto, setLocalTexto] = useState(inputTexto ?? '');
+  const [focused, setFocused] = useState(false);
   const [archivos, setArchivos] = useState<ArchivoAdjunto[]>([]);
   const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
   const [menuChip, setMenuChip] = useState('');
@@ -227,9 +228,9 @@ export function AsistenteInput({
           <Box
             sx={{
               position: 'relative',
-              borderRadius: pensando ? '22px' : '20px',
+              borderRadius: focused && !pensando ? '22px' : '20px',
               overflow: 'hidden',
-              p: pensando ? '2px' : 0,
+              p: focused && !pensando ? '2px' : 0,
             }}
           >
             {/* Beam — sx is 100% static so emotion never regenerates the class, animation never restarts */}
@@ -245,11 +246,13 @@ export function AsistenteInput({
                 pointerEvents: 'none',
               }}
               style={{
-                opacity: pensando ? 1 : 0,
+                opacity: focused && !pensando ? 1 : 0,
                 transition: 'opacity 0.6s ease',
               }}
             />
             <Box
+              onFocus={() => setFocused(true)}
+              onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setFocused(false); }}
               sx={{
                 bgcolor: 'grey.100',
                 borderRadius: '20px',
@@ -263,11 +266,12 @@ export function AsistenteInput({
                 zIndex: 1,
                 transition: 'border-color 0.2s',
                 ...(pensando
+                  ? { border: '1px solid rgba(47,67,208,0.5)' }
+                  : focused
                   ? {}
                   : {
                       border: '1px solid rgba(16,24,64,0.2)',
                       '&:hover': { borderColor: 'rgba(47,67,208,0.5)' },
-                      '&:focus-within': { borderColor: '#2f43d0' },
                     }),
               }}
             >
