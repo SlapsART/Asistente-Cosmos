@@ -13,6 +13,8 @@ import { AsistenteVerticalPanel } from './AsistenteVerticalPanel';
 type EstadoBase =
   | 'minimizado'
   | 'expandido'
+  | 'expandido-historial'
+  | 'expandido-historial-anclado'
   | 'chat'
   | 'nueva'
   | 'lateral'
@@ -260,12 +262,63 @@ export function AsistenteVerticalWidget() {
         overlay={
           <AsistenteVerticalPanel
             onMinimizar={() => irA('minimizado')}
-            onVerHistorial={() => irA('historial')}
+            onVerHistorial={() => irA('expandido-historial')}
             onExpandir={() => irA('lateral')}
             onEnviar={() => irA('chat')}
             onEnviarMensajeSistema={enviarMensajeSistema}
           />
         }
+      />
+    );
+  }
+
+  // ─── EXPANDIDO + HISTORIAL ────────────────────────────────────────────────
+  if (estado === 'expandido-historial') {
+    return (
+      <AppShellMock
+        overlayCentered
+        overlay={
+          <AsistenteVerticalPanel
+            onMinimizar={() => irA('minimizado')}
+            onVerHistorial={() => irA('expandido')}
+            onExpandir={() => irA('lateral')}
+            onEnviar={() => irA('chat')}
+            onEnviarMensajeSistema={enviarMensajeSistema}
+          />
+        }
+        drawerOverlay={drawerHistorial(
+          () => irA('expandido'),
+          false,
+          () => irA('expandido-historial-anclado'),
+        )}
+        onCloseDrawer={() => irA('expandido')}
+        drawerOverlayWidth={HISTORIAL_WIDTH}
+      />
+    );
+  }
+
+  // ─── EXPANDIDO + HISTORIAL ANCLADO ────────────────────────────────────────
+  if (estado === 'expandido-historial-anclado') {
+    return (
+      <AppShellMock
+        overlayCentered
+        overlay={
+          <AsistenteVerticalPanel
+            onMinimizar={() => irA('minimizado')}
+            onVerHistorial={() => irA('expandido')}
+            onExpandir={() => irA('lateral')}
+            onEnviar={() => irA('chat')}
+            onEnviarMensajeSistema={enviarMensajeSistema}
+          />
+        }
+        drawerOverlay={drawerHistorial(
+          () => irA('expandido'),
+          true,
+          undefined,
+          () => irA('expandido-historial'),
+        )}
+        onCloseDrawer={() => irA('expandido')}
+        drawerOverlayWidth={HISTORIAL_WIDTH}
       />
     );
   }
