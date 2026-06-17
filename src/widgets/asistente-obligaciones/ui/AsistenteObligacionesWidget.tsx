@@ -165,7 +165,7 @@ export function AsistenteObligacionesWidget() {
       if (!conv) return prev;
       const isAnclada = conv.grupo === 'anclada';
       const nuevoGrupo = isAnclada ? 'reciente' : 'anclada';
-      const updated = { ...conv, grupo: nuevoGrupo as const };
+      const updated = { ...conv, grupo: nuevoGrupo as 'anclada' | 'reciente' };
       const rest = prev.filter(c => c.id !== id);
       
       if (isAnclada) {

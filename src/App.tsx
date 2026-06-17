@@ -5,6 +5,7 @@ import { pageVariants } from '@/shared/ui/anim';
 import { AsistenteContabilidadPage } from '@/pages/asistente';
 import { AsistenteBasePage } from '@/pages/asistente-base';
 import { AsistenteObligacionesPage } from '@/pages/asistente-obligaciones';
+import { AsistenteVerticalPage } from '@/pages/asistente-vertical';
 
 function AppViews() {
   const { vista } = useDemoContext();
@@ -21,6 +22,7 @@ function AppViews() {
         {vista === 'contabilidad' && <AsistenteContabilidadPage />}
         {vista === 'base' && <AsistenteBasePage />}
         {vista === 'obligaciones' && <AsistenteObligacionesPage />}
+        {vista === 'vertical' && <AsistenteVerticalPage />}
       </motion.div>
     </AnimatePresence>
   );

@@ -12,7 +12,6 @@ import {
 } from '@tabler/icons-react';
 
 const PRIMARY = '#2f43d0';
-const CHIP_ACTIVE_BG = '#e1e6ff';
 const BADGE_BG = '#eaebec';
 const BADGE_TEXT = 'rgba(16,24,64,0.6)';
 const SECTION_TITLE = 'rgba(16,24,64,0.6)';

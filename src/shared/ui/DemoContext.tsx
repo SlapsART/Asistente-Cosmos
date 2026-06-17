@@ -1,7 +1,7 @@
 import { createContext, useContext, useState } from 'react';
 import type { ReactNode } from 'react';
 
-export type VistaDemo = 'contabilidad' | 'base' | 'obligaciones';
+export type VistaDemo = 'contabilidad' | 'base' | 'obligaciones' | 'vertical';
 
 interface DemoContextValue {
   vista: VistaDemo;

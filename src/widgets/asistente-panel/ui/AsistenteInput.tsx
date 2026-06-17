@@ -63,7 +63,7 @@ interface AsistenteInputProps {
 
 export function AsistenteInput({
   chipActivo,
-  chipActivoTipo,
+  chipActivoTipo: _chipActivoTipo,
   inputTexto,
   inputChips = [],
   chipValues = {},
@@ -228,9 +228,21 @@ export function AsistenteInput({
           <Box
             sx={{
               position: 'relative',
-              borderRadius: focused && !pensando ? '22px' : '20px',
+              borderRadius: '22px',
               overflow: 'hidden',
-              p: focused && !pensando ? '2px' : 0,
+              p: '2px',
+              bgcolor: 'grey.100',
+              transition: 'box-shadow 0.2s',
+              boxShadow: pensando
+                ? 'inset 0 0 0 1px rgba(47,67,208,0.5)'
+                : focused
+                ? 'inset 0 0 0 1px transparent'
+                : 'inset 0 0 0 1px rgba(16,24,64,0.2)',
+              '&:hover': {
+                boxShadow: pensando || focused
+                  ? 'inset 0 0 0 1px transparent'
+                  : 'inset 0 0 0 1px rgba(47,67,208,0.5)',
+              },
             }}
           >
             {/* Beam — sx is 100% static so emotion never regenerates the class, animation never restarts */}
@@ -264,15 +276,6 @@ export function AsistenteInput({
                 py: 0.75,
                 position: 'relative',
                 zIndex: 1,
-                transition: 'border-color 0.2s',
-                ...(pensando
-                  ? { border: '1px solid rgba(47,67,208,0.5)' }
-                  : focused
-                  ? {}
-                  : {
-                      border: '1px solid rgba(16,24,64,0.2)',
-                      '&:hover': { borderColor: 'rgba(47,67,208,0.5)' },
-                    }),
               }}
             >
               {/* Archivos adjuntos */}

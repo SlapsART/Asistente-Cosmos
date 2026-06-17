@@ -7,6 +7,7 @@ import {
   IconRefresh,
   IconSettings,
   IconTable,
+  IconLayoutAlignBottom,
 } from '@tabler/icons-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useDemoContext } from '@/shared/ui/DemoContext';
@@ -19,6 +20,8 @@ interface AppShellMockProps {
   /** Ancho del panel lateral — necesario para animar la entrada sin jump */
   rightPanelWidth?: number;
   overlay?: React.ReactNode;
+  /** Centra el overlay vertical y horizontalmente en lugar de anclarlo al bottom */
+  overlayCentered?: boolean;
   /** Overlay absoluto en el lado derecho — no empuja el contenido (historial) */
   drawerOverlay?: React.ReactNode;
   drawerOverlayWidth?: number;
@@ -30,12 +33,14 @@ const SIDEBAR_NAV: { vista: VistaDemo; Icon: React.ElementType; label: string }[
   { vista: 'base', Icon: IconList, label: 'Asistente Base' },
   { vista: 'obligaciones', Icon: IconTable, label: 'Asistente Obligaciones' },
   { vista: 'contabilidad', Icon: IconBolt, label: 'Asistente Contabilidad' },
+  { vista: 'vertical', Icon: IconLayoutAlignBottom, label: 'Asistente Vertical' },
 ];
 
 const PAGE_TITLE: Record<VistaDemo, string> = {
   base: 'Asistente Base',
   obligaciones: 'Asistente Obligaciones por Pagar',
   contabilidad: 'Asistente Contabilidad',
+  vertical: 'Asistente Vertical',
 };
 
 const EASE: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94];
@@ -46,6 +51,7 @@ export function AppShellMock({
   rightPanel,
   rightPanelWidth = 336,
   overlay,
+  overlayCentered = false,
   drawerOverlay,
   drawerOverlayWidth = 380,
   onCloseDrawer,
@@ -194,9 +200,9 @@ export function AppShellMock({
               <Box
                 sx={{
                   position: 'absolute',
-                  bottom: 12,
-                  left: 0,
-                  right: 0,
+                  ...(overlayCentered
+                    ? { top: 0, left: 0, right: 0, bottom: 0, alignItems: 'center' }
+                    : { bottom: 12, left: 0, right: 0, alignItems: 'flex-end' }),
                   zIndex: 10,
                   pointerEvents: 'none',
                   display: 'flex',
