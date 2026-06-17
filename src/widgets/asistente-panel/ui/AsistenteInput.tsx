@@ -3,6 +3,8 @@ import { Box, Chip, Divider, IconButton, InputBase, Menu, MenuItem, Typography }
 import {
   IconArrowUp,
   IconBoxAlignRight,
+  IconChevronLeft,
+  IconChevronRight,
   IconLayoutDashboard,
   IconMessageSearch,
   IconMinus,
@@ -86,10 +88,38 @@ export function AsistenteInput({
   const [menuChip, setMenuChip] = useState('');
   const [busqueda, setBusqueda] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const chipsScrollRef = useRef<HTMLDivElement>(null);
+  const [chipsOverflow, setChipsOverflow] = useState(false);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
 
   useEffect(() => {
     setLocalTexto(inputTexto ?? '');
   }, [inputTexto]);
+
+  useEffect(() => {
+    const el = chipsScrollRef.current;
+    if (!el) return;
+    function check() {
+      if (!el) return;
+      const overflow = el.scrollWidth > el.clientWidth + 1;
+      setChipsOverflow(overflow);
+      setCanScrollLeft(el.scrollLeft > 0);
+      setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 1);
+    }
+    check();
+    const ro = new ResizeObserver(check);
+    ro.observe(el);
+    el.addEventListener('scroll', check, { passive: true });
+    return () => { ro.disconnect(); el.removeEventListener('scroll', check); };
+  }, []);
+
+  function scrollChipsLeft() {
+    chipsScrollRef.current?.scrollBy({ left: -120, behavior: 'smooth' });
+  }
+  function scrollChipsRight() {
+    chipsScrollRef.current?.scrollBy({ left: 120, behavior: 'smooth' });
+  }
 
   const tieneTexto = Boolean(localTexto);
   const isCard = variant === 'card';
@@ -357,58 +387,96 @@ export function AsistenteInput({
           </Box>
 
           {/* Quick Actions */}
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <Box
-              sx={{
-                display: 'flex',
-                flex: '1 0 0',
-                gap: 1,
-                alignItems: 'center',
-                overflow: 'hidden',
-                position: 'relative',
-              }}
-            >
-              {QUICK_ACTIONS.map((accion) => {
-                const isActive = accion === chipActivo;
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, width: '100%' }}>
+            {chipsOverflow && (
+              <IconButton
+                size="small"
+                onClick={scrollChipsLeft}
+                sx={{ p: '2px', flexShrink: 0, opacity: canScrollLeft ? 1 : 0.25, transition: 'opacity 0.2s' }}
+              >
+                <IconChevronLeft size={14} />
+              </IconButton>
+            )}
 
-                return (
+            <Box sx={{ position: 'relative', flex: '1 0 0', overflow: 'hidden' }}>
+              {chipsOverflow && canScrollLeft && (
+                <Box sx={{
+                  position: 'absolute', left: 0, top: 0, bottom: 0, width: 32, zIndex: 1, pointerEvents: 'none',
+                  background: isCard
+                    ? 'linear-gradient(to right, white, transparent)'
+                    : 'linear-gradient(to right, #f5f5f6, transparent)',
+                }} />
+              )}
+
+              <Box
+                ref={chipsScrollRef}
+                sx={{
+                  display: 'flex',
+                  gap: 1,
+                  alignItems: 'center',
+                  overflowX: 'auto',
+                  scrollbarWidth: 'none',
+                  '&::-webkit-scrollbar': { display: 'none' },
+                }}
+              >
+                {QUICK_ACTIONS.map((accion) => {
+                  const isActive = accion === chipActivo;
+                  return (
+                    <Chip
+                      key={accion}
+                      label={accion}
+                      size="medium"
+                      variant={isActive ? 'filled' : 'outlined'}
+                      color={isActive ? 'primary' : 'default'}
+                      onClick={() => onAbrirPanel ? onAbrirPanel(accion) : onChipClick(accion)}
+                      sx={{ flexShrink: 0, cursor: 'pointer' }}
+                    />
+                  );
+                })}
+
+                {!chipsOverflow && (
                   <Chip
-                    key={accion}
-                    label={accion}
+                    label="Ver más"
                     size="medium"
-                    variant={isActive ? 'filled' : 'outlined'}
-                    color={isActive ? 'primary' : 'default'}
-                    onClick={() => onAbrirPanel ? onAbrirPanel(accion) : onChipClick(accion)}
+                    variant={verMasActivo ? 'filled' : 'outlined'}
+                    color={verMasActivo ? 'primary' : 'default'}
+                    icon={<IconLayoutDashboard size={14} />}
+                    onClick={() => onAbrirPanel ? onAbrirPanel('ver-mas') : onVerMas()}
                     sx={{ flexShrink: 0, cursor: 'pointer' }}
                   />
-                );
-              })}
+                )}
+              </Box>
 
-              {/* Fade overflow */}
-              <Box
-                sx={{
-                  position: 'absolute',
-                  right: 0,
-                  top: 0,
-                  bottom: 0,
-                  width: '32px',
+              {chipsOverflow && canScrollRight && (
+                <Box sx={{
+                  position: 'absolute', right: 0, top: 0, bottom: 0, width: 32, zIndex: 1, pointerEvents: 'none',
                   background: isCard
-                    ? 'linear-gradient(to right, rgba(245,245,246,0), #f5f5f6)'
-                    : 'linear-gradient(to right, rgba(255,255,255,0), white)',
-                  pointerEvents: 'none',
-                }}
-              />
+                    ? 'linear-gradient(to left, white, transparent)'
+                    : 'linear-gradient(to left, #f5f5f6, transparent)',
+                }} />
+              )}
             </Box>
 
-            <Chip
-              label="Ver más"
-              size="medium"
-              variant={verMasActivo ? 'filled' : 'outlined'}
-              color={verMasActivo ? 'primary' : 'default'}
-              icon={<IconLayoutDashboard size={14} />}
-              onClick={() => onAbrirPanel ? onAbrirPanel('ver-mas') : onVerMas()}
-              sx={{ flexShrink: 0, cursor: 'pointer' }}
-            />
+            {chipsOverflow && (
+              <>
+                <IconButton
+                  size="small"
+                  onClick={scrollChipsRight}
+                  sx={{ p: '2px', flexShrink: 0, opacity: canScrollRight ? 1 : 0.25, transition: 'opacity 0.2s' }}
+                >
+                  <IconChevronRight size={14} />
+                </IconButton>
+                <Chip
+                  label="Ver más"
+                  size="medium"
+                  variant={verMasActivo ? 'filled' : 'outlined'}
+                  color={verMasActivo ? 'primary' : 'default'}
+                  icon={<IconLayoutDashboard size={14} />}
+                  onClick={() => onAbrirPanel ? onAbrirPanel('ver-mas') : onVerMas()}
+                  sx={{ flexShrink: 0, cursor: 'pointer' }}
+                />
+              </>
+            )}
           </Box>
         </Box>
 

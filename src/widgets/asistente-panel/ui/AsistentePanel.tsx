@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Box, Button, IconButton, Typography } from '@mui/material';
+import { Box, IconButton, Typography } from '@mui/material';
 import { IconAlertCircle, IconX } from '@tabler/icons-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { subPanelVariants } from '@/shared/ui/anim';
@@ -306,86 +306,84 @@ export function AsistentePanel({ onMinimizar, onVerHistorial, onExpandir, onEnvi
             exit={{ opacity: 0, y: 3 }}
             transition={{ duration: 0.45, ease: 'easeOut' }}
           >
-            <Box
-              onClick={handleNotifClick}
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                bgcolor: 'background.default',
-                borderRadius: '4px',
-                px: 1.5,
-                py: 1,
-                gap: 1,
-                cursor: 'pointer',
-                '&:hover': { bgcolor: 'rgba(47,67,208,0.04)' },
-              }}
-            >
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: '4px', flex: 1, minWidth: 0, overflow: 'hidden' }}>
-                <IconAlertCircle size={14} color="rgba(16,24,64,0.6)" style={{ flexShrink: 0 }} />
-                <Typography
-                  sx={{
-                    fontSize: '0.8125rem',
-                    color: 'text.primary',
-                    lineHeight: '16px',
-                    letterSpacing: '0.17px',
-                    whiteSpace: 'nowrap',
-                    flexShrink: 0,
-                  }}
-                >
-                  {tareaActual.titulo}
-                </Typography>
-                <Box
-                  sx={{
-                    bgcolor: '#eaebec',
-                    borderRadius: '100px',
-                    px: '5px',
-                    py: '2.5px',
-                    flexShrink: 0,
-                    display: 'flex',
-                    alignItems: 'center',
-                  }}
-                >
-                  <Typography sx={{ fontSize: '0.6875rem', color: 'rgba(16,24,64,0.6)', fontWeight: 500, lineHeight: '11px', letterSpacing: '0.14px' }}>
-                    {tareaActual.cantidad}
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'flex-end' }}>
+              <Typography
+                component="span"
+                onClick={(e) => { e.stopPropagation(); handleVerTodo(); }}
+                sx={{
+                  fontSize: '0.6875rem',
+                  color: '#2f43d0',
+                  letterSpacing: '0.4px',
+                  lineHeight: '14px',
+                  cursor: 'pointer',
+                  textDecoration: 'underline',
+                  textUnderlineOffset: '2px',
+                  '&:hover': { opacity: 0.8 },
+                }}
+              >
+                Ver todas
+              </Typography>
+              <Box
+                onClick={handleNotifClick}
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  bgcolor: 'background.default',
+                  borderRadius: '4px',
+                  px: 1.5,
+                  py: '6px',
+                  gap: 1,
+                  cursor: 'pointer',
+                  width: '100%',
+                  '&:hover': { bgcolor: 'rgba(47,67,208,0.04)' },
+                }}
+              >
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: '4px', flex: 1, minWidth: 0, overflow: 'hidden' }}>
+                  <IconAlertCircle size={14} color="rgba(16,24,64,0.6)" style={{ flexShrink: 0 }} />
+                  <Typography
+                    sx={{
+                      fontSize: '0.8125rem',
+                      color: 'text.primary',
+                      lineHeight: '16px',
+                      letterSpacing: '0.17px',
+                      whiteSpace: 'nowrap',
+                      flexShrink: 0,
+                    }}
+                  >
+                    {tareaActual.titulo}
+                  </Typography>
+                  <Box
+                    sx={{
+                      bgcolor: '#eaebec',
+                      borderRadius: '100px',
+                      px: '5px',
+                      py: '2.5px',
+                      flexShrink: 0,
+                      display: 'flex',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Typography sx={{ fontSize: '0.6875rem', color: 'rgba(16,24,64,0.6)', fontWeight: 500, lineHeight: '11px', letterSpacing: '0.14px' }}>
+                      {tareaActual.cantidad}
+                    </Typography>
+                  </Box>
+                  <Typography
+                    sx={{
+                      fontSize: '0.8125rem',
+                      color: 'text.secondary',
+                      lineHeight: '16px',
+                      letterSpacing: '0.17px',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                      flex: 1,
+                      minWidth: 0,
+                    }}
+                  >
+                    {tareaActual.descripcion}
                   </Typography>
                 </Box>
-                <Typography
-                  sx={{
-                    fontSize: '0.8125rem',
-                    color: 'text.secondary',
-                    lineHeight: '16px',
-                    letterSpacing: '0.17px',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap',
-                    flex: 1,
-                    minWidth: 0,
-                  }}
-                >
-                  {tareaActual.descripcion}
-                </Typography>
-              </Box>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexShrink: 0 }}>
-                <Button
-                  size="small"
-                  onClick={(e) => { e.stopPropagation(); handleVerTodo(); }}
-                  sx={{
-                    fontSize: '0.75rem',
-                    fontWeight: 500,
-                    lineHeight: '18px',
-                    letterSpacing: '0.4px',
-                    color: '#2f43d0',
-                    px: '10px',
-                    py: '4px',
-                    minWidth: 0,
-                    textTransform: 'none',
-                    borderRadius: '4px',
-                    '&:hover': { bgcolor: 'rgba(47,67,208,0.06)' },
-                  }}
-                >
-                  Ver todo
-                </Button>
                 <IconButton size="small" onClick={(e) => { e.stopPropagation(); handleCerrarNotif(); }} sx={{ p: '3px' }}>
                   <IconX size={16} color="rgba(16,24,64,0.38)" />
                 </IconButton>
