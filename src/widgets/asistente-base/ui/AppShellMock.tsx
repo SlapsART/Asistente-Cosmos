@@ -1,3 +1,4 @@
+import { useRef, useState, useEffect } from 'react';
 import { Box, Divider, IconButton, Tooltip, Typography } from '@mui/material';
 import {
   IconBolt,
@@ -28,6 +29,8 @@ interface AppShellMockProps {
   drawerOverlayWidth?: number;
   /** Callback para cerrar el drawer al hacer clic fuera */
   onCloseDrawer?: () => void;
+  /** Permite redimensionar el panel derecho arrastrando (min 20vw, max 40vw) */
+  rightPanelResizable?: boolean;
 }
 
 const SIDEBAR_NAV: { vista: VistaDemo; Icon: React.ElementType; label: string }[] = [
@@ -58,8 +61,34 @@ export function AppShellMock({
   drawerOverlay,
   drawerOverlayWidth = 380,
   onCloseDrawer,
+  rightPanelResizable = false,
 }: AppShellMockProps) {
   const { vista, setVista } = useDemoContext();
+
+  // ── Resize state ────────────────────────────────────────────────────────────
+  const [panelWidth, setPanelWidth] = useState(rightPanelWidth);
+  const [isResizing, setIsResizing] = useState(false);
+  const dragRef = useRef({ startX: 0, startWidth: 0 });
+
+  useEffect(() => { setPanelWidth(rightPanelWidth); }, [rightPanelWidth]);
+
+  function handleResizeStart(e: React.MouseEvent) {
+    dragRef.current = { startX: e.clientX, startWidth: panelWidth };
+    setIsResizing(true);
+    const onMove = (ev: MouseEvent) => {
+      const delta = dragRef.current.startX - ev.clientX;
+      const vw = window.innerWidth;
+      setPanelWidth(Math.max(vw * 0.2, Math.min(vw * 0.4, dragRef.current.startWidth + delta)));
+    };
+    const onUp = () => {
+      setIsResizing(false);
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup', onUp);
+    };
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+    e.preventDefault();
+  }
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%', bgcolor: '#f5f6f7', position: 'relative' }}>
@@ -174,7 +203,7 @@ export function AppShellMock({
           </Box>
 
           {/* Fila principal: área de contenido + panel derecho */}
-          <Box sx={{ flex: 1, display: 'flex', gap: 2, overflow: 'hidden', position: 'relative' }}>
+          <Box sx={{ flex: 1, display: 'flex', gap: rightPanelResizable && rightPanel ? 0 : 2, overflow: 'hidden', position: 'relative' }}>
             {/* Área de contenido de la página */}
             <Box
               sx={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', position: 'relative' }}
@@ -219,25 +248,51 @@ export function AppShellMock({
               </Box>
             </Box>
 
+            {/* Resize handle — visible solo cuando rightPanelResizable */}
+            {rightPanelResizable && rightPanel && (
+              <Box
+                onMouseDown={handleResizeStart}
+                sx={{
+                  width: 16,
+                  flexShrink: 0,
+                  cursor: 'col-resize',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  userSelect: 'none',
+                  '& .rh-pill': { transition: 'background-color 0.15s, opacity 0.15s', opacity: 0 },
+                  '&:hover .rh-pill': { opacity: 1, backgroundColor: 'rgba(47,67,208,0.3)' },
+                }}
+              >
+                <Box
+                  className="rh-pill"
+                  sx={{
+                    width: 2,
+                    height: 40,
+                    borderRadius: 1,
+                    backgroundColor: isResizing ? 'rgba(47,67,208,0.55)' : 'rgba(47,67,208,0.3)',
+                    opacity: isResizing ? 1 : undefined,
+                  }}
+                />
+              </Box>
+            )}
+
             {/* Panel derecho — card con borde y radio (Figma: w:336px, border, rounded-8px) */}
             <AnimatePresence>
               {rightPanel && (
                 <motion.div
                   key="right-panel"
                   initial={{ width: 0, opacity: 0 }}
-                  animate={{
-                    width: rightPanelWidth,
-                    opacity: 1,
-                    transition: {
-                      width: { type: 'spring', stiffness: 320, damping: 34, mass: 0.9 },
-                      opacity: { duration: 0.18, ease: EASE },
-                    },
-                  }}
-                  exit={{
-                    width: 0,
-                    opacity: 0,
-                    transition: { duration: 0.22, ease: EASE_IN },
-                  }}
+                  animate={{ width: panelWidth, opacity: 1 }}
+                  exit={{ width: 0, opacity: 0, transition: { duration: 0.22, ease: EASE_IN } }}
+                  transition={
+                    isResizing
+                      ? { duration: 0 }
+                      : {
+                          width: { type: 'spring', stiffness: 320, damping: 34, mass: 0.9 },
+                          opacity: { duration: 0.18, ease: EASE },
+                        }
+                  }
                   style={{
                     flexShrink: 0,
                     display: 'flex',

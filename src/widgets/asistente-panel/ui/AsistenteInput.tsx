@@ -3,7 +3,7 @@ import { Box, Chip, Divider, IconButton, InputBase, Menu, MenuItem, Tooltip, Typ
 import {
   IconArrowUp,
   IconBoxAlignRight,
-  IconCheckbox,
+  IconReport,
   IconChevronLeft,
   IconChevronRight,
   IconLayoutDashboard,
@@ -64,6 +64,8 @@ interface AsistenteInputProps {
   onInputFocus?: () => void;
   autoFocusInput?: boolean;
   onAbrirTareas?: () => void;
+  /** Muestra el botón "Ver más" solo con ícono (sin texto) — para modo lateral */
+  verMasSoloIcono?: boolean;
 }
 
 export function AsistenteInput({
@@ -89,6 +91,7 @@ export function AsistenteInput({
   onInputFocus,
   autoFocusInput,
   onAbrirTareas,
+  verMasSoloIcono = false,
 }: AsistenteInputProps) {
   const [localTexto, setLocalTexto] = useState(inputTexto ?? '');
   const [focused, setFocused] = useState(false);
@@ -223,7 +226,7 @@ export function AsistenteInput({
             {onAbrirTareas && (
               <Tooltip title="Tareas pendientes" placement="top" arrow>
                 <IconButton size="small" onClick={onAbrirTareas} sx={{ p: '3px' }}>
-                  <IconCheckbox size={16} />
+                  <IconReport size={16} />
                 </IconButton>
               </Tooltip>
             )}
@@ -469,15 +472,27 @@ export function AsistenteInput({
                 })}
 
                 {!chipsOverflow && (
-                  <Chip
-                    label="Ver más"
-                    size="medium"
-                    variant={verMasActivo ? 'filled' : 'outlined'}
-                    color={verMasActivo ? 'primary' : 'default'}
-                    icon={<IconLayoutDashboard size={14} />}
-                    onClick={() => onAbrirPanel ? onAbrirPanel('ver-mas') : onVerMas()}
-                    sx={{ flexShrink: 0, cursor: 'pointer' }}
-                  />
+                  verMasSoloIcono ? (
+                    <Tooltip title="Ver más" placement="top" arrow>
+                      <IconButton
+                        size="small"
+                        onClick={() => onAbrirPanel ? onAbrirPanel('ver-mas') : onVerMas()}
+                        sx={{ p: '5px', borderRadius: '6px', flexShrink: 0, ...(verMasActivo && { bgcolor: 'rgba(47,67,208,0.1)', color: '#2f43d0' }) }}
+                      >
+                        <IconLayoutDashboard size={16} />
+                      </IconButton>
+                    </Tooltip>
+                  ) : (
+                    <Chip
+                      label="Ver más"
+                      size="medium"
+                      variant={verMasActivo ? 'filled' : 'outlined'}
+                      color={verMasActivo ? 'primary' : 'default'}
+                      icon={<IconLayoutDashboard size={14} />}
+                      onClick={() => onAbrirPanel ? onAbrirPanel('ver-mas') : onVerMas()}
+                      sx={{ flexShrink: 0, cursor: 'pointer' }}
+                    />
+                  )
                 )}
               </Box>
 
@@ -500,15 +515,27 @@ export function AsistenteInput({
                 >
                   <IconChevronRight size={14} />
                 </IconButton>
-                <Chip
-                  label="Ver más"
-                  size="medium"
-                  variant={verMasActivo ? 'filled' : 'outlined'}
-                  color={verMasActivo ? 'primary' : 'default'}
-                  icon={<IconLayoutDashboard size={14} />}
-                  onClick={() => onAbrirPanel ? onAbrirPanel('ver-mas') : onVerMas()}
-                  sx={{ flexShrink: 0, cursor: 'pointer' }}
-                />
+                {verMasSoloIcono ? (
+                  <Tooltip title="Ver más" placement="top" arrow>
+                    <IconButton
+                      size="small"
+                      onClick={() => onAbrirPanel ? onAbrirPanel('ver-mas') : onVerMas()}
+                      sx={{ p: '5px', borderRadius: '6px', flexShrink: 0, ...(verMasActivo && { bgcolor: 'rgba(47,67,208,0.1)', color: '#2f43d0' }) }}
+                    >
+                      <IconLayoutDashboard size={16} />
+                    </IconButton>
+                  </Tooltip>
+                ) : (
+                  <Chip
+                    label="Ver más"
+                    size="medium"
+                    variant={verMasActivo ? 'filled' : 'outlined'}
+                    color={verMasActivo ? 'primary' : 'default'}
+                    icon={<IconLayoutDashboard size={14} />}
+                    onClick={() => onAbrirPanel ? onAbrirPanel('ver-mas') : onVerMas()}
+                    sx={{ flexShrink: 0, cursor: 'pointer' }}
+                  />
+                )}
               </>
             )}
           </Box>

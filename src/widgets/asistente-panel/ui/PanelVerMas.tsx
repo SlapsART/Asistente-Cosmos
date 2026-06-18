@@ -1,9 +1,12 @@
-import { useState } from 'react';
-import { Box, Chip, Collapse, IconButton, Typography } from '@mui/material';
+import { useState, useRef, useEffect } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Box, Chip, IconButton, Tooltip, Typography } from '@mui/material';
 import {
   IconArrowUpRight,
   IconBolt,
   IconChevronDown,
+  IconChevronLeft,
+  IconChevronRight,
   IconChevronUp,
   IconCoins,
   IconTable,
@@ -12,6 +15,8 @@ import {
 } from '@tabler/icons-react';
 
 const PRIMARY = '#2f43d0';
+const EASE: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94];
+const MotionBox = motion(Box);
 const BADGE_BG = '#eaebec';
 const BADGE_TEXT = 'rgba(16,24,64,0.6)';
 const SECTION_TITLE = 'rgba(16,24,64,0.6)';
@@ -204,17 +209,22 @@ function SeccionItem({ texto, onClick }: { texto: string; onClick: () => void })
         color={hover ? PRIMARY : ARROW_DEFAULT}
         style={{ flexShrink: 0, transition: 'color 0.15s' }}
       />
-      <Typography
-        variant="body2"
-        sx={{
-          fontSize: '0.8125rem',
-          color: hover ? PRIMARY : ITEM_TEXT,
-          transition: 'color 0.15s',
-          lineHeight: '16px',
-        }}
-      >
-        {texto}
-      </Typography>
+      <Tooltip title={texto} placement="top" arrow enterDelay={600}>
+        <Typography
+          variant="body2"
+          noWrap
+          sx={{
+            flex: 1,
+            minWidth: 0,
+            fontSize: '0.8125rem',
+            color: hover ? PRIMARY : ITEM_TEXT,
+            transition: 'color 0.15s',
+            lineHeight: '16px',
+          }}
+        >
+          {texto}
+        </Typography>
+      </Tooltip>
     </Box>
   );
 }
@@ -287,13 +297,23 @@ function SeccionPanel({
       </Box>
 
       {/* Items */}
-      <Collapse in={abierta}>
-        <Box sx={{ pb: 1 }}>
-          {seccion.items.map((item) => (
-            <SeccionItem key={item} texto={item} onClick={() => onItemClick(item)} />
-          ))}
-        </Box>
-      </Collapse>
+      <AnimatePresence initial={false}>
+        {abierta && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.22, ease: EASE }}
+            style={{ overflow: 'hidden' }}
+          >
+            <Box sx={{ pb: 1 }}>
+              {seccion.items.map((item) => (
+                <SeccionItem key={item} texto={item} onClick={() => onItemClick(item)} />
+              ))}
+            </Box>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </Box>
   );
 }
@@ -302,11 +322,32 @@ interface PanelVerMasProps {
   onCerrar: () => void;
   onItemClick: (texto: string) => void;
   moduloInicial?: ModuloKey;
+  /** Tabs de módulos en una sola línea con scroll horizontal — para modo lateral */
+  tabsScrollable?: boolean;
 }
 
-export function PanelVerMas({ onCerrar, onItemClick, moduloInicial = 'obligaciones' }: PanelVerMasProps) {
+export function PanelVerMas({ onCerrar, onItemClick, moduloInicial = 'obligaciones', tabsScrollable = false }: PanelVerMasProps) {
   const [moduloActivo, setModuloActivo] = useState<ModuloKey>(moduloInicial);
   const [seccionAbierta, setSeccionAbierta] = useState<string>(MODULOS[moduloInicial].secciones[0].titulo);
+  const tabsScrollRef = useRef<HTMLDivElement>(null);
+  const [tabsCanScrollLeft, setTabsCanScrollLeft] = useState(false);
+  const [tabsCanScrollRight, setTabsCanScrollRight] = useState(false);
+
+  useEffect(() => {
+    if (!tabsScrollable) return;
+    const el = tabsScrollRef.current;
+    if (!el) return;
+    function check() {
+      if (!el) return;
+      setTabsCanScrollLeft(el.scrollLeft > 0);
+      setTabsCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 1);
+    }
+    check();
+    el.addEventListener('scroll', check, { passive: true });
+    const ro = new ResizeObserver(check);
+    ro.observe(el);
+    return () => { el.removeEventListener('scroll', check); ro.disconnect(); };
+  }, [tabsScrollable]);
 
   function handleModuloChange(key: ModuloKey) {
     setModuloActivo(key);
@@ -321,7 +362,9 @@ export function PanelVerMas({ onCerrar, onItemClick, moduloInicial = 'obligacion
   const ordenadoKeys: ModuloKey[] = [moduloInicial, ...MODULO_KEYS.filter((k) => k !== moduloInicial)];
 
   return (
-    <Box
+    <MotionBox
+      layout
+      transition={{ duration: 0.28, ease: EASE }}
       sx={{
         bgcolor: '#fbfbfb',
         border: '1px solid rgba(47,67,208,0.4)',
@@ -332,8 +375,7 @@ export function PanelVerMas({ onCerrar, onItemClick, moduloInicial = 'obligacion
         gap: 1,
         p: 1.5,
         overflow: 'hidden',
-        width: 656,
-        mx: 'auto',
+        width: '100%',
       }}
     >
       {/* Fila 1: Cerrar */}
@@ -344,23 +386,82 @@ export function PanelVerMas({ onCerrar, onItemClick, moduloInicial = 'obligacion
       </Box>
 
       {/* Fila 2: Tabs de módulos */}
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
-        {ordenadoKeys.map((key) => {
-          const m = MODULOS[key];
-          const isActivo = key === moduloActivo;
-          return (
-            <Chip
-              key={key}
-              label={m.label}
-              size="medium"
-              variant={isActivo ? 'filled' : 'outlined'}
-              color={isActivo ? 'primary' : 'default'}
-              onClick={() => handleModuloChange(key)}
-              sx={{ cursor: 'pointer', flexShrink: 0 }}
-            />
-          );
-        })}
-      </Box>
+      {tabsScrollable ? (
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+          <IconButton
+            size="small"
+            onClick={() => tabsScrollRef.current?.scrollBy({ left: -120, behavior: 'smooth' })}
+            sx={{ p: '2px', flexShrink: 0, opacity: tabsCanScrollLeft ? 1 : 0.25, transition: 'opacity 0.2s' }}
+          >
+            <IconChevronLeft size={14} />
+          </IconButton>
+          <Box sx={{ position: 'relative', flex: 1, minWidth: 0 }}>
+            {tabsCanScrollLeft && (
+              <Box sx={{
+                position: 'absolute', left: 0, top: 0, bottom: 0, width: 32, zIndex: 1, pointerEvents: 'none',
+                background: 'linear-gradient(to right, #fbfbfb, transparent)',
+              }} />
+            )}
+            <Box
+              ref={tabsScrollRef}
+              sx={{
+                display: 'flex',
+                gap: 1,
+                overflowX: 'auto',
+                scrollbarWidth: 'none',
+                '&::-webkit-scrollbar': { display: 'none' },
+              }}
+            >
+              {ordenadoKeys.map((key) => {
+                const m = MODULOS[key];
+                const isActivo = key === moduloActivo;
+                return (
+                  <Chip
+                    key={key}
+                    label={m.label}
+                    size="medium"
+                    variant={isActivo ? 'filled' : 'outlined'}
+                    color={isActivo ? 'primary' : 'default'}
+                    onClick={() => handleModuloChange(key)}
+                    sx={{ cursor: 'pointer', flexShrink: 0 }}
+                  />
+                );
+              })}
+            </Box>
+            {tabsCanScrollRight && (
+              <Box sx={{
+                position: 'absolute', right: 0, top: 0, bottom: 0, width: 32, zIndex: 1, pointerEvents: 'none',
+                background: 'linear-gradient(to left, #fbfbfb, transparent)',
+              }} />
+            )}
+          </Box>
+          <IconButton
+            size="small"
+            onClick={() => tabsScrollRef.current?.scrollBy({ left: 120, behavior: 'smooth' })}
+            sx={{ p: '2px', flexShrink: 0, opacity: tabsCanScrollRight ? 1 : 0.25, transition: 'opacity 0.2s' }}
+          >
+            <IconChevronRight size={14} />
+          </IconButton>
+        </Box>
+      ) : (
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
+          {ordenadoKeys.map((key) => {
+            const m = MODULOS[key];
+            const isActivo = key === moduloActivo;
+            return (
+              <Chip
+                key={key}
+                label={m.label}
+                size="medium"
+                variant={isActivo ? 'filled' : 'outlined'}
+                color={isActivo ? 'primary' : 'default'}
+                onClick={() => handleModuloChange(key)}
+                sx={{ cursor: 'pointer', flexShrink: 0 }}
+              />
+            );
+          })}
+        </Box>
+      )}
 
       {/* Fila 3: Contenido */}
       <Box>
@@ -374,6 +475,6 @@ export function PanelVerMas({ onCerrar, onItemClick, moduloInicial = 'obligacion
           />
         ))}
       </Box>
-    </Box>
+    </MotionBox>
   );
 }

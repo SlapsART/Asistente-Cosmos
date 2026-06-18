@@ -111,6 +111,12 @@ export function AsistenteBaseWidget() {
     setEstado(siguiente);
   }
 
+  const estadoAnteriorLateral = useRef<EstadoBase>('chat');
+  function irALateral() {
+    estadoAnteriorLateral.current = estado;
+    irA('lateral');
+  }
+
   function enviarMensaje(texto: string) {
     const hora = new Date().toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
     const userMsg: Mensaje = { id: Date.now(), autor: 'usuario', texto, hora };
@@ -287,7 +293,7 @@ export function AsistenteBaseWidget() {
             <AsistentePanel
               onMinimizar={() => irA('minimizado')}
               onVerHistorial={() => irA('historial')}
-              onExpandir={() => irA('lateral')}
+              onExpandir={irALateral}
               onEnviarConMensaje={(texto) => { enviarMensaje(texto); irA('chat'); }}
               onAbrirChat={tieneConversacion ? () => irA('chat') : undefined}
               onEnviarMensajeSistema={enviarMensajeSistema}
@@ -308,7 +314,7 @@ export function AsistenteBaseWidget() {
               modo="flotante"
               {...chatProps}
               onMinimizar={() => irA('minimizado')}
-              onLateral={() => irA('lateral')}
+              onLateral={irALateral}
               onNueva={iniciarNuevaConversacion}
               onHistorial={() => irA('historial')}
               onAbrirPanel={(chip) => { setChipDesdeChat(chip); irA('expandido-desde-chat'); }}
@@ -333,7 +339,7 @@ export function AsistenteBaseWidget() {
               onEnviarMensaje={enviarMensaje}
               nombreChat="Nueva conversación"
               onMinimizar={() => irA('minimizado')}
-              onLateral={() => irA('lateral')}
+              onLateral={irALateral}
               onNueva={iniciarNuevaConversacion}
               onHistorial={() => irA('historial')}
               onAbrirPanel={(chip) => { setChipDesdeChat(chip); irA('expandido-desde-chat'); }}
@@ -353,7 +359,7 @@ export function AsistenteBaseWidget() {
             <AsistentePanel
               onMinimizar={() => irA('minimizado')}
               onVerHistorial={() => irA('historial')}
-              onExpandir={() => irA('lateral')}
+              onExpandir={irALateral}
               onEnviarConMensaje={(texto) => { enviarMensaje(texto); irA('chat'); }}
               onAbrirChat={tieneConversacion ? () => irA('chat') : undefined}
               onEnviarMensajeSistema={enviarMensajeSistema}
@@ -375,7 +381,7 @@ export function AsistenteBaseWidget() {
             modo="lateral"
             {...chatProps}
             onMinimizar={() => irA('minimizado')}
-            onLateral={() => irA('chat')}
+            onLateral={() => irA(estadoAnteriorLateral.current)}
             onNueva={iniciarNuevaConversacion}
             onHistorial={() => irA('historial-lateral')}
           />
@@ -394,7 +400,7 @@ export function AsistenteBaseWidget() {
             modo="lateral"
             {...chatProps}
             onMinimizar={() => irA('minimizado')}
-            onLateral={() => irA('chat')}
+            onLateral={() => irA(estadoAnteriorLateral.current)}
             onNueva={iniciarNuevaConversacion}
             onHistorial={() => irA('historial-lateral')}
           />
@@ -420,7 +426,7 @@ export function AsistenteBaseWidget() {
             modo="lateral"
             {...chatProps}
             onMinimizar={() => irA('minimizado')}
-            onLateral={() => irA('chat')}
+            onLateral={() => irA(estadoAnteriorLateral.current)}
             onNueva={iniciarNuevaConversacion}
             onHistorial={() => irA('historial-lateral')}
           />
@@ -447,7 +453,7 @@ export function AsistenteBaseWidget() {
               modo="flotante"
               {...chatProps}
               onMinimizar={() => irA('minimizado')}
-              onLateral={() => irA('lateral')}
+              onLateral={irALateral}
               onNueva={iniciarNuevaConversacion}
               onHistorial={() => irA('chat')}
             />
@@ -474,7 +480,7 @@ export function AsistenteBaseWidget() {
               modo="flotante"
               {...chatProps}
               onMinimizar={() => irA('minimizado')}
-              onLateral={() => irA('lateral')}
+              onLateral={irALateral}
               onNueva={iniciarNuevaConversacion}
               onHistorial={() => irA('chat')}
             />

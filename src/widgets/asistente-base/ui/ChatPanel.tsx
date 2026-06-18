@@ -12,11 +12,53 @@ import {
   IconPlus,
   IconRefresh,
 } from '@tabler/icons-react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { subPanelVariants } from '@/shared/ui/anim';
 import { AsistenteInput } from '@/widgets/asistente-panel/ui/AsistenteInput';
+import { ActividadesPendientes } from '@/widgets/asistente-panel/ui/ActividadesPendientes';
+import { PanelVerMas } from '@/widgets/asistente-panel/ui/PanelVerMas';
 import { CosmosLoader } from './CosmosLoader';
 import type { Mensaje } from '../model/conversaciones';
 
 const PRIMARY = '#2f43d0';
+
+// ── Chip panel types & data ──────────────────────────────────────────────────
+
+type ChipPanel = 'actividades' | 'reportes' | 'periodos' | 'reglas' | 'ver-mas' | null;
+
+const CHIP_A_PANEL: Record<string, ChipPanel> = {
+  'Actividades pendientes': 'actividades',
+  'Reportes de gestión': 'reportes',
+  'Periodos contables': 'periodos',
+  'Reglas de derivación': 'reglas',
+  'ver-mas': 'ver-mas',
+};
+
+const ACTIVIDADES_ITEMS = [
+  { texto: 'Borradores de asiento pendientes por revisar', cantidad: 20 },
+  { texto: 'Borradores que fueron devueltos', cantidad: 5 },
+  { texto: 'Borradores sin cuentas contables resueltas', cantidad: 10 },
+  { texto: 'Periodos contables', cantidad: 1 },
+];
+const REPORTES_ITEMS = [
+  { texto: 'Asientos por período durante el año' },
+  { texto: '¿Cuántos asientos se enviaron este mes?' },
+  { texto: '¿Cuántos asientos se aceptaron por destino este mes?' },
+  { texto: '¿Cuánta actividad contable tuve en [período]?' },
+];
+const PERIODOS_ITEMS = [
+  { texto: 'Periodos contables pendientes por cerrar', cantidad: 20 },
+  { texto: 'Documentos pendientes por cerrar del periodo anterior', cantidad: 5 },
+  { texto: '¿En qué períodos puedo registrar asientos?', cantidad: 10 },
+  { texto: '¿Qué quedó sin procesar en el período [X]?', cantidad: 1 },
+];
+const REGLAS_ITEMS = [
+  { texto: 'Revisar y formalizar reglas sugeridas', cantidad: 20 },
+  { texto: 'Reglas con cuenta contable inactiva', cantidad: 5 },
+  { texto: 'Revisar reglas inactivas', cantidad: 10 },
+];
+
+// ── Message sub-components ───────────────────────────────────────────────────
 
 function UserMessage({ mensaje }: { mensaje: Mensaje }) {
   const [hover, setHover] = useState(false);
@@ -87,7 +129,6 @@ function AgenteMessage({ mensaje }: { mensaje: Mensaje }) {
   );
 }
 
-
 function ContextSeparator() {
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, my: 0.5 }}>
@@ -114,6 +155,8 @@ function ContextSeparator() {
   );
 }
 
+// ── ChatPanel ────────────────────────────────────────────────────────────────
+
 export interface ChatPanelProps {
   modo: 'flotante' | 'lateral';
   mensajes?: Mensaje[];
@@ -127,7 +170,7 @@ export interface ChatPanelProps {
   onDetenerRespuesta?: () => void;
   onRenombrar?: (nombre: string) => void;
   nombreChat?: string;
-  /** Cuando hay mensajes, los chips del input navegan al panel en lugar de actuar localmente */
+  /** En modo flotante con mensajes, los chips navegan al panel expandido en lugar de abrir sub-panel local */
   onAbrirPanel?: (chip: string) => void;
   autoFocusInput?: boolean;
 }
@@ -149,6 +192,8 @@ export function ChatPanel({
   autoFocusInput,
 }: ChatPanelProps) {
   const [chipActivo, setChipActivo] = useState('');
+  const [chipPanel, setChipPanel] = useState<ChipPanel>(null);
+  const [inputTexto, setInputTexto] = useState('');
   const [nombre, setNombre] = useState(nombreChat);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const isFlotante = modo === 'flotante';
@@ -161,6 +206,59 @@ export function ChatPanel({
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [mensajes, pensando]);
+
+  function handleChipClick(chip: string) {
+    // En modo flotante con mensajes, el padre maneja la navegación al panel expandido
+    if (onAbrirPanel && tieneMensajes) {
+      onAbrirPanel(chip);
+      return;
+    }
+    const panel = CHIP_A_PANEL[chip] ?? null;
+    if (chipActivo === chip && chipPanel !== null) {
+      setChipActivo('');
+      setChipPanel(null);
+    } else {
+      setChipActivo(chip);
+      setChipPanel(panel);
+    }
+  }
+
+  function handleVerMas() {
+    if (chipPanel === 'ver-mas') {
+      setChipActivo('');
+      setChipPanel(null);
+    } else {
+      setChipActivo('');
+      setChipPanel('ver-mas');
+    }
+  }
+
+  function handleCerrarPanel() {
+    setChipActivo('');
+    setChipPanel(null);
+  }
+
+  function handleItemClick(texto: string) {
+    setInputTexto(texto);
+    setChipActivo('');
+    setChipPanel(null);
+  }
+
+  const panelConfig: {
+    titulo: string;
+    items: { texto: string; cantidad?: number }[];
+    onItemClick: (t: string) => void;
+  } | null = (() => {
+    switch (chipPanel) {
+      case 'actividades': return { titulo: 'Actividades pendientes', items: ACTIVIDADES_ITEMS, onItemClick: handleItemClick };
+      case 'reportes':    return { titulo: 'Reportes de gestión',    items: REPORTES_ITEMS,    onItemClick: handleItemClick };
+      case 'periodos':    return { titulo: 'Periodos contables',      items: PERIODOS_ITEMS,    onItemClick: handleItemClick };
+      case 'reglas':      return { titulo: 'Reglas de derivación',   items: REGLAS_ITEMS,      onItemClick: handleItemClick };
+      default: return null;
+    }
+  })();
+
+  const SP = subPanelVariants;
 
   return (
     <Box
@@ -306,24 +404,67 @@ export function ChatPanel({
       {/* Spacer when no messages in lateral mode */}
       {!tieneMensajes && !isFlotante && <Box sx={{ flex: 1 }} />}
 
-      <AsistenteInput
-        chipActivo={chipActivo}
-        chipActivoTipo={null}
-        inputTexto=""
-        inputChips={[]}
-        onChipClick={setChipActivo}
-        onMinimizar={onMinimizar ?? (() => {})}
-        onVerHistorial={onHistorial ?? (() => {})}
-        onExpandir={onLateral ?? (() => {})}
-        onVerMas={() => {}}
-        onEnviar={onEnviarMensaje}
-        onDetener={onDetenerRespuesta}
-        pensando={pensando}
-        showTopActions={false}
-        variant="embedded"
-        onAbrirPanel={tieneMensajes ? onAbrirPanel : undefined}
-        autoFocusInput={autoFocusInput}
-      />
+      {/* Input section — sub-panels emerge above it */}
+      <Box sx={{ position: 'relative' }}>
+        {/* Chip sub-panels: actividades / reportes / periodos / reglas */}
+        <AnimatePresence>
+          {panelConfig && (
+            <motion.div
+              key={chipPanel}
+              layout
+              variants={SP}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              style={{ position: 'absolute', bottom: 'calc(100% + 8px)', left: 12, right: 12, zIndex: 5 }}
+            >
+              <ActividadesPendientes
+                titulo={panelConfig.titulo}
+                items={panelConfig.items}
+                onCerrar={handleCerrarPanel}
+                onItemClick={panelConfig.onItemClick}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Panel Ver más */}
+        <AnimatePresence>
+          {chipPanel === 'ver-mas' && (
+            <motion.div
+              key="ver-mas"
+              layout
+              variants={SP}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              style={{ position: 'absolute', bottom: 'calc(100% + 8px)', left: 12, right: 12, zIndex: 10 }}
+            >
+              <PanelVerMas moduloInicial="contabilidad" onCerrar={handleCerrarPanel} onItemClick={handleItemClick} tabsScrollable={!isFlotante} />
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <AsistenteInput
+          chipActivo={chipActivo}
+          chipActivoTipo={null}
+          inputTexto={inputTexto}
+          inputChips={[]}
+          onChipClick={handleChipClick}
+          onMinimizar={onMinimizar ?? (() => {})}
+          onVerHistorial={onHistorial ?? (() => {})}
+          onExpandir={onLateral ?? (() => {})}
+          onVerMas={handleVerMas}
+          verMasActivo={chipPanel === 'ver-mas'}
+          onEnviar={(texto) => { onEnviarMensaje?.(texto); setInputTexto(''); }}
+          onDetener={onDetenerRespuesta}
+          pensando={pensando}
+          showTopActions={false}
+          variant="embedded"
+          verMasSoloIcono={!isFlotante}
+          autoFocusInput={autoFocusInput}
+        />
+      </Box>
     </Box>
   );
 }

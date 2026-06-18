@@ -1,5 +1,9 @@
-import { Box, Chip, IconButton, List, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material';
+import { motion } from 'framer-motion';
+import { Box, Chip, IconButton, List, ListItem, ListItemIcon, Tooltip, Typography } from '@mui/material';
 import { IconArrowUpRight, IconChevronRight, IconX } from '@tabler/icons-react';
+
+const EASE: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94];
+const MotionBox = motion(Box);
 
 interface ActividadItem {
   texto: string;
@@ -32,7 +36,9 @@ export function ActividadesPendientes({
   onItemClick,
 }: ActividadesPendientesProps) {
   return (
-    <Box
+    <MotionBox
+      layout
+      transition={{ duration: 0.28, ease: EASE }}
       sx={{
         bgcolor: 'grey.50',
         border: '1px solid rgba(47,67,208,0.4)',
@@ -41,8 +47,7 @@ export function ActividadesPendientes({
         flexDirection: 'column',
         gap: 1,
         p: 1.5,
-        width: 656,
-        mx: 'auto',
+        width: '100%',
       }}
     >
       {/* Header */}
@@ -77,14 +82,15 @@ export function ActividadesPendientes({
                 <ListItemIcon sx={{ minWidth: 0, flexShrink: 0, color: 'text.secondary' }}>
                   <IconArrowUpRight size={16} />
                 </ListItemIcon>
-                <ListItemText
-                  primary={item.texto}
-                  primaryTypographyProps={{
-                    variant: 'body2',
-                    sx: { color: 'text.primary', py: '4px' },
-                  }}
-                  sx={{ flex: '1 0 0', minWidth: 0, my: 0 }}
-                />
+                <Tooltip title={item.texto} placement="top" arrow enterDelay={600}>
+                  <Typography
+                    variant="body2"
+                    noWrap
+                    sx={{ flex: 1, minWidth: 0, color: 'text.primary', py: '4px' }}
+                  >
+                    {item.texto}
+                  </Typography>
+                </Tooltip>
                 <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', flexShrink: 0 }}>
                   {item.cantidad !== undefined && <BadgeConteo cantidad={item.cantidad} />}
                   <IconButton size="small" sx={{ p: '3px' }}>
@@ -122,6 +128,6 @@ export function ActividadesPendientes({
           />
         </Box> */}
       </Box>
-    </Box>
+    </MotionBox>
   );
 }
