@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
-import { Box, Chip, Divider, IconButton, InputBase, Menu, MenuItem, Typography } from '@mui/material';
+import { Box, Chip, Divider, IconButton, InputBase, Menu, MenuItem, Tooltip, Typography } from '@mui/material';
 import {
   IconArrowUp,
   IconBoxAlignRight,
+  IconCheckbox,
   IconChevronLeft,
   IconChevronRight,
   IconLayoutDashboard,
@@ -61,6 +62,8 @@ interface AsistenteInputProps {
   onAbrirPanel?: (chip: string) => void;
   /** Cuando se provee, el foco del input llama esto en lugar del comportamiento normal */
   onInputFocus?: () => void;
+  autoFocusInput?: boolean;
+  onAbrirTareas?: () => void;
 }
 
 export function AsistenteInput({
@@ -84,6 +87,8 @@ export function AsistenteInput({
   variant = 'card',
   onAbrirPanel,
   onInputFocus,
+  autoFocusInput,
+  onAbrirTareas,
 }: AsistenteInputProps) {
   const [localTexto, setLocalTexto] = useState(inputTexto ?? '');
   const [focused, setFocused] = useState(false);
@@ -92,6 +97,11 @@ export function AsistenteInput({
   const [menuChip, setMenuChip] = useState('');
   const [busqueda, setBusqueda] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const textInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (autoFocusInput) textInputRef.current?.focus();
+  }, []);
   const chipsScrollRef = useRef<HTMLDivElement>(null);
   const [chipsOverflow, setChipsOverflow] = useState(false);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -210,6 +220,13 @@ export function AsistenteInput({
       {showTopActions && (
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', width: '100%' }}>
           <Box sx={{ display: 'flex', gap: 0.5, alignItems: 'center' }}>
+            {onAbrirTareas && (
+              <Tooltip title="Tareas pendientes" placement="top" arrow>
+                <IconButton size="small" onClick={onAbrirTareas} sx={{ p: '3px' }}>
+                  <IconCheckbox size={16} />
+                </IconButton>
+              </Tooltip>
+            )}
             <IconButton size="small" onClick={onVerHistorial} sx={{ p: '3px' }}>
               <IconMessageSearch size={16} />
             </IconButton>
@@ -266,8 +283,14 @@ export function AsistenteInput({
               }}
             />
             <Box
-              onFocus={() => { if (onInputFocus) { onInputFocus(); return; } setFocused(true); }}
+              onFocus={() => setFocused(true)}
               onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setFocused(false); }}
+              onClick={(e) => {
+                if (!onInputFocus) return;
+                if ((e.target as HTMLElement).closest('button, [role="button"]')) return;
+                if (localTexto.length > 0 || archivos.length > 0) return;
+                onInputFocus();
+              }}
               sx={{
                 bgcolor: 'grey.100',
                 borderRadius: '20px',
@@ -300,6 +323,7 @@ export function AsistenteInput({
                   sx={{ display: 'flex', flex: '1 0 0', gap: '8px', alignItems: 'center', minWidth: 0, overflow: 'hidden' }}
                 >
                   <InputBase
+                    inputRef={textInputRef}
                     value={localTexto}
                     onChange={(e) => setLocalTexto(e.target.value)}
                     onKeyDown={(e) => {

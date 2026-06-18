@@ -205,7 +205,7 @@ export function AppShellMock({
                   position: 'absolute',
                   ...(overlayCentered
                     ? { top: 0, left: 0, right: 0, bottom: 0, alignItems: 'center' }
-                    : { bottom: 12, left: 0, right: 0, alignItems: 'flex-end' }),
+                    : { bottom: 8, left: 0, right: 0, alignItems: 'flex-end' }),
                   zIndex: 10,
                   pointerEvents: 'none',
                   display: 'flex',

@@ -129,6 +129,7 @@ export interface ChatPanelProps {
   nombreChat?: string;
   /** Cuando hay mensajes, los chips del input navegan al panel en lugar de actuar localmente */
   onAbrirPanel?: (chip: string) => void;
+  autoFocusInput?: boolean;
 }
 
 export function ChatPanel({
@@ -145,6 +146,7 @@ export function ChatPanel({
   onRenombrar,
   nombreChat = '[Nombre del chat]',
   onAbrirPanel,
+  autoFocusInput,
 }: ChatPanelProps) {
   const [chipActivo, setChipActivo] = useState('');
   const [nombre, setNombre] = useState(nombreChat);
@@ -320,6 +322,7 @@ export function ChatPanel({
         showTopActions={false}
         variant="embedded"
         onAbrirPanel={tieneMensajes ? onAbrirPanel : undefined}
+        autoFocusInput={autoFocusInput}
       />
     </Box>
   );

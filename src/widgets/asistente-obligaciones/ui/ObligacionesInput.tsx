@@ -257,8 +257,14 @@ export function ObligacionesInput({
           }}
         />
         <Box
-          onFocus={() => { if (onInputFocus) { onInputFocus(); return; } setFocused(true); }}
+          onFocus={() => setFocused(true)}
           onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setFocused(false); }}
+          onClick={(e) => {
+            if (!onInputFocus) return;
+            if ((e.target as HTMLElement).closest('button, [role="button"]')) return;
+            if (localTexto.length > 0 || archivos.length > 0) return;
+            onInputFocus();
+          }}
           sx={{
             bgcolor: 'grey.100',
             borderRadius: '20px',

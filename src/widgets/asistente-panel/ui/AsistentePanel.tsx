@@ -102,9 +102,13 @@ interface AsistentePanelProps {
   onPanelTareasCerrado?: () => void;
   /** Cuando hay conversación activa, clic en el input abre el chat directamente */
   onAbrirChat?: () => void;
+  /** Notifica al padre cuando un sub-panel (chip) se abre o cierra */
+  onSubPanelChange?: (open: boolean) => void;
+  /** Cuando el banner de tareas está oculto, muestra el icono de acceso a tareas en el panel */
+  onAbrirTareas?: () => void;
 }
 
-export function AsistentePanel({ onMinimizar, onVerHistorial, onExpandir, onEnviar, onEnviarConMensaje, onEnviarMensajeSistema, chipInicial, ocultarNotificacion = false, subPanelExtraOffset = 0, abrirPanelTareas, onPanelTareasAbierto, onPanelTareasCerrado, onAbrirChat }: AsistentePanelProps = {}) {
+export function AsistentePanel({ onMinimizar, onVerHistorial, onExpandir, onEnviar, onEnviarConMensaje, onEnviarMensajeSistema, chipInicial, ocultarNotificacion = false, subPanelExtraOffset = 0, abrirPanelTareas, onPanelTareasAbierto, onPanelTareasCerrado, onAbrirChat, onSubPanelChange, onAbrirTareas }: AsistentePanelProps = {}) {
   const [estado, setEstado] = useState<Estado>(() => {
     if (!chipInicial) return ESTADO_INICIAL;
     const panel = CHIP_A_PANEL[chipInicial] ?? null;
@@ -128,6 +132,10 @@ export function AsistentePanel({ onMinimizar, onVerHistorial, onExpandir, onEnvi
       onPanelTareasAbierto?.();
     }
   }, [abrirPanelTareas]);
+
+  useEffect(() => {
+    onSubPanelChange?.(estado.panel !== null);
+  }, [estado.panel]);
 
   function handleCerrarNotif() {
     setNotifVisible(false);
@@ -451,6 +459,7 @@ export function AsistentePanel({ onMinimizar, onVerHistorial, onExpandir, onEnvi
           pensando={pensando}
           onEnviar={onEnviar || onEnviarConMensaje ? handleEnviar : undefined}
           onInputFocus={onAbrirChat}
+          onAbrirTareas={onAbrirTareas}
         />
       </Box>
     </Box>

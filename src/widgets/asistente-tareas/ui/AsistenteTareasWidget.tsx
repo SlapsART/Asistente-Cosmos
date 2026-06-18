@@ -29,8 +29,6 @@ type EstadoTareas =
 
 const LATERAL_WIDTH = 336;
 const HISTORIAL_WIDTH = 380;
-// Altura neta del TareaBanner visible por encima del AsistentePanel (pt:8 + content:20 + pb:28 + borders:2 - overlap:25 = 33)
-const BANNER_OFFSET = 33;
 
 function MiniInput({ onClick }: { onClick: () => void }) {
   return (
@@ -99,6 +97,8 @@ export function AsistenteTareasWidget() {
   const [estado, setEstado] = useState<EstadoTareas>('minimizado');
   const [chipDesdeChat, setChipDesdeChat] = useState<string | undefined>(undefined);
   const [bannerVisible, setBannerVisible] = useState(true);
+  const [bannerOcultadoPorPanel, setBannerOcultadoPorPanel] = useState(false);
+  const [mostrarIconoTareas, setMostrarIconoTareas] = useState(false);
 
   const [abrirPanelTareas, setAbrirPanelTareas] = useState(false);
   const [panelTareasVisible, setPanelTareasVisible] = useState(false);
@@ -113,9 +113,10 @@ export function AsistenteTareasWidget() {
 
   function handlePanelTareasCerrado() {
     setPanelTareasVisible(false);
+    setBannerVisible(true);
   }
 
-  const [conversacionActivaId, setConversacionActivaId] = useState(1);
+  const [conversacionActivaId, setConversacionActivaId] = useState(-1);
   const [conversaciones, setConversaciones] = useState(() => [...CONVERSACIONES_DEMO]);
   const [mensajesPorConv, setMensajesPorConv] = useState<Record<number, Mensaje[]>>(() =>
     Object.fromEntries(CONVERSACIONES_DEMO.map((c) => [c.id, [...c.mensajes]]))
@@ -136,6 +137,16 @@ export function AsistenteTareasWidget() {
   function enviarMensaje(texto: string) {
     const hora = new Date().toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
     const userMsg: Mensaje = { id: Date.now(), autor: 'usuario', texto, hora };
+    if (!conversaciones.find((c) => c.id === conversacionActivaId)) {
+      const nombre = texto.length > 40 ? texto.slice(0, 40).trimEnd() + '…' : texto;
+      const nueva = { id: conversacionActivaId, nombre, tiempo: 'ahora', grupo: 'reciente' as const, mensajes: [] };
+      setConversaciones((prev) => {
+        const idx = prev.findIndex((c) => c.grupo !== 'anclada');
+        const result = [...prev];
+        idx === -1 ? result.push(nueva) : result.splice(idx, 0, nueva);
+        return result;
+      });
+    }
     setMensajesPorConv((prev) => ({
       ...prev,
       [conversacionActivaId]: [...(prev[conversacionActivaId] ?? []), userMsg],
@@ -271,14 +282,11 @@ export function AsistenteTareasWidget() {
     );
   }
 
-  // Wraps overlay content with the task banner for panel states
   function conBanner(content: React.ReactNode) {
-    const mostrarBanner = bannerVisible && !panelTareasVisible;
+    const mostrarBanner = bannerVisible && !bannerOcultadoPorPanel && !panelTareasVisible;
     return (
-      <Box sx={{ display: 'flex', flexDirection: 'column', width: 680 }}>
-        {/* mode="popLayout" saca el banner del flujo inmediatamente al salir,
-            permitiendo que el panel anime su posición en paralelo (no en serie) */}
-        <AnimatePresence mode="popLayout">
+      <Box sx={{ position: 'relative', width: 680 }}>
+        <AnimatePresence>
           {mostrarBanner && (
             <motion.div
               key="tarea-banner"
@@ -286,24 +294,18 @@ export function AsistenteTareasWidget() {
               initial="initial"
               animate="animate"
               exit="exit"
+              style={{ position: 'absolute', bottom: '100%', left: 0, right: 0, paddingBottom: 8 }}
             >
               <TareaBanner
                 tareas={TAREAS_DEMO}
-                onOcultar={() => setBannerVisible(false)}
+                onOcultar={() => { setBannerVisible(false); setMostrarIconoTareas(true); }}
                 onVerTodas={handleVerTodas}
                 onClickTarea={() => enviarMensajeSistema('Dirigiendo a la tarea')}
               />
             </motion.div>
           )}
         </AnimatePresence>
-        {/* layout anima el desplazamiento vertical del panel cuando el banner entra/sale */}
-        <motion.div
-          layout
-          transition={{ duration: 0.22, ease: [0.25, 0.46, 0.45, 0.94] }}
-          style={{ position: 'relative', zIndex: 1 }}
-        >
-          {content}
-        </motion.div>
+        {content}
       </Box>
     );
   }
@@ -337,8 +339,10 @@ export function AsistenteTareasWidget() {
                 onEnviarConMensaje={(texto) => { enviarMensaje(texto); irA('chat'); }}
                 onAbrirChat={tieneConversacion ? () => irA('chat') : undefined}
                 onEnviarMensajeSistema={enviarMensajeSistema}
+                onSubPanelChange={setBannerOcultadoPorPanel}
+                onAbrirTareas={mostrarIconoTareas ? () => { setMostrarIconoTareas(false); setAbrirPanelTareas(true); } : undefined}
                 ocultarNotificacion
-                subPanelExtraOffset={bannerVisible && !panelTareasVisible ? BANNER_OFFSET : 0}
+                subPanelExtraOffset={0}
                 abrirPanelTareas={abrirPanelTareas}
                 onPanelTareasAbierto={() => setAbrirPanelTareas(false)}
                 onPanelTareasCerrado={handlePanelTareasCerrado}
@@ -366,6 +370,7 @@ export function AsistenteTareasWidget() {
               onNueva={iniciarNuevaConversacion}
               onHistorial={() => irA('historial')}
               onAbrirPanel={(chip) => { setChipDesdeChat(chip); irA('expandido-desde-chat'); }}
+              autoFocusInput
             />
           </motion.div>
         }
@@ -415,9 +420,10 @@ export function AsistenteTareasWidget() {
                 onEnviarConMensaje={(texto) => { enviarMensaje(texto); irA('chat'); }}
                 onAbrirChat={tieneConversacion ? () => irA('chat') : undefined}
                 onEnviarMensajeSistema={enviarMensajeSistema}
+                onSubPanelChange={setBannerOcultadoPorPanel}
                 chipInicial={chipDesdeChat}
                 ocultarNotificacion
-                subPanelExtraOffset={bannerVisible && !panelTareasVisible ? BANNER_OFFSET : 0}
+                subPanelExtraOffset={0}
                 abrirPanelTareas={abrirPanelTareas}
                 onPanelTareasAbierto={() => setAbrirPanelTareas(false)}
                 onPanelTareasCerrado={handlePanelTareasCerrado}

@@ -93,7 +93,7 @@ export function AsistenteBaseWidget() {
   const [chipDesdeChat, setChipDesdeChat] = useState<string | undefined>(undefined);
 
   // Conversation state
-  const [conversacionActivaId, setConversacionActivaId] = useState(1);
+  const [conversacionActivaId, setConversacionActivaId] = useState(-1);
   const [conversaciones, setConversaciones] = useState(() => [...CONVERSACIONES_DEMO]);
   const [mensajesPorConv, setMensajesPorConv] = useState<Record<number, Mensaje[]>>(() =>
     Object.fromEntries(CONVERSACIONES_DEMO.map((c) => [c.id, [...c.mensajes]]))
@@ -114,7 +114,16 @@ export function AsistenteBaseWidget() {
   function enviarMensaje(texto: string) {
     const hora = new Date().toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
     const userMsg: Mensaje = { id: Date.now(), autor: 'usuario', texto, hora };
-
+    if (!conversaciones.find((c) => c.id === conversacionActivaId)) {
+      const nombre = texto.length > 40 ? texto.slice(0, 40).trimEnd() + '…' : texto;
+      const nueva = { id: conversacionActivaId, nombre, tiempo: 'ahora', grupo: 'reciente' as const, mensajes: [] };
+      setConversaciones((prev) => {
+        const idx = prev.findIndex((c) => c.grupo !== 'anclada');
+        const result = [...prev];
+        idx === -1 ? result.push(nueva) : result.splice(idx, 0, nueva);
+        return result;
+      });
+    }
     setMensajesPorConv((prev) => ({
       ...prev,
       [conversacionActivaId]: [...(prev[conversacionActivaId] ?? []), userMsg],
@@ -303,6 +312,7 @@ export function AsistenteBaseWidget() {
               onNueva={iniciarNuevaConversacion}
               onHistorial={() => irA('historial')}
               onAbrirPanel={(chip) => { setChipDesdeChat(chip); irA('expandido-desde-chat'); }}
+              autoFocusInput
             />
           </motion.div>
         }
