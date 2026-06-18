@@ -6,6 +6,7 @@ import { AsistenteContabilidadPage } from '@/pages/asistente';
 import { AsistenteBasePage } from '@/pages/asistente-base';
 import { AsistenteObligacionesPage } from '@/pages/asistente-obligaciones';
 import { AsistenteVerticalPage } from '@/pages/asistente-vertical';
+import { AsistenteTareasPage } from '@/pages/asistente-tareas';
 
 function AppViews() {
   const { vista } = useDemoContext();
@@ -23,6 +24,7 @@ function AppViews() {
         {vista === 'base' && <AsistenteBasePage />}
         {vista === 'obligaciones' && <AsistenteObligacionesPage />}
         {vista === 'vertical' && <AsistenteVerticalPage />}
+        {vista === 'tareas' && <AsistenteTareasPage />}
       </motion.div>
     </AnimatePresence>
   );

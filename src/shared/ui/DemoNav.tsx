@@ -1,6 +1,6 @@
 import { Box, Tab, Tabs, Typography } from '@mui/material';
 
-export type VistaDemo = 'contabilidad' | 'base' | 'obligaciones';
+export type VistaDemo = 'contabilidad' | 'base' | 'obligaciones' | 'vertical' | 'tareas';
 
 interface DemoNavProps {
   vista: VistaDemo;
@@ -50,6 +50,7 @@ export function DemoNav({ vista, onVista }: DemoNavProps) {
         <Tab value="contabilidad" label="Asistente Contabilidad" />
         <Tab value="base" label="Asistente Base" />
         <Tab value="obligaciones" label="Asistente Obligaciones" />
+        <Tab value="tareas" label="Tareas" />
       </Tabs>
     </Box>
   );

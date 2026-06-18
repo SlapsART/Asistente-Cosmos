@@ -89,9 +89,13 @@ interface AsistentePanelProps {
   onEnviarMensajeSistema?: (texto: string) => void;
   /** Chip pre-seleccionado al abrir el panel (viene del ChatPanel) */
   chipInicial?: string;
+  /** Oculta la notificación gris de tarea pendiente (usada cuando el widget ya muestra su propio banner) */
+  ocultarNotificacion?: boolean;
+  /** Píxeles extra que se suman al bottom de los sub-paneles (útil cuando hay un banner encima del asistente) */
+  subPanelExtraOffset?: number;
 }
 
-export function AsistentePanel({ onMinimizar, onVerHistorial, onExpandir, onEnviar, onEnviarMensajeSistema, chipInicial }: AsistentePanelProps = {}) {
+export function AsistentePanel({ onMinimizar, onVerHistorial, onExpandir, onEnviar, onEnviarMensajeSistema, chipInicial, ocultarNotificacion = false, subPanelExtraOffset = 0 }: AsistentePanelProps = {}) {
   const [estado, setEstado] = useState<Estado>(() => {
     if (!chipInicial) return ESTADO_INICIAL;
     const panel = CHIP_A_PANEL[chipInicial] ?? null;
@@ -268,7 +272,7 @@ export function AsistentePanel({ onMinimizar, onVerHistorial, onExpandir, onEnvi
             initial="initial"
             animate="animate"
             exit="exit"
-            style={{ position: 'absolute', bottom: 'calc(100% + 8px)', left: 0, right: 0, zIndex: 5 }}
+            style={{ position: 'absolute', bottom: `calc(100% + ${8 + subPanelExtraOffset}px)`, left: 0, right: 0, zIndex: 5 }}
           >
             <ActividadesPendientes
               titulo={panelConfig.titulo}
@@ -289,7 +293,7 @@ export function AsistentePanel({ onMinimizar, onVerHistorial, onExpandir, onEnvi
             initial="initial"
             animate="animate"
             exit="exit"
-            style={{ position: 'absolute', bottom: 'calc(100% + 8px)', left: 0, right: 0, zIndex: 10 }}
+            style={{ position: 'absolute', bottom: `calc(100% + ${8 + subPanelExtraOffset}px)`, left: 0, right: 0, zIndex: 10 }}
           >
             <PanelVerMas moduloInicial="contabilidad" onCerrar={onCerrarPanel} onItemClick={onVerMasItemClick} />
           </motion.div>
@@ -298,7 +302,7 @@ export function AsistentePanel({ onMinimizar, onVerHistorial, onExpandir, onEnvi
 
       {/* Notification bar: tarea pendiente */}
       <AnimatePresence>
-        {notifVisible && (
+        {!ocultarNotificacion && notifVisible && (
           <motion.div
             key="tarea-notif"
             initial={{ opacity: 0, y: 3 }}

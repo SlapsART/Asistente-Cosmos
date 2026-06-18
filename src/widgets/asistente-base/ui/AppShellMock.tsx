@@ -8,6 +8,7 @@ import {
   IconSettings,
   IconTable,
   IconLayoutAlignBottom,
+  IconCheckbox,
 } from '@tabler/icons-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useDemoContext } from '@/shared/ui/DemoContext';
@@ -34,6 +35,7 @@ const SIDEBAR_NAV: { vista: VistaDemo; Icon: React.ElementType; label: string }[
   { vista: 'obligaciones', Icon: IconTable, label: 'Asistente Obligaciones' },
   { vista: 'contabilidad', Icon: IconBolt, label: 'Asistente Contabilidad' },
   { vista: 'vertical', Icon: IconLayoutAlignBottom, label: 'Asistente Vertical' },
+  { vista: 'tareas', Icon: IconCheckbox, label: 'Tareas' },
 ];
 
 const PAGE_TITLE: Record<VistaDemo, string> = {
@@ -41,6 +43,7 @@ const PAGE_TITLE: Record<VistaDemo, string> = {
   obligaciones: 'Asistente Obligaciones por Pagar',
   contabilidad: 'Asistente Contabilidad',
   vertical: 'Asistente Vertical',
+  tareas: 'Tareas',
 };
 
 const EASE: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94];
