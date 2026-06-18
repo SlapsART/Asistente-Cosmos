@@ -59,6 +59,8 @@ interface AsistenteInputProps {
   variant?: 'card' | 'embedded';
   /** Si está presente, los chips y "Ver más" llaman esto en lugar del handler normal */
   onAbrirPanel?: (chip: string) => void;
+  /** Cuando se provee, el foco del input llama esto en lugar del comportamiento normal */
+  onInputFocus?: () => void;
 }
 
 export function AsistenteInput({
@@ -81,6 +83,7 @@ export function AsistenteInput({
   showTopActions = true,
   variant = 'card',
   onAbrirPanel,
+  onInputFocus,
 }: AsistenteInputProps) {
   const [localTexto, setLocalTexto] = useState(inputTexto ?? '');
   const [focused, setFocused] = useState(false);
@@ -263,7 +266,7 @@ export function AsistenteInput({
               }}
             />
             <Box
-              onFocus={() => setFocused(true)}
+              onFocus={() => { if (onInputFocus) { onInputFocus(); return; } setFocused(true); }}
               onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setFocused(false); }}
               sx={{
                 bgcolor: 'grey.100',

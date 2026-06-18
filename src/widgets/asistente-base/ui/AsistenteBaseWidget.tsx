@@ -105,6 +105,7 @@ export function AsistenteBaseWidget() {
   const mensajesActivos = mensajesPorConv[conversacionActivaId] ?? [];
   const convActiva = conversaciones.find((c) => c.id === conversacionActivaId);
   const nombreConvActiva = convActiva?.nombre ?? 'Conversación';
+  const tieneConversacion = mensajesActivos.length > 0;
 
   function irA(siguiente: EstadoBase) {
     setEstado(siguiente);
@@ -278,7 +279,8 @@ export function AsistenteBaseWidget() {
               onMinimizar={() => irA('minimizado')}
               onVerHistorial={() => irA('historial')}
               onExpandir={() => irA('lateral')}
-              onEnviar={() => irA('chat')}
+              onEnviarConMensaje={(texto) => { enviarMensaje(texto); irA('chat'); }}
+              onAbrirChat={tieneConversacion ? () => irA('chat') : undefined}
               onEnviarMensajeSistema={enviarMensajeSistema}
             />
           </motion.div>
@@ -342,7 +344,8 @@ export function AsistenteBaseWidget() {
               onMinimizar={() => irA('minimizado')}
               onVerHistorial={() => irA('historial')}
               onExpandir={() => irA('lateral')}
-              onEnviar={() => irA('chat')}
+              onEnviarConMensaje={(texto) => { enviarMensaje(texto); irA('chat'); }}
+              onAbrirChat={tieneConversacion ? () => irA('chat') : undefined}
               onEnviarMensajeSistema={enviarMensajeSistema}
               chipInicial={chipDesdeChat}
             />

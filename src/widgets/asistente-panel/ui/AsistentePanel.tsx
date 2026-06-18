@@ -86,6 +86,7 @@ interface AsistentePanelProps {
   onVerHistorial?: () => void;
   onExpandir?: () => void;
   onEnviar?: () => void;
+  onEnviarConMensaje?: (texto: string) => void;
   onEnviarMensajeSistema?: (texto: string) => void;
   /** Chip pre-seleccionado al abrir el panel (viene del ChatPanel) */
   chipInicial?: string;
@@ -93,9 +94,17 @@ interface AsistentePanelProps {
   ocultarNotificacion?: boolean;
   /** Píxeles extra que se suman al bottom de los sub-paneles (útil cuando hay un banner encima del asistente) */
   subPanelExtraOffset?: number;
+  /** Abre el panel de tareas pendientes desde fuera (p.ej. desde el TareaBanner) */
+  abrirPanelTareas?: boolean;
+  /** Callback para resetear abrirPanelTareas en el padre una vez abierto */
+  onPanelTareasAbierto?: () => void;
+  /** Callback cuando el panel de tareas pendientes se cierra */
+  onPanelTareasCerrado?: () => void;
+  /** Cuando hay conversación activa, clic en el input abre el chat directamente */
+  onAbrirChat?: () => void;
 }
 
-export function AsistentePanel({ onMinimizar, onVerHistorial, onExpandir, onEnviar, onEnviarMensajeSistema, chipInicial, ocultarNotificacion = false, subPanelExtraOffset = 0 }: AsistentePanelProps = {}) {
+export function AsistentePanel({ onMinimizar, onVerHistorial, onExpandir, onEnviar, onEnviarConMensaje, onEnviarMensajeSistema, chipInicial, ocultarNotificacion = false, subPanelExtraOffset = 0, abrirPanelTareas, onPanelTareasAbierto, onPanelTareasCerrado, onAbrirChat }: AsistentePanelProps = {}) {
   const [estado, setEstado] = useState<Estado>(() => {
     if (!chipInicial) return ESTADO_INICIAL;
     const panel = CHIP_A_PANEL[chipInicial] ?? null;
@@ -112,6 +121,13 @@ export function AsistentePanel({ onMinimizar, onVerHistorial, onExpandir, onEnvi
     notifTimerRef.current = setTimeout(() => setNotifVisible(true), 4000);
     return () => { if (notifTimerRef.current) clearTimeout(notifTimerRef.current); };
   }, []);
+
+  useEffect(() => {
+    if (abrirPanelTareas) {
+      setPanelTareasOpen(true);
+      onPanelTareasAbierto?.();
+    }
+  }, [abrirPanelTareas]);
 
   function handleCerrarNotif() {
     setNotifVisible(false);
@@ -136,6 +152,7 @@ export function AsistentePanel({ onMinimizar, onVerHistorial, onExpandir, onEnvi
 
   function handleCerrarPanelTareas() {
     setPanelTareasOpen(false);
+    onPanelTareasCerrado?.();
   }
 
   const tareaActual = TAREAS_NOTIF[tareaIdx];
@@ -183,7 +200,11 @@ export function AsistentePanel({ onMinimizar, onVerHistorial, onExpandir, onEnvi
     });
   }
 
-  function handleEnviar(_texto: string) {
+  function handleEnviar(texto: string) {
+    if (onEnviarConMensaje) {
+      onEnviarConMensaje(texto);
+      return;
+    }
     if (!onEnviar) return;
     setPensando(true);
     if (pensandoTimer.current) clearTimeout(pensandoTimer.current);
@@ -428,7 +449,8 @@ export function AsistentePanel({ onMinimizar, onVerHistorial, onExpandir, onEnvi
           onVerMas={onToggleVerMas}
           verMasActivo={panel === 'ver-mas'}
           pensando={pensando}
-          onEnviar={onEnviar ? handleEnviar : undefined}
+          onEnviar={onEnviar || onEnviarConMensaje ? handleEnviar : undefined}
+          onInputFocus={onAbrirChat}
         />
       </Box>
     </Box>

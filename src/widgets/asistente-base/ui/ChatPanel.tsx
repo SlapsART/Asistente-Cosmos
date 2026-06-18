@@ -5,12 +5,12 @@ import {
   IconCopy,
   IconDots,
   IconLayoutSidebarRight,
+  IconMessage2,
   IconMessageSearch,
   IconMinus,
   IconPencil,
   IconPlus,
   IconRefresh,
-  IconUsers,
 } from '@tabler/icons-react';
 import { AsistenteInput } from '@/widgets/asistente-panel/ui/AsistenteInput';
 import { CosmosLoader } from './CosmosLoader';
@@ -189,7 +189,7 @@ export function ChatPanel({
         }}
       >
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75, flex: 1, minWidth: 0 }}>
-          <IconUsers size={14} color={PRIMARY} style={{ flexShrink: 0 }} />
+          <IconMessage2 size={14} color={PRIMARY} style={{ flexShrink: 0 }} />
           <InputBase
             value={nombre}
             onChange={(e) => setNombre(e.target.value)}

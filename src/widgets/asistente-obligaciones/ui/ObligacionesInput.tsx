@@ -51,9 +51,10 @@ interface ObligacionesInputProps {
   onVerMas: () => void;
   verMasActivo?: boolean;
   pensando?: boolean;
-  onEnviar?: () => void;
+  onEnviar?: (texto: string) => void;
   showTopActions?: boolean;
   variant?: 'card' | 'embedded';
+  onInputFocus?: () => void;
 }
 
 export function ObligacionesInput({
@@ -74,6 +75,7 @@ export function ObligacionesInput({
   onEnviar,
   showTopActions = true,
   variant = 'card',
+  onInputFocus,
 }: ObligacionesInputProps) {
   const [localTexto, setLocalTexto] = useState(inputTexto ?? '');
   const [focused, setFocused] = useState(false);
@@ -255,7 +257,7 @@ export function ObligacionesInput({
           }}
         />
         <Box
-          onFocus={() => setFocused(true)}
+          onFocus={() => { if (onInputFocus) { onInputFocus(); return; } setFocused(true); }}
           onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setFocused(false); }}
           sx={{
             bgcolor: 'grey.100',
@@ -294,7 +296,8 @@ export function ObligacionesInput({
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' && !e.shiftKey && tieneTexto) {
                     e.preventDefault();
-                    onEnviar?.();
+                    onEnviar?.(localTexto);
+                    setLocalTexto('');
                   }
                 }}
                 placeholder="Describe lo que necesitas..."
@@ -336,7 +339,7 @@ export function ObligacionesInput({
 
             <IconButton
               size="small"
-              onClick={tieneTexto ? onEnviar : undefined}
+              onClick={tieneTexto ? () => { onEnviar?.(localTexto); setLocalTexto(''); } : undefined}
               sx={{
                 p: '4px',
                 borderRadius: '20px',

@@ -81,6 +81,8 @@ interface ObligacionesPanelProps {
   onExpandir?: () => void;
   onEnviar?: () => void;
   chipInicial?: string;
+  onEnviarConMensaje?: (texto: string) => void;
+  onAbrirChat?: () => void;
 }
 
 export function ObligacionesPanel({
@@ -89,6 +91,8 @@ export function ObligacionesPanel({
   onExpandir,
   onEnviar,
   chipInicial,
+  onEnviarConMensaje,
+  onAbrirChat,
 }: ObligacionesPanelProps = {}) {
   const [estado, setEstado] = useState<Estado>(() => {
     if (!chipInicial) return ESTADO_INICIAL;
@@ -124,7 +128,11 @@ export function ObligacionesPanel({
     setEstado(ESTADO_INICIAL);
   }
 
-  function handleEnviar() {
+  function handleEnviar(texto: string) {
+    if (onEnviarConMensaje) {
+      onEnviarConMensaje(texto);
+      return;
+    }
     if (!onEnviar) return;
     setPensando(true);
     if (pensandoTimer.current) clearTimeout(pensandoTimer.current);
@@ -273,7 +281,8 @@ export function ObligacionesPanel({
         onVerMas={onToggleVerMas}
         verMasActivo={panel === 'ver-mas'}
         pensando={pensando}
-        onEnviar={onEnviar ? handleEnviar : undefined}
+        onEnviar={onEnviar || onEnviarConMensaje ? handleEnviar : undefined}
+        onInputFocus={onAbrirChat}
       />
     </Box>
   );

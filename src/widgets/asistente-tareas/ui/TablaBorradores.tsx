@@ -92,10 +92,10 @@ function FilaTabla({ fila }: { fila: Borrador }) {
     >
       {/* Referencia */}
       <Box sx={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: '3px' }}>
-        <Typography sx={{ fontSize: '0.8125rem', fontWeight: 500, color: 'text.primary', lineHeight: '16px', letterSpacing: '0.1px', whiteSpace: 'nowrap' }}>
+        <Typography sx={{ fontSize: '0.8125rem', fontWeight: 500, color: 'text.primary', lineHeight: '16px', letterSpacing: '0.1px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
           {fila.id}
         </Typography>
-        <Typography sx={{ fontSize: '0.6875rem', color: PRIMARY, lineHeight: '14px', letterSpacing: '0.4px', whiteSpace: 'nowrap', cursor: 'pointer', '&:hover': { textDecoration: 'underline' } }}>
+        <Typography sx={{ fontSize: '0.6875rem', color: PRIMARY, lineHeight: '14px', letterSpacing: '0.4px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', cursor: 'pointer', '&:hover': { textDecoration: 'underline' } }}>
           {fila.ref}
         </Typography>
       </Box>

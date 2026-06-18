@@ -38,6 +38,17 @@ export const drawerVariants: Variants = {
 };
 
 /**
+ * Banner de notificación flotante (TareaBanner).
+ * Sale deslizando hacia arriba y opacidad 0; entra desde arriba.
+ * mode="popLayout" en AnimatePresence para que el shift del panel se anime en paralelo.
+ */
+export const bannerVariants: Variants = {
+  initial: { opacity: 0, y: -8 },
+  animate: { opacity: 1, y: 0, transition: { duration: 0.25, ease: EASE } },
+  exit: { opacity: 0, y: -8, transition: { duration: 0.18, ease: EASE_IN } },
+};
+
+/**
  * Cambio de prototipo (iconos sidebar).
  */
 export const pageVariants: Variants = {

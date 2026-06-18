@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { Box, Chip, IconButton, Typography } from '@mui/material';
 import { IconAlertCircle, IconAlertTriangle, IconX } from '@tabler/icons-react';
+import { AnimatePresence, motion } from 'framer-motion';
+
+const EASE: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94];
 
 type Modulo = 'obligaciones' | 'contabilidad' | 'terceros' | 'impuestos';
 
@@ -142,19 +145,23 @@ export function PanelTareasPendientes({ onCerrar }: PanelTareasPendientesProps) 
   const [moduloActivo, setModuloActivo] = useState<Modulo>('obligaciones');
 
   return (
-    <Box
-      sx={{
-        bgcolor: '#fbfbfb',
+    // layout anima el cambio de altura del panel cuando el módulo cambia
+    <motion.div
+      layout
+      transition={{ duration: 0.22, ease: EASE }}
+      style={{
+        background: '#fbfbfb',
         border: '1px solid rgba(47,67,208,0.4)',
         borderRadius: '8px',
         boxShadow: '0px 4px 24px rgba(0,0,0,0.1), 0px 1px 4px rgba(0,0,0,0.06)',
         display: 'flex',
         flexDirection: 'column',
-        gap: 1,
-        p: 1.5,
+        gap: 8,
+        padding: 12,
         overflow: 'hidden',
         width: 656,
-        mx: 'auto',
+        marginLeft: 'auto',
+        marginRight: 'auto',
       }}
     >
       {/* Header */}
@@ -193,20 +200,21 @@ export function PanelTareasPendientes({ onCerrar }: PanelTareasPendientesProps) 
         })}
       </Box>
 
-      {/* Task list */}
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          overflowY: 'auto',
-          scrollbarWidth: 'thin',
-          scrollbarColor: 'rgba(16,24,64,0.15) transparent',
-        }}
-      >
-        {TAREAS[moduloActivo].items.map((tarea) => (
-          <TareaRow key={tarea.id} tarea={tarea} />
-        ))}
-      </Box>
-    </Box>
+      {/* Task list — fade entre módulos, layout anima el cambio de altura */}
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.div
+          key={moduloActivo}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.14, ease: EASE }}
+          style={{ display: 'flex', flexDirection: 'column', overflowY: 'auto', scrollbarWidth: 'thin' }}
+        >
+          {TAREAS[moduloActivo].items.map((tarea) => (
+            <TareaRow key={tarea.id} tarea={tarea} />
+          ))}
+        </motion.div>
+      </AnimatePresence>
+    </motion.div>
   );
 }

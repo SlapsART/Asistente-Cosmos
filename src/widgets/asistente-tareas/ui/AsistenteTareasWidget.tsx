@@ -1,9 +1,9 @@
 import { useState, useRef } from 'react';
 import { Box, IconButton, InputBase } from '@mui/material';
 import { IconArrowUp, IconPlus } from '@tabler/icons-react';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { AsistentePanel } from '@/widgets/asistente-panel';
-import { overlayVariants } from '@/shared/ui/anim';
+import { bannerVariants, overlayVariants } from '@/shared/ui/anim';
 import { CONVERSACIONES_DEMO, generarRespuesta } from '@/widgets/asistente-base/model/conversaciones';
 import type { Mensaje } from '@/widgets/asistente-base/model/conversaciones';
 import { AppShellMock } from '@/widgets/asistente-base/ui/AppShellMock';
@@ -29,8 +29,8 @@ type EstadoTareas =
 
 const LATERAL_WIDTH = 336;
 const HISTORIAL_WIDTH = 380;
-// Altura neta del TareaBanner visible por encima del AsistentePanel (pt:12 + content:20 + pb:32 + borders:2 - overlap:25 = 41)
-const BANNER_OFFSET = 41;
+// Altura neta del TareaBanner visible por encima del AsistentePanel (pt:8 + content:20 + pb:28 + borders:2 - overlap:25 = 33)
+const BANNER_OFFSET = 33;
 
 function MiniInput({ onClick }: { onClick: () => void }) {
   return (
@@ -100,6 +100,21 @@ export function AsistenteTareasWidget() {
   const [chipDesdeChat, setChipDesdeChat] = useState<string | undefined>(undefined);
   const [bannerVisible, setBannerVisible] = useState(true);
 
+  const [abrirPanelTareas, setAbrirPanelTareas] = useState(false);
+  const [panelTareasVisible, setPanelTareasVisible] = useState(false);
+
+  function handleVerTodas() {
+    if (estado === 'minimizado' || estado === 'chat' || estado === 'nueva' || estado === 'lateral' || estado.startsWith('historial')) {
+      irA('expandido');
+    }
+    setPanelTareasVisible(true);
+    setAbrirPanelTareas(true);
+  }
+
+  function handlePanelTareasCerrado() {
+    setPanelTareasVisible(false);
+  }
+
   const [conversacionActivaId, setConversacionActivaId] = useState(1);
   const [conversaciones, setConversaciones] = useState(() => [...CONVERSACIONES_DEMO]);
   const [mensajesPorConv, setMensajesPorConv] = useState<Record<number, Mensaje[]>>(() =>
@@ -112,6 +127,7 @@ export function AsistenteTareasWidget() {
   const mensajesActivos = mensajesPorConv[conversacionActivaId] ?? [];
   const convActiva = conversaciones.find((c) => c.id === conversacionActivaId);
   const nombreConvActiva = convActiva?.nombre ?? 'Conversación';
+  const tieneConversacion = mensajesActivos.length > 0;
 
   function irA(siguiente: EstadoTareas) {
     setEstado(siguiente);
@@ -257,17 +273,37 @@ export function AsistenteTareasWidget() {
 
   // Wraps overlay content with the task banner for panel states
   function conBanner(content: React.ReactNode) {
+    const mostrarBanner = bannerVisible && !panelTareasVisible;
     return (
       <Box sx={{ display: 'flex', flexDirection: 'column', width: 680 }}>
-        {bannerVisible && (
-          <TareaBanner
-            tareas={TAREAS_DEMO}
-            onOcultar={() => setBannerVisible(false)}
-          />
-        )}
-        <Box sx={{ position: 'relative', zIndex: 1 }}>
+        {/* mode="popLayout" saca el banner del flujo inmediatamente al salir,
+            permitiendo que el panel anime su posición en paralelo (no en serie) */}
+        <AnimatePresence mode="popLayout">
+          {mostrarBanner && (
+            <motion.div
+              key="tarea-banner"
+              variants={bannerVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+            >
+              <TareaBanner
+                tareas={TAREAS_DEMO}
+                onOcultar={() => setBannerVisible(false)}
+                onVerTodas={handleVerTodas}
+                onClickTarea={() => enviarMensajeSistema('Dirigiendo a la tarea')}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
+        {/* layout anima el desplazamiento vertical del panel cuando el banner entra/sale */}
+        <motion.div
+          layout
+          transition={{ duration: 0.22, ease: [0.25, 0.46, 0.45, 0.94] }}
+          style={{ position: 'relative', zIndex: 1 }}
+        >
           {content}
-        </Box>
+        </motion.div>
       </Box>
     );
   }
@@ -298,10 +334,14 @@ export function AsistenteTareasWidget() {
                 onMinimizar={() => irA('minimizado')}
                 onVerHistorial={() => irA('historial')}
                 onExpandir={() => irA('lateral')}
-                onEnviar={() => irA('chat')}
+                onEnviarConMensaje={(texto) => { enviarMensaje(texto); irA('chat'); }}
+                onAbrirChat={tieneConversacion ? () => irA('chat') : undefined}
                 onEnviarMensajeSistema={enviarMensajeSistema}
                 ocultarNotificacion
-                subPanelExtraOffset={bannerVisible ? BANNER_OFFSET : 0}
+                subPanelExtraOffset={bannerVisible && !panelTareasVisible ? BANNER_OFFSET : 0}
+                abrirPanelTareas={abrirPanelTareas}
+                onPanelTareasAbierto={() => setAbrirPanelTareas(false)}
+                onPanelTareasCerrado={handlePanelTareasCerrado}
               />
             )}
           </motion.div>
@@ -372,11 +412,15 @@ export function AsistenteTareasWidget() {
                 onMinimizar={() => irA('minimizado')}
                 onVerHistorial={() => irA('historial')}
                 onExpandir={() => irA('lateral')}
-                onEnviar={() => irA('chat')}
+                onEnviarConMensaje={(texto) => { enviarMensaje(texto); irA('chat'); }}
+                onAbrirChat={tieneConversacion ? () => irA('chat') : undefined}
                 onEnviarMensajeSistema={enviarMensajeSistema}
                 chipInicial={chipDesdeChat}
                 ocultarNotificacion
-                subPanelExtraOffset={bannerVisible ? BANNER_OFFSET : 0}
+                subPanelExtraOffset={bannerVisible && !panelTareasVisible ? BANNER_OFFSET : 0}
+                abrirPanelTareas={abrirPanelTareas}
+                onPanelTareasAbierto={() => setAbrirPanelTareas(false)}
+                onPanelTareasCerrado={handlePanelTareasCerrado}
               />
             )}
           </motion.div>
