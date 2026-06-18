@@ -7,6 +7,7 @@ import { ActividadesPendientes } from '@/widgets/asistente-panel/ui/ActividadesP
 import { PanelTareasPendientes } from '@/widgets/asistente-panel/ui/PanelTareasPendientes';
 import { PanelVerMas } from '@/widgets/asistente-panel/ui/PanelVerMas';
 import { AsistenteVerticalInput } from './AsistenteVerticalInput';
+import sincoIoLogo from '@/assets/sinco-io-logo.svg';
 
 interface TareaNotif {
   titulo: string;
@@ -263,7 +264,7 @@ export function AsistenteVerticalPanel({
   const SP = subPanelVariants;
 
   return (
-    <Box sx={{ position: 'relative', display: 'flex', flexDirection: 'column', gap: 1, width: 680 }}>
+    <Box sx={{ position: 'relative', display: 'flex', flexDirection: 'column', gap: 5, width: 680, alignItems: 'center' }}>
       {/* Panel principal (actividades / reportes / periodos / reglas) */}
       <AnimatePresence>
         {panelConfig && (
@@ -310,8 +311,11 @@ export function AsistenteVerticalPanel({
         )}
       </AnimatePresence> */}
 
+      {/* Logo */}
+      <Box component="img" src={sincoIoLogo} alt="Sinco IO" sx={{ width: 153, height: 36, flexShrink: 0 }} />
+
       {/* Input section */}
-      <Box sx={{ position: 'relative' }}>
+      <Box sx={{ position: 'relative', width: '100%' }}>
         <AnimatePresence>
           {panelTareasOpen && (
             <motion.div
