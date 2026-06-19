@@ -37,6 +37,17 @@ function MiniInput({ onClick }: { onClick: () => void }) {
         p: 1,
         width: 260,
         cursor: 'pointer',
+        animation: 'cosmosPulse 3.5s ease-in-out infinite',
+        '@keyframes cosmosPulse': {
+          '0%, 100%': {
+            boxShadow: '0px 4px 16px rgba(47,67,208,0), 0px 1px 4px rgba(47,67,208,0), 0 0 0 4px rgba(47,67,208,0)',
+            transform: 'scale(1)',
+          },
+          '50%': {
+            boxShadow: '0px 0px 28px rgba(47,67,208,0.15), 0px 4px 12px rgba(47,67,208,0.08)',
+            transform: 'scale(1.012)',
+          },
+        },
       }}
     >
       <Box
