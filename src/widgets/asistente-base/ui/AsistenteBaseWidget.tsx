@@ -33,19 +33,18 @@ function MiniInput({ onClick }: { onClick: () => void }) {
         bgcolor: 'background.paper',
         border: '1px solid rgba(47,67,208,0.08)',
         borderRadius: '10px',
-        boxShadow: '0px 4px 16px rgba(47,67,208,0.1), 0px 1px 4px rgba(47,67,208,0.06)',
         p: 1,
         width: 260,
         cursor: 'pointer',
         animation: 'cosmosPulse 3.5s ease-in-out infinite',
         '@keyframes cosmosPulse': {
           '0%, 100%': {
-            boxShadow: '0px 4px 16px rgba(47,67,208,0), 0px 1px 4px rgba(47,67,208,0), 0 0 0 4px rgba(47,67,208,0)',
-            transform: 'scale(1)',
+            boxShadow: '0px 4px 16px rgba(47,67,208,0.08), 0px 1px 4px rgba(47,67,208,0.05)',
+            borderColor: 'rgba(47,67,208,0.08)',
           },
           '50%': {
-            boxShadow: '0px 0px 28px rgba(47,67,208,0.15), 0px 4px 12px rgba(47,67,208,0.08)',
-            transform: 'scale(1.012)',
+            boxShadow: '0px 4px 28px rgba(47,67,208,0.22), 0px 2px 8px rgba(47,67,208,0.14)',
+            borderColor: 'rgba(47,67,208,0.22)',
           },
         },
       }}
