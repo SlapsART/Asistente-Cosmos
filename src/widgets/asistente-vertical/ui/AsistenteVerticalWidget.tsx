@@ -9,6 +9,7 @@ import { AppShellMock } from '@/widgets/asistente-base/ui/AppShellMock';
 import { ChatPanel } from '@/widgets/asistente-base/ui/ChatPanel';
 import { HistorialDrawer } from '@/widgets/asistente-base/ui/HistorialDrawer';
 import { AsistenteVerticalPanel } from './AsistenteVerticalPanel';
+import { AsistenteVerticalChat } from './AsistenteVerticalChat';
 
 type EstadoBase =
   | 'minimizado'
@@ -264,7 +265,7 @@ export function AsistenteVerticalWidget() {
             onMinimizar={() => irA('minimizado')}
             onVerHistorial={() => irA('expandido-historial')}
             onExpandir={() => irA('lateral')}
-            onEnviar={() => irA('chat')}
+            onEnviar={(texto) => { enviarMensaje(texto); irA('chat'); }}
             onEnviarMensajeSistema={enviarMensajeSistema}
           />
         }
@@ -282,7 +283,7 @@ export function AsistenteVerticalWidget() {
             onMinimizar={() => irA('minimizado')}
             onVerHistorial={() => irA('expandido')}
             onExpandir={() => irA('lateral')}
-            onEnviar={() => irA('chat')}
+            onEnviar={(texto) => { enviarMensaje(texto); irA('chat'); }}
             onEnviarMensajeSistema={enviarMensajeSistema}
           />
         }
@@ -307,7 +308,7 @@ export function AsistenteVerticalWidget() {
             onMinimizar={() => irA('minimizado')}
             onVerHistorial={() => irA('expandido')}
             onExpandir={() => irA('lateral')}
-            onEnviar={() => irA('chat')}
+            onEnviar={(texto) => { enviarMensaje(texto); irA('chat'); }}
             onEnviarMensajeSistema={enviarMensajeSistema}
           />
         }
@@ -323,25 +324,18 @@ export function AsistenteVerticalWidget() {
     );
   }
 
-  // ─── CHAT FLOTANTE ────────────────────────────────────────────────────────
+  // ─── CHAT VERTICAL (pantalla completa) ───────────────────────────────────
   if (estado === 'chat') {
     return (
-      <AppShellMock
-        overlayCentered
-        overlay={
-          <motion.div key="chat" variants={O} initial="initial" animate="animate" exit="exit">
-            <ChatPanel
-              modo="flotante"
-              {...chatProps}
-              onMinimizar={() => irA('minimizado')}
-              onLateral={() => irA('lateral')}
-              onNueva={iniciarNuevaConversacion}
-              onHistorial={() => irA('historial')}
-              onAbrirPanel={(chip) => { setChipDesdeChat(chip); irA('expandido-desde-chat'); }}
-            />
-          </motion.div>
-        }
-      />
+      <AppShellMock>
+        <AsistenteVerticalChat
+          mensajes={mensajesActivos}
+          pensando={pensando}
+          textoLoader={loaderTexto}
+          onEnviarMensaje={enviarMensaje}
+          onDetenerRespuesta={detenerRespuesta}
+        />
+      </AppShellMock>
     );
   }
 
@@ -381,7 +375,7 @@ export function AsistenteVerticalWidget() {
               onMinimizar={() => irA('minimizado')}
               onVerHistorial={() => irA('historial')}
               onExpandir={() => irA('lateral')}
-              onEnviar={() => irA('chat')}
+              onEnviar={(texto) => { enviarMensaje(texto); irA('chat'); }}
               onEnviarMensajeSistema={enviarMensajeSistema}
               chipInicial={chipDesdeChat}
             />

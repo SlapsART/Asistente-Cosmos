@@ -1,0 +1,3 @@
+[     287ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:5173/node_modules/.vite/deps/react-dom_client.js?v=0734818f:20100
+[     364ms] [WARNING] motion() is deprecated. Use motion.create() instead. @ http://localhost:5173/node_modules/.vite/deps/framer-motion.js?v=0734818f:180
+[     484ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:5173/favicon.ico:0

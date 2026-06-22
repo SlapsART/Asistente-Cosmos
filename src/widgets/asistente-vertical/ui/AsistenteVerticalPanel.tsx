@@ -86,7 +86,7 @@ interface AsistenteVerticalPanelProps {
   onMinimizar?: () => void;
   onVerHistorial?: () => void;
   onExpandir?: () => void;
-  onEnviar?: () => void;
+  onEnviar?: (texto: string) => void;
   onEnviarMensajeSistema?: (texto: string) => void;
   chipInicial?: string;
 }
@@ -185,12 +185,12 @@ export function AsistenteVerticalPanel({
     });
   }
 
-  function handleEnviar(_texto: string) {
+  function handleEnviar(texto: string) {
     if (!onEnviar) return;
     setPensando(true);
     if (pensandoTimer.current) clearTimeout(pensandoTimer.current);
     pensandoTimer.current = setTimeout(() => {
-      onEnviar();
+      onEnviar(texto);
     }, 600);
   }
 

@@ -31,9 +31,23 @@ const LATERAL_WIDTH = 336;
 const HISTORIAL_WIDTH = 380;
 
 function MiniInput({ onClick }: { onClick: () => void }) {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  /* PULSO + BORDER-BEAM — comentado temporalmente
+  const [hovered, setHovered] = useState(false);
+  useLayoutEffect(() => {
+    const id = 'cosmos-mini-beam-styles';
+    let el = document.getElementById(id) as HTMLStyleElement | null;
+    if (!el) { el = document.createElement('style'); el.id = id; document.head.appendChild(el); }
+    el.textContent =
+      '@property --beam-opacity{syntax:"<number>";initial-value:0;inherits:true}' +
+      '@keyframes border-beam{from{transform:translate(-50%,-50%) rotate(0deg)}to{transform:translate(-50%,-50%) rotate(360deg)}}';
+  }, []);
+  */
+
   return (
     <Box
-      onClick={onClick}
+      onClick={() => { inputRef.current?.focus(); onClick(); }}
       sx={{
         bgcolor: 'background.paper',
         border: '1px solid rgba(47,67,208,0.08)',
@@ -41,19 +55,43 @@ function MiniInput({ onClick }: { onClick: () => void }) {
         p: 1,
         width: 260,
         cursor: 'pointer',
+        /* PULSO + BORDER-BEAM
+        position: 'relative',
+        overflow: 'hidden',
+        background: 'rgba(47,67,208,0.08)',
+        padding: '1px',
         animation: 'cosmosPulse 3.5s ease-in-out infinite',
         '@keyframes cosmosPulse': {
           '0%, 100%': {
             boxShadow: '0px 4px 16px rgba(47,67,208,0.08), 0px 1px 4px rgba(47,67,208,0.05)',
-            borderColor: 'rgba(47,67,208,0.08)',
+            background: 'rgba(47,67,208,0)',
+            '--beam-opacity': '0',
           },
           '50%': {
-            boxShadow: '0px 4px 28px rgba(47,67,208,0.22), 0px 2px 8px rgba(47,67,208,0.14)',
-            borderColor: 'rgba(47,67,208,0.22)',
+            boxShadow: '0px 4px 36px rgba(47,67,208,0.45), 0px 2px 12px rgba(47,67,208,0.28)',
+            background: 'rgba(47,67,208,0.48)',
+            '--beam-opacity': '1',
           },
         },
+        */
       }}
     >
+      {/* PULSO + BORDER-BEAM — beam element
+      <Box
+        sx={{
+          position: 'absolute',
+          width: '400%',
+          aspectRatio: '1 / 1',
+          top: '50%',
+          left: '50%',
+          background: 'conic-gradient(transparent 0deg 250deg, rgba(47,67,208,0.05) 250deg 300deg, rgba(47,67,208,0.18) 300deg 338deg, rgba(47,67,208,0.55) 338deg 354deg, rgba(55,82,228,0.95) 354deg 360deg)',
+          animation: 'border-beam 3s linear infinite',
+          pointerEvents: 'none',
+          transition: 'opacity 0.3s ease',
+          opacity: hovered ? '1 !important' : 'var(--beam-opacity)',
+        }}
+      />
+      */}
       <Box
         sx={{
           bgcolor: '#f5f5f5',
@@ -72,6 +110,7 @@ function MiniInput({ onClick }: { onClick: () => void }) {
           <IconPlus size={14} color="rgba(16,24,64,0.54)" />
         </IconButton>
         <InputBase
+          inputRef={inputRef}
           placeholder="Describe lo que necesitas..."
           readOnly
           sx={{

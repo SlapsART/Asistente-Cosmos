@@ -29,7 +29,7 @@ interface SeccionData {
   items: string[];
 }
 
-type ModuloKey = 'obligaciones' | 'contabilidad' | 'terceros' | 'impuestos';
+export type ModuloKey = 'obligaciones' | 'contabilidad' | 'terceros' | 'impuestos';
 
 interface ModuloConfig {
   label: string;
@@ -37,7 +37,7 @@ interface ModuloConfig {
   secciones: SeccionData[];
 }
 
-const MODULOS: Record<ModuloKey, ModuloConfig> = {
+export const MODULOS: Record<ModuloKey, ModuloConfig> = {
   obligaciones: {
     label: 'Obligaciones por pagar',
     Icon: IconTable,
@@ -186,7 +186,7 @@ const MODULOS: Record<ModuloKey, ModuloConfig> = {
   },
 };
 
-const MODULO_KEYS: ModuloKey[] = ['obligaciones', 'contabilidad', 'terceros', 'impuestos'];
+export const MODULO_KEYS: ModuloKey[] = ['obligaciones', 'contabilidad', 'terceros', 'impuestos'];
 
 function SeccionItem({ texto, onClick }: { texto: string; onClick: () => void }) {
   const [hover, setHover] = useState(false);
@@ -324,9 +324,11 @@ interface PanelVerMasProps {
   moduloInicial?: ModuloKey;
   /** Tabs de módulos en una sola línea con scroll horizontal — para modo lateral */
   tabsScrollable?: boolean;
+  /** Oculta los tabs de módulos; muestra solo el contenido del módulo inicial */
+  hideTabs?: boolean;
 }
 
-export function PanelVerMas({ onCerrar, onItemClick, moduloInicial = 'obligaciones', tabsScrollable = false }: PanelVerMasProps) {
+export function PanelVerMas({ onCerrar, onItemClick, moduloInicial = 'obligaciones', tabsScrollable = false, hideTabs = false }: PanelVerMasProps) {
   const [moduloActivo, setModuloActivo] = useState<ModuloKey>(moduloInicial);
   const [seccionAbierta, setSeccionAbierta] = useState<string>(MODULOS[moduloInicial].secciones[0].titulo);
   const tabsScrollRef = useRef<HTMLDivElement>(null);
@@ -386,7 +388,7 @@ export function PanelVerMas({ onCerrar, onItemClick, moduloInicial = 'obligacion
       </Box>
 
       {/* Fila 2: Tabs de módulos */}
-      {tabsScrollable ? (
+      {!hideTabs && (tabsScrollable ? (
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
           <IconButton
             size="small"
@@ -461,7 +463,7 @@ export function PanelVerMas({ onCerrar, onItemClick, moduloInicial = 'obligacion
             );
           })}
         </Box>
-      )}
+      ))}
 
       {/* Fila 3: Contenido */}
       <Box>

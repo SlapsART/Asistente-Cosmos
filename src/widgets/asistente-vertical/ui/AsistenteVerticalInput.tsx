@@ -45,6 +45,7 @@ interface AsistenteVerticalInputProps {
   showTopActions?: boolean;
   variant?: 'card' | 'embedded';
   onAbrirPanel?: (chip: string) => void;
+  hideDisclaimer?: boolean;
 }
 
 export function AsistenteVerticalInput({
@@ -67,6 +68,7 @@ export function AsistenteVerticalInput({
   showTopActions: _showTopActions,
   variant = 'card',
   onAbrirPanel: _onAbrirPanel,
+  hideDisclaimer = false,
 }: AsistenteVerticalInputProps) {
   const [localTexto, setLocalTexto] = useState(inputTexto ?? '');
   const [focused, setFocused] = useState(false);
@@ -213,7 +215,7 @@ export function AsistenteVerticalInput({
             borderRadius: '20px',
             display: 'flex',
             flexDirection: 'column',
-            gap: 2,
+            gap: 0,
             p: 1.5,
             position: 'relative',
             zIndex: 1,
@@ -347,12 +349,14 @@ export function AsistenteVerticalInput({
       </Box>
 
       {/* Footer disclaimer */}
-      <Typography
-        variant="caption"
-        sx={{ color: 'text.disabled', textAlign: 'center', whiteSpace: 'nowrap', letterSpacing: '0.4px' }}
-      >
-        El contenido generado por IA puede ser incorrecto.
-      </Typography>
+      {!hideDisclaimer && (
+        <Typography
+          variant="caption"
+          sx={{ color: 'text.disabled', textAlign: 'center', whiteSpace: 'nowrap', letterSpacing: '0.4px' }}
+        >
+          El contenido generado por IA puede ser incorrecto.
+        </Typography>
+      )}
 
       {/* Dropdown menus para context chips */}
       <Menu

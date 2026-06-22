@@ -1,0 +1,48 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e59]:
+    - generic [ref=e60]:
+      - generic [ref=e61]:
+        - img [ref=e62]
+        - separator [ref=e64]
+        - paragraph [ref=e65]: Inicio
+        - img [ref=e66]
+        - paragraph [ref=e68]: Reglas de derivación
+      - generic [ref=e69]:
+        - paragraph [ref=e70]: Empresa de insumos S.A.S
+        - button [ref=e71] [cursor=pointer]:
+          - img [ref=e72]
+        - separator [ref=e75]
+        - button [ref=e76] [cursor=pointer]:
+          - img [ref=e77]
+        - separator [ref=e80]
+        - paragraph [ref=e82]: HD
+    - generic [ref=e83]:
+      - generic [ref=e84]:
+        - button "Asistente Base" [ref=e85] [cursor=pointer]:
+          - img [ref=e86]
+        - button "Asistente Obligaciones" [ref=e87] [cursor=pointer]:
+          - img [ref=e88]
+        - button "Asistente Contabilidad" [ref=e90] [cursor=pointer]:
+          - img [ref=e91]
+        - button "Asistente Vertical" [ref=e93] [cursor=pointer]:
+          - img [ref=e94]
+        - button "Tareas" [ref=e96] [cursor=pointer]:
+          - img [ref=e97]
+      - generic [ref=e100]:
+        - heading "Asistente Vertical" [level=6] [ref=e102]
+        - generic [ref=e107]:
+          - img "Sinco IO" [ref=e108]
+          - generic [ref=e110]:
+            - generic [ref=e112]:
+              - textbox "Describe lo que necesitas..." [ref=e114]
+              - generic [ref=e115]:
+                - generic [ref=e116]:
+                  - button [ref=e117] [cursor=pointer]:
+                    - img [ref=e118]
+                  - button [ref=e119] [cursor=pointer]:
+                    - img [ref=e120]
+                - button [ref=e124] [cursor=pointer]:
+                  - img [ref=e125]
+            - generic [ref=e128]: El contenido generado por IA puede ser incorrecto.
+  - tooltip "Asistente Vertical" [ref=e129]:
+    - generic [ref=e130]: Asistente Vertical
